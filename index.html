@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Canvas AI - Diagram Editor with AI Assistant</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-surface: #1a1a1a;
+            --bg-surface-2: #252525;
+            --border: #333;
+            --accent: #4f98a3;
+            --accent-hover: #6bb3c0;
+            --text-primary: #e0e0e0;
+            --text-secondary: #999;
+            --success: #4caf50;
+            --error: #f44336;
+            --warning: #ff9800;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            height: 40px;
+        }
+
+        .header h1 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .ai-toggle {
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .ai-toggle:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .ai-toggle.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Main Layout */
+        .main-container {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Left Panel - Tools */
+        .left-panel {
+            width: 200px;
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border);
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .tool-section {
+            margin-bottom: 24px;
+        }
+
+        .tool-section h3 {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4px;
+        }
+
+        .tool-btn {
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+
+        .tool-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .tool-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .style-select {
+            width: 100%;
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 4px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+
+        /* Canvas Area */
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-primary);
+            position: relative;
+        }
+
+        .canvas-wrapper {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #canvas {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 12px;
+            white-space: pre;
+            cursor: crosshair;
+            transform-origin: top left;
+            image-rendering: pixelated;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            padding: 4px 16px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            display: flex;
+            gap: 16px;
+        }
+
+        /* AI Panel */
+        .ai-panel {
+            width: 280px;
+            background: var(--bg-surface);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease-out;
+            min-width: 200px;
+            max-width: 500px;
+        }
+
+        .ai-panel.collapsed {
+            transform: translateX(100%);
+        }
+
+        .ai-panel-header {
+            background: var(--bg-surface-2);
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ai-panel-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .ai-panel-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .ai-panel-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* API Config */
+        .api-config {
+            background: var(--bg-surface-2);
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .config-row {
+            margin-bottom: 8px;
+        }
+
+        .config-row label {
+            display: block;
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .config-input {
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .config-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .config-btn {
+            background: var(--accent);
+            border: none;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px;
+            margin-top: 4px;
+        }
+
+        /* Quick Prompts */
+        .quick-prompts {
+            padding: 8px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+        }
+
+        .quick-prompt {
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 4px 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 10px;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .quick-prompt:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Chat Messages */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .message {
+            margin-bottom: 12px;
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message-bubble {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 100%;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .message.user .message-bubble {
+            background: var(--accent);
+            color: white;
+        }
+
+        .message.ai .message-bubble {
+            background: var(--bg-surface-2);
+            color: var(--text-primary);
+        }
+
+        .ascii-code-block {
+            background: var(--bg-primary);
+            border-left: 3px solid var(--accent);
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            line-height: 1.2;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .message-actions {
+            margin-top: 8px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .action-btn {
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 9px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            padding: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            resize: none;
+            min-height: 32px;
+            max-height: 80px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .send-btn {
+            background: var(--accent);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .send-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .send-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error */
+        .error-bubble {
+            background: var(--error);
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            margin: 8px 0;
+        }
+
+        /* Resize Handle */
+        .resize-handle {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            cursor: ew-resize;
+            background: transparent;
+        }
+
+        .resize-handle:hover {
+            background: var(--accent);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 11px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .toast.error {
+            border-color: var(--error);
+            color: var(--error);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ASCII Canvas AI</h1>
+        <button class="ai-toggle" id="aiToggle">✦ AI</button>
+    </div>
+
+    <div class="main-container">
+        <div class="left-panel">
+            <div class="tool-section">
+                <h3>Tools</h3>
+                <div class="tool-grid">
+                    <button class="tool-btn active" data-tool="select">Select</button>
+                    <button class="tool-btn" data-tool="rectangle">Rectangle</button>
+                    <button class="tool-btn" data-tool="diamond">Diamond</button>
+                    <button class="tool-btn" data-tool="line">Line</button>
+                    <button class="tool-btn" data-tool="arrow">Arrow</button>
+                    <button class="tool-btn" data-tool="text">Text</button>
+                    <button class="tool-btn" data-tool="freehand">Freehand</button>
+                    <button class="tool-btn" data-tool="eraser">Eraser</button>
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <h3>Border Style</h3>
+                <select class="style-select" id="borderStyle">
+                    <option value="simple">Simple</option>
+                    <option value="double">Double</option>
+                    <option value="rounded">Rounded</option>
+                    <option value="heavy">Heavy</option>
+                    <option value="light">Light</option>
+                </select>
+            </div>
+
+            <div class="tool-section">
+                <h3>Arrow Head</h3>
+                <select class="style-select" id="arrowHead">
+                    <option value="arrow">Arrow (>)</option>
+                    <option value="triangle">Triangle (▶)</option>
+                </select>
+            </div>
+
+            <div class="tool-section">
+                <h3>Line Style</h3>
+                <select class="style-select" id="lineStyle">
+                    <option value="ascii">ASCII (-, |)</option>
+                    <option value="light">Light (─, │)</option>
+                    <option value="heavy">Heavy (━, ┃)</option>
+                    <option value="dashed">Dashed</option>
+                    <option value="dotted">Dotted</option>
+                </select>
+            </div>
+
+            <div class="tool-section">
+                <h3>Diamond Style</h3>
+                <select class="style-select" id="diamondStyle">
+                    <option value="simple">Simple (/, \)</option>
+                    <option value="unicode">Unicode (◇)</option>
+                </select>
+            </div>
+
+            <div class="tool-section">
+                <h3>Freehand Char</h3>
+                <select class="style-select" id="freehandChar">
+                    <option value="*">*</option>
+                    <option value="#">#</option>
+                    <option value="+">+</option>
+                    <option value=".">.</option>
+                    <option value="x">x</option>
+                    <option value="o">o</option>
+                    <option value="~">~</option>
+                </select>
+            </div>
+
+            <div class="tool-section">
+                <h3>Eraser Size</h3>
+                <select class="style-select" id="eraserSize">
+                    <option value="1">1×1</option>
+                    <option value="3">3×3</option>
+                    <option value="5">5×5</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <div class="canvas-wrapper">
+                <canvas id="canvas"></canvas>
+            </div>
+            <div class="status-bar">
+                <span id="cursorPos">0, 0</span>
+                <span id="canvasSize">200×80</span>
+                <span id="zoomLevel">100%</span>
+                <span id="currentTool">Select</span>
+                <span id="hint">Ready</span>
+            </div>
+        </div>
+
+        <div class="ai-panel collapsed" id="aiPanel">
+            <div class="resize-handle" id="resizeHandle"></div>
+            <div class="ai-panel-header">
+                <div class="ai-panel-title">✦ AI Assistant</div>
+                <button class="ai-panel-close" id="aiPanelClose">×</button>
+            </div>
+            <div class="ai-panel-content">
+                <div class="api-config">
+                    <div class="config-row">
+                        <label>API Base URL</label>
+                        <input type="text" class="config-input" id="apiBaseUrl" value="https://openrouter.ai/api/v1">
+                    </div>
+                    <div class="config-row">
+                        <label>API Key</label>
+                        <input type="password" class="config-input" id="apiKey" placeholder="Enter your API key">
+                    </div>
+                    <div class="config-row">
+                        <label>Model</label>
+                        <select class="config-input" id="modelSelect">
+                            <option value="anthropic/claude-sonnet-4-5">Claude Sonnet 4.5</option>
+                            <option value="anthropic/claude-opus-4-5">Claude Opus 4.5</option>
+                            <option value="openai/gpt-4o">GPT-4o</option>
+                            <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
+                            <option value="mistralai/mistral-large-latest">Mistral Large</option>
+                            <option value="deepseek/deepseek-chat">DeepSeek Chat</option>
+                            <option value="meta-llama/llama-3.3-70b-instruct">Llama 3.3 70B</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <button class="config-btn" id="saveConfig">Save Config</button>
+                </div>
+
+                <div class="quick-prompts">
+                    <button class="quick-prompt" data-prompt="Create a flowchart diagram">Flowchart</button>
+                    <button class="quick-prompt" data-prompt="Design a system architecture diagram">System Architecture</button>
+                    <button class="quick-prompt" data-prompt="Draw a sequence diagram">Sequence Diagram</button>
+                    <button class="quick-prompt" data-prompt="Create a tree structure">Tree Structure</button>
+                    <button class="quick-prompt" data-prompt="Design a network topology">Network Topology</button>
+                    <button class="quick-prompt" data-prompt="Create a timeline diagram">Timeline</button>
+                    <button class="quick-prompt" data-prompt="Draw a table layout">Table</button>
+                    <button class="quick-prompt" data-prompt="Create a state machine diagram">State Machine</button>
+                </div>
+
+                <div class="chat-messages" id="chatMessages"></div>
+
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <textarea class="chat-input" id="chatInput" placeholder="Ask AI to create a diagram..." rows="1"></textarea>
+                        <button class="send-btn" id="sendBtn">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Canvas Setup
+        const COLS = 200;
+        const ROWS = 80;
+        let grid = Array(ROWS).fill().map(() => Array(COLS).fill(' '));
+        let currentTool = 'select';
+        let isDrawing = false;
+        let startPos = null;
+        let currentPos = null;
+        let zoom = 1;
+        let panX = 0;
+        let panY = 0;
+        let isPanning = false;
+        let lastPanPos = null;
+        let selection = null;
+        let undoStack = [];
+        let redoStack = [];
+
+        // Canvas Element
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // UI Elements
+        const cursorPos = document.getElementById('cursorPos');
+        const canvasSize = document.getElementById('canvasSize');
+        const zoomLevel = document.getElementById('zoomLevel');
+        const currentToolSpan = document.getElementById('currentTool');
+        const hint = document.getElementById('hint');
+
+        // AI Panel Elements
+        const aiToggle = document.getElementById('aiToggle');
+        const aiPanel = document.getElementById('aiPanel');
+        const aiPanelClose = document.getElementById('aiPanelClose');
+        const resizeHandle = document.getElementById('resizeHandle');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        // Initialize Canvas
+        function initCanvas() {
+            canvas.width = COLS * 8;
+            canvas.height = ROWS * 12;
+            render();
+        }
+
+        // Render Grid
+        function render() {
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid
+            ctx.strokeStyle = '#1a1a1a';
+            ctx.lineWidth = 0.5;
+            for (let i = 0; i <= COLS; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * 8, 0);
+                ctx.lineTo(i * 8, canvas.height);
+                ctx.stroke();
+            }
+            for (let i = 0; i <= ROWS; i++) {
+                ctx.beginPath();
+                ctx.moveTo(0, i * 12);
+                ctx.lineTo(canvas.width, i * 12);
+                ctx.stroke();
+            }
+            
+            // Draw text
+            ctx.fillStyle = '#e0e0e0';
+            ctx.font = '12px JetBrains Mono, monospace';
+            for (let row = 0; row < ROWS; row++) {
+                for (let col = 0; col < COLS; col++) {
+                    const char = grid[row][col];
+                    if (char !== ' ') {
+                        ctx.fillText(char, col * 8, row * 12 + 10);
+                    }
+                }
+            }
+            
+            // Draw selection
+            if (selection) {
+                ctx.strokeStyle = '#4f98a3';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(
+                    selection.startCol * 8,
+                    selection.startRow * 12,
+                    (selection.endCol - selection.startCol + 1) * 8,
+                    (selection.endRow - selection.startRow + 1) * 12
+                );
+            }
+        }
+
+        // Get mouse position in grid coordinates
+        function getGridPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / zoom - panX;
+            const y = (e.clientY - rect.top) / zoom - panY;
+            return {
+                col: Math.floor(x / 8),
+                row: Math.floor(y / 12)
+            };
+        }
+
+        // Save state for undo
+        function saveUndo() {
+            undoStack.push(grid.map(row => [...row]));
+            if (undoStack.length > 50) undoStack.shift();
+            redoStack = [];
+        }
+
+        // Tool functions
+        function drawRectangle(start, end, style) {
+            const chars = getBorderChars(style);
+            for (let col = start.col; col <= end.col; col++) {
+                grid[start.row][col] = chars.h;
+                grid[end.row][col] = chars.h;
+            }
+            for (let row = start.row + 1; row < end.row; row++) {
+                grid[row][start.col] = chars.v;
+                grid[row][end.col] = chars.v;
+            }
+            grid[start.row][start.col] = chars.tl;
+            grid[start.row][end.col] = chars.tr;
+            grid[end.row][start.col] = chars.bl;
+            grid[end.row][end.col] = chars.br;
+        }
+
+        function drawDiamond(start, end, style) {
+            const midRow = Math.floor((start.row + end.row) / 2);
+            const midCol = Math.floor((start.col + end.col) / 2);
+            
+            if (style === 'unicode') {
+                for (let row = start.row; row <= end.row; row++) {
+                    for (let col = start.col; col <= end.col; col++) {
+                        const relRow = row - midRow;
+                        const relCol = col - midCol;
+                        if (Math.abs(relRow) + Math.abs(relCol) <= Math.abs(end.row - start.row) / 2) {
+                            grid[row][col] = '◇';
+                        }
+                    }
+                }
+            } else {
+                for (let row = start.row; row <= end.row; row++) {
+                    const progress = (row - start.row) / (end.row - start.row);
+                    const leftCol = Math.floor(start.col + (midCol - start.col) * progress);
+                    const rightCol = Math.floor(midCol + (end.col - midCol) * progress);
+                    grid[row][leftCol] = row === start.row || row === end.row ? '/' : '\\';
+                    grid[row][rightCol] = row === start.row || row === end.row ? '\\' : '/';
+                }
+            }
+        }
+
+        function drawLine(start, end, style) {
+            const chars = getLineChars(style);
+            const dx = Math.abs(end.col - start.col);
+            const dy = Math.abs(end.row - start.row);
+            const sx = start.col < end.col ? 1 : -1;
+            const sy = start.row < end.row ? 1 : -1;
+            let err = dx - dy;
+            let x = start.col;
+            let y = start.row;
+
+            while (true) {
+                const isHorizontal = Math.abs(end.row - start.row) < Math.abs(end.col - start.col);
+                grid[y][x] = isHorizontal ? chars.h : chars.v;
+                
+                if (x === end.col && y === end.row) break;
+                const e2 = 2 * err;
+                if (e2 > -dy) {
+                    err -= dy;
+                    x += sx;
+                }
+                if (e2 < dx) {
+                    err += dx;
+                    y += sy;
+                }
+            }
+        }
+
+        function drawArrow(start, end, style, head) {
+            drawLine(start, end, style);
+            
+            const dx = end.col - start.col;
+            const dy = end.row - start.row;
+            const len = Math.sqrt(dx * dx + dy * dy);
+            const ux = dx / len;
+            const uy = dy / len;
+            
+            if (head === 'arrow') {
+                grid[end.row][end.col] = '>';
+            } else {
+                const perpX = -uy;
+                const perpY = ux;
+                const tipRow = Math.round(end.row - uy * 2);
+                const tipCol = Math.round(end.col - ux * 2);
+                const base1Row = Math.round(tipRow + perpY);
+                const base1Col = Math.round(tipCol + perpX);
+                const base2Row = Math.round(tipRow - perpY);
+                const base2Col = Math.round(tipCol - perpX);
+                
+                if (base1Row >= 0 && base1Row < ROWS && base1Col >= 0 && base1Col < COLS) {
+                    grid[base1Row][base1Col] = '▶';
+                }
+                if (base2Row >= 0 && base2Row < ROWS && base2Col >= 0 && base2Col < COLS) {
+                    grid[base2Row][base2Col] = '▶';
+                }
+            }
+        }
+
+        function drawFreehand(pos, char) {
+            if (pos.row >= 0 && pos.row < ROWS && pos.col >= 0 && pos.col < COLS) {
+                grid[pos.row][pos.col] = char;
+            }
+        }
+
+        function erase(pos, size) {
+            const half = Math.floor(size / 2);
+            for (let row = pos.row - half; row <= pos.row + half; row++) {
+                for (let col = pos.col - half; col <= pos.col + half; col++) {
+                    if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
+                        grid[row][col] = ' ';
+                    }
+                }
+            }
+        }
+
+        function floodSelect(start) {
+            const char = grid[start.row][start.col];
+            if (char === ' ') return null;
+            
+            const visited = new Set();
+            const queue = [start];
+            const cells = [];
+            
+            while (queue.length > 0) {
+                const pos = queue.shift();
+                const key = `${pos.row},${pos.col}`;
+                
+                if (visited.has(key)) continue;
+                visited.add(key);
+                
+                if (pos.row < 0 || pos.row >= ROWS || pos.col < 0 || pos.col >= COLS) continue;
+                if (grid[pos.row][pos.col] !== char) continue;
+                
+                cells.push(pos);
+                queue.push({row: pos.row - 1, col: pos.col});
+                queue.push({row: pos.row + 1, col: pos.col});
+                queue.push({row: pos.row, col: pos.col - 1});
+                queue.push({row: pos.row, col: pos.col + 1});
+            }
+            
+            if (cells.length === 0) return null;
+            
+            const minRow = Math.min(...cells.map(c => c.row));
+            const maxRow = Math.max(...cells.map(c => c.row));
+            const minCol = Math.min(...cells.map(c => c.col));
+            const maxCol = Math.max(...cells.map(c => c.col));
+            
+            return {
+                startRow: minRow,
+                endRow: maxRow,
+                startCol: minCol,
+                endCol: maxCol,
+                cells: cells
+            };
+        }
+
+        // Helper functions
+        function getBorderChars(style) {
+            const styles = {
+                simple: {h: '-', v: '|', tl: '+', tr: '+', bl: '+', br: '+'},
+                double: {h: '=', v: '||', tl: '+', tr: '+', bl: '+', br: '+'},
+                rounded: {h: '-', v: '|', tl: '/', tr: '\\', bl: '\\', br: '/'},
+                heavy: {h: '━', v: '┃', tl: '┏', tr: '┓', bl: '┗', br: '┛'},
+                light: {h: '─', v: '│', tl: '┌', tr: '┐', bl: '└', br: '┘'}
+            };
+            return styles[style] || styles.simple;
+        }
+
+        function getLineChars(style) {
+            const styles = {
+                ascii: {h: '-', v: '|'},
+                light: {h: '─', v: '│'},
+                heavy: {h: '━', v: '┃'},
+                dashed: {h: '- -', v: '| |'},
+                dotted: {h: '. .', v: '. .'}
+            };
+            return styles[style] || styles.ascii;
+        }
+
+        // Event handlers
+        canvas.addEventListener('mousedown', (e) => {
+            const pos = getGridPos(e);
+            
+            if (e.button === 1 || (e.button === 0 && e.spaceKey)) {
+                isPanning = true;
+                lastPanPos = {x: e.clientX, y: e.clientY};
+                canvas.style.cursor = 'grabbing';
+                return;
+            }
+            
+            isDrawing = true;
+            startPos = pos;
+            currentPos = pos;
+            
+            if (currentTool === 'select') {
+                const selected = floodSelect(pos);
+                if (selected) {
+                    selection = selected;
+                    render();
+                }
+            } else if (currentTool === 'text') {
+                const text = prompt('Enter text:');
+                if (text) {
+                    saveUndo();
+                    for (let i = 0; i < text.length && pos.col + i < COLS; i++) {
+                        grid[pos.row][pos.col + i] = text[i];
+                    }
+                    render();
+                }
+            } else if (currentTool === 'freehand' || currentTool === 'eraser') {
+                saveUndo();
+                if (currentTool === 'freehand') {
+                    const char = document.getElementById('freehandChar').value;
+                    drawFreehand(pos, char);
+                } else {
+                    const size = parseInt(document.getElementById('eraserSize').value);
+                    erase(pos, size);
+                }
+                render();
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            const pos = getGridPos(e);
+            cursorPos.textContent = `${pos.col}, ${pos.row}`;
+            
+            if (isPanning && lastPanPos) {
+                panX += e.clientX - lastPanPos.x;
+                panY += e.clientY - lastPanPos.y;
+                lastPanPos = {x: e.clientX, y: e.clientY};
+                canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+                return;
+            }
+            
+            if (!isDrawing) return;
+            
+            currentPos = pos;
+            
+            if (currentTool === 'freehand') {
+                const char = document.getElementById('freehandChar').value;
+                drawFreehand(pos, char);
+                render();
+            } else if (currentTool === 'eraser') {
+                const size = parseInt(document.getElementById('eraserSize').value);
+                erase(pos, size);
+                render();
+            }
+        });
+
+        canvas.addEventListener('mouseup', (e) => {
+            if (isPanning) {
+                isPanning = false;
+                lastPanPos = null;
+                canvas.style.cursor = 'crosshair';
+                return;
+            }
+            
+            if (!isDrawing || !startPos || !currentPos) return;
+            
+            saveUndo();
+            
+            const borderStyle = document.getElementById('borderStyle').value;
+            const lineStyle = document.getElementById('lineStyle').value;
+            const arrowHead = document.getElementById('arrowHead').value;
+            const diamondStyle = document.getElementById('diamondStyle').value;
+            
+            if (currentTool === 'rectangle') {
+                drawRectangle(startPos, currentPos, borderStyle);
+            } else if (currentTool === 'diamond') {
+                drawDiamond(startPos, currentPos, diamondStyle);
+            } else if (currentTool === 'line') {
+                drawLine(startPos, currentPos, lineStyle);
+            } else if (currentTool === 'arrow') {
+                drawArrow(startPos, currentPos, lineStyle, arrowHead);
+            }
+            
+            isDrawing = false;
+            startPos = null;
+            currentPos = null;
+            render();
+        });
+
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 0.9 : 1.1;
+            zoom = Math.max(0.5, Math.min(3, zoom * delta));
+            canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+            zoomLevel.textContent = `${Math.round(zoom * 100)}%`;
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+            
+            e.spaceKey = e.code === 'Space';
+            
+            if (e.ctrlKey && e.key === 'z') {
+                e.preventDefault();
+                if (undoStack.length > 0) {
+                    redoStack.push(grid.map(row => [...row]));
+                    grid = undoStack.pop();
+                    render();
+                }
+            } else if (e.ctrlKey && e.key === 'y') {
+                e.preventDefault();
+                if (redoStack.length > 0) {
+                    undoStack.push(grid.map(row => [...row]));
+                    grid = redoStack.pop();
+                    render();
+                }
+            } else if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                e.preventDefault();
+                const ascii = grid.map(row => row.join('')).join('\n');
+                navigator.clipboard.writeText(ascii);
+                showToast('Copied to clipboard', 'success');
+            } else if (e.key === 'Delete') {
+                saveUndo();
+                grid = Array(ROWS).fill().map(() => Array(COLS).fill(' '));
+                render();
+            } else if (e.key === 'v') {
+                setTool('select');
+            } else if (e.key === 'r') {
+                setTool('rectangle');
+            } else if (e.key === 'd') {
+                setTool('diamond');
+            } else if (e.key === 'l') {
+                setTool('line');
+            } else if (e.key === 'a') {
+                setTool('arrow');
+            } else if (e.key === 't') {
+                setTool('text');
+            } else if (e.key === 'f') {
+                setTool('freehand');
+            } else if (e.key === 'e') {
+                setTool('eraser');
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.code === 'Space') {
+                e.spaceKey = false;
+            }
+        });
+
+        // Tool selection
+        function setTool(tool) {
+            currentTool = tool;
+            document.querySelectorAll('.tool-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tool === tool);
+            });
+            currentToolSpan.textContent = tool.charAt(0).toUpperCase() + tool.slice(1);
+            
+            if (tool === 'text') {
+                canvas.style.cursor = 'text';
+            } else if (tool === 'eraser') {
+                canvas.style.cursor = 'crosshair';
+            } else {
+                canvas.style.cursor = 'crosshair';
+            }
+        }
+
+        document.querySelectorAll('.tool-btn').forEach(btn => {
+            btn.addEventListener('click', () => setTool(btn.dataset.tool));
+        });
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // AI Panel functionality
+        let aiConfig = {
+            baseUrl: 'https://openrouter.ai/api/v1',
+            apiKey: '',
+            model: 'anthropic/claude-sonnet-4-5'
+        };
+        let chatHistory = [];
+        let isGenerating = false;
+        let abortController = null;
+
+        // Load saved config
+        function loadConfig() {
+            const saved = localStorage.getItem('aiConfig');
+            if (saved) {
+                aiConfig = JSON.parse(saved);
+                document.getElementById('apiBaseUrl').value = aiConfig.baseUrl;
+                document.getElementById('apiKey').value = aiConfig.apiKey ? '•'.repeat(20) : '';
+                document.getElementById('modelSelect').value = aiConfig.model;
+            }
+        }
+
+        // Save config
+        function saveApiConfig() {
+            const baseUrl = document.getElementById('apiBaseUrl').value;
+            const apiKey = document.getElementById('apiKey').value;
+            const model = document.getElementById('modelSelect').value;
+            
+            aiConfig = {baseUrl, apiKey, model};
+            localStorage.setItem('aiConfig', JSON.stringify(aiConfig));
+            
+            if (apiKey) {
+                document.getElementById('apiKey').value = '•'.repeat(20);
+            }
+            
+            showToast('Configuration saved', 'success');
+        }
+
+        // Toggle AI panel
+        function toggleAiPanel() {
+            aiPanel.classList.toggle('collapsed');
+            aiToggle.classList.toggle('active');
+        }
+
+        // Send message to AI
+        async function sendToAI(message) {
+            if (!aiConfig.apiKey) {
+                addMessage('error', 'Please configure your API key first');
+                return;
+            }
+            
+            isGenerating = true;
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<span class="loading"></span>';
+            
+            addMessage('user', message);
+            
+            abortController = new AbortController();
+            
+            try {
+                const response = await fetch(`${aiConfig.baseUrl}/chat/completions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${aiConfig.apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: aiConfig.model,
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are an ASCII diagram assistant. The user is working in an ASCII canvas editor (200 cols x 80 rows, monospace grid). When asked to create or modify diagrams, respond ONLY with the ASCII art/diagram inside a code block (```ascii ... ```). Keep drawings compact. Use box-drawing characters when appropriate: ┌─┐│└┘╔═╗║╚╝╭─╮. For explanations, respond normally. When the user says "add to canvas" or "apply", the content of the last ascii code block will be placed on the canvas at position (0,0). Support requests like: "draw a flowchart", "create a system architecture diagram", "draw a tree structure", "make a sequence diagram", etc.'
+                            },
+                            ...chatHistory,
+                            {role: 'user', content: message}
+                        ],
+                        temperature: 0.7
+                    }),
+                    signal: abortController.signal
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const content = data.choices[0].message.content;
+                
+                addMessage('ai', content);
+                chatHistory.push({role: 'user', content: message});
+                chatHistory.push({role: 'assistant', content: content});
+                
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    addMessage('error', 'Request cancelled');
+                } else {
+                    addMessage('error', `Error: ${error.message}`);
+                }
+            } finally {
+                isGenerating = false;
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send';
+                abortController = null;
+            }
+        }
+
+        // Add message to chat
+        function addMessage(type, content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            if (type === 'error') {
+                messageDiv.innerHTML = `<div class="error-bubble">${content}</div>`;
+            } else {
+                let processedContent = content;
+                
+                // Extract ASCII code blocks
+                const asciiBlocks = [];
+                const regex = /```(?:ascii|art)?\n([\s\S]*?)```/gi;
+                let match;
+                while ((match = regex.exec(content)) !== null) {
+                    asciiBlocks.push(match[1]);
+                    processedContent = processedContent.replace(match[0], `<div class="ascii-code-block">${match[1]}</div>`);
+                }
+                
+                messageDiv.innerHTML = `<div class="message-bubble">${processedContent}</div>`;
+                
+                // Add action buttons if ASCII blocks found
+                if (asciiBlocks.length > 0 && type === 'ai') {
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.className = 'message-actions';
+                    
+                    const applyBtn = document.createElement('button');
+                    applyBtn.className = 'action-btn';
+                    applyBtn.textContent = 'Apply to Canvas';
+                    applyBtn.onclick = () => applyAsciiToCanvas(asciiBlocks[asciiBlocks.length - 1], 0, 0);
+                    
+                    const atCursorBtn = document.createElement('button');
+                    atCursorBtn.className = 'action-btn';
+                    atCursorBtn.textContent = 'Apply at Cursor';
+                    atCursorBtn.onclick = () => {
+                        const pos = getGridPos({clientX: canvas.width / 2, clientY: canvas.height / 2});
+                        applyAsciiToCanvas(asciiBlocks[asciiBlocks.length - 1], pos.col, pos.row);
+                    };
+                    
+                    const appendBtn = document.createElement('button');
+                    appendBtn.className = 'action-btn';
+                    appendBtn.textContent = 'Append';
+                    appendBtn.onclick = () => {
+                        let firstEmptyRow = 0;
+                        for (let row = 0; row < ROWS; row++) {
+                            if (grid[row].every(char => char === ' ')) {
+                                firstEmptyRow = row;
+                                break;
+                            }
+                        }
+                        applyAsciiToCanvas(asciiBlocks[asciiBlocks.length - 1], 0, firstEmptyRow);
+                    };
+                    
+                    actionsDiv.appendChild(applyBtn);
+                    actionsDiv.appendChild(atCursorBtn);
+                    actionsDiv.appendChild(appendBtn);
+                    messageDiv.appendChild(actionsDiv);
+                }
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Apply ASCII to canvas
+        function applyAsciiToCanvas(asciiText, startCol = 0, startRow = 0) {
+            saveUndo();
+            const lines = asciiText.split('\n');
+            for (let r = 0; r < lines.length && startRow + r < ROWS; r++) {
+                for (let c = 0; c < lines[r].length && startCol + c < COLS; c++) {
+                    grid[startRow + r][startCol + c] = lines[r][c];
+                }
+            }
+            render();
+            showToast('Applied to canvas', 'success');
+        }
+
+        // Event listeners for AI panel
+        aiToggle.addEventListener('click', toggleAiPanel);
+        aiPanelClose.addEventListener('click', toggleAiPanel);
+
+        document.getElementById('saveConfig').addEventListener('click', saveApiConfig);
+
+        document.querySelectorAll('.quick-prompt').forEach(btn => {
+            btn.addEventListener('click', () => {
+                chatInput.value = btn.dataset.prompt;
+                chatInput.focus();
+            });
+        });
+
+        sendBtn.addEventListener('click', () => {
+            const message = chatInput.value.trim();
+            if (message) {
+                sendToAI(message);
+                chatInput.value = '';
+                chatInput.style.height = 'auto';
+            }
+        });
+
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendBtn.click();
+            }
+        });
+
+        chatInput.addEventListener('input', () => {
+            chatInput.style.height = 'auto';
+            chatInput.style.height = Math.min(chatInput.scrollHeight, 80) + 'px';
+        });
+
+        // Panel resize
+        let isResizing = false;
+        resizeHandle.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            
+            const newWidth = window.innerWidth - e.clientX;
+            const clampedWidth = Math.max(200, Math.min(500, newWidth));
+            aiPanel.style.width = clampedWidth + 'px';
+        });
+
+        document.addEventListener('mouseup', () => {
+            isResizing = false;
+        });
+
+        // Initialize
+        loadConfig();
+        initCanvas();
+        setTool('select');
+    </script>
+</body>
+</html>
