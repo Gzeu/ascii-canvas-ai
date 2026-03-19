@@ -1,0 +1,32 @@
+{
+  "name": "ascii-canvas-ai",
+  "version": "1.0.0",
+  "description": "Professional ASCII Canvas Diagram Editor with integrated AI Assistant",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "dev": "python -m http.server 8080",
+    "build": "echo 'No build step required - static HTML file'"
+  },
+  "keywords": [
+    "ascii",
+    "diagram",
+    "editor",
+    "ai",
+    "canvas",
+    "drawing",
+    "visualization",
+    "flowchart",
+    "architecture"
+  ],
+  "author": "Gzeu",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gzeu/ascii-canvas-ai.git"
+  },
+  "homepage": "https://ascii-canvas-ai.vercel.app",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
