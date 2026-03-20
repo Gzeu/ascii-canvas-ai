@@ -621,60 +621,31 @@
            CANVAS SETUP
            =============================================
         
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
         
         // Canvas dimensions
-        const COLS = 200;
-        const ROWS = 80;
-        const charWidth = 8;
-        const charHeight = 12;
+        var COLS = 200;
+        var ROWS = 80;
+        var charWidth = 8;
+        var charHeight = 12;
         
         canvas.width = COLS * charWidth;
         canvas.height = ROWS * charHeight;
         
         // Grid data
-        let grid = Array(ROWS).fill(null).map(function() { return Array(COLS).fill(' '); });
+        var grid = Array(ROWS).fill(null).map(function() { return Array(COLS).fill(' '); });
         
         // Current state
-        let currentTool = 'freehand';
-        let currentChar = '*';
-        let isDrawing = false;
-        let lastPos = null;
-        let startPos = null;
-        let selectedCharIndex = 0;
-        let clipboard = null;
-        
-        // Popular ASCII characters for palette
-        var charPalette = [
-            ' ', '.', ',', ':', ';', '-', '=', '+', '*', '#', '@', '%', '$', '&', '0', 'O',
-            '│', '─', '┌', '┐', '└', '┘', '├', '┤', '┬', '┴', '┼', '╭', '╮', '╰', '╯',
-            '█', '▓', '▒', '░', '■', '□', '◆', '◇', '▲', '▼', '▶', '◀', '★', '☆', '→', '←',
-            '(', ')', '[', ']', '{', '}', '<', '>', '/', '\\', '|', '_', '~', '`', '"', "'"
-        ];
-        
-        function initCharPalette() {
-            var palette = document.getElementById('char-palette');
-            charPalette.forEach(function(ch, i) {
-                var btn = document.createElement('button');
-                btn.className = 'tool-btn';
-                btn.style.fontSize = '16px';
-                btn.style.padding = '8px';
-                btn.textContent = ch === ' ' ? '␣' : ch;
-                btn.title = ch === ' ' ? 'Space' : ch;
-                if (i === selectedCharIndex) btn.classList.add('active');
-                
-                btn.addEventListener('click', function() {
-                    currentChar = ch;
-                    selectedCharIndex = i;
-                    var buttons = document.querySelectorAll('#char-palette .tool-btn');
-                    buttons.forEach(function(b) { b.classList.remove('active'); });
-                    btn.classList.add('active');
-                });
-                
-                palette.appendChild(btn);
-            });
-        }
+        var currentTool = 'freehand';
+        var currentChar = '*';
+        var isDrawing = false;
+        var lastPos = null;
+        var startPos = null;
+        var selectedCharIndex = 0;
+        var clipboard = null;
+        var apiKey = localStorage.getItem('openai_api_key') || '';
+        var aiStatus = 'idle';
         
         // History
         let undoStack = [];
