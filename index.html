@@ -686,7 +686,9 @@
         
         function updateInfo() {
             document.getElementById('cursorPos').textContent = lastPos ? lastPos.col + ', ' + lastPos.row : '0, 0';
-            document.getElementById('currentTool').textContent = currentTool.charAt(0).toUpperCase() + currentTool.substring(1);
+            document.getElementById('currentTool').textContent = 
+                currentTool.charAt(0).toUpperCase() + currentTool.substring(1) +
+                (currentChar !== ' ' ? ' (' + currentChar + ')' : ' (space)');
             document.getElementById('zoomLevel').textContent = '100%';
             
             // Count characters and lines
@@ -770,37 +772,52 @@
             const input = document.createElement('input');
             input.type = 'text';
             input.style.position = 'absolute';
-            input.style.left = (col * charWidth + canvas.offsetLeft) + 'px';
-            input.style.top = (row * charHeight + canvas.offsetTop) + 'px';
+            // Better alignment – account for canvas position + slight offset
+            input.style.left = canvas.offsetLeft + col * charWidth + 2 + 'px';
+            input.style.top = canvas.offsetTop + row * charHeight - 2 + 'px'; // slight upward nudge
             input.style.font = '12px JetBrains Mono';
-            input.style.background = 'rgba(0,212,170,0.2)';
+            input.style.background = 'rgba(0, 212, 170, 0.25)';
             input.style.color = '#fff';
             input.style.border = '1px solid #00d4aa';
-            input.style.padding = '2px 4px';
-            input.style.width = '200px';
-            input.style.zIndex = 100;
-            
+            input.style.padding = '1px 4px';
+            input.style.width = '240px';
+            input.style.height = charHeight + 2 + 'px';
+            input.style.lineHeight = charHeight + 'px';
+            input.style.zIndex = '1000';
+
             document.body.appendChild(input);
             input.focus();
-            
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === 'Escape') {
-                    if (e.key === 'Enter') {
-                        const text = input.value.trim();
-                        if (text) {
-                            saveUndo();
-                            for (let i = 0; i < text.length; i++) {
-                                const c = col + i;
-                                if (c < COLS && row < ROWS) {
-                                    grid[row][c] = text[i];
-                                }
-                            }
-                            render();
+            input.select();
+
+            let committed = false;
+
+            const commit = function() {
+                if (committed) return;
+                committed = true;
+                const text = input.value.trim();
+                if (text) {
+                    saveUndo();
+                    for (let i = 0; i < text.length; i++) {
+                        const c = col + i;
+                        if (c < COLS && row < ROWS) {
+                            grid[row][c] = text[i];
                         }
                     }
-                    document.body.removeChild(input);
+                    render();
+                }
+                document.body.removeChild(input);
+            };
+
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    commit();
+                } else if (e.key === 'Escape') {
+                    commit(); // just close without saving
                 }
             });
+
+            input.addEventListener('blur', commit);
         }
         
         function floodFill(startRow, startCol, targetChar, replacementChar) {
@@ -1134,7 +1151,7 @@
         });
         
         // Canvas mouse events
-        canvas.addEventListener('mousedown', (e) => {
+        canvas.addEventListener('mousedown', function(e) {
             isDrawing = true;
             startPos = getMousePos(e);
             lastPos = startPos;
@@ -1145,7 +1162,9 @@
                 startTextInput(startPos.row, startPos.col);
                 isDrawing = false;
             } else if (currentTool === 'fill') {
-                floodFill(startPos.row, startPos.col, ' ', currentChar);
+                const pos = getMousePos(e);
+                saveUndo();
+                floodFill(pos.row, pos.col, grid[pos.row][pos.col], currentChar);
                 isDrawing = false;
             } else if (currentTool === 'select') {
                 selection = {
