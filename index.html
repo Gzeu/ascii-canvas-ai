@@ -1059,6 +1059,53 @@
                     case 'mirror': mirrorCanvas(); break;
                     case 'center': centerContent(); break;
                     case 'random': generateRandomArt(); break;
+                    case 'fill-all': fillCanvas(); break;
+                    case 'fill-connected': 
+                        // Flood fill from center or current position
+                        const centerRow = Math.floor(ROWS / 2);
+                        const centerCol = Math.floor(COLS / 2);
+                        floodFill(centerRow, centerCol, ' ', currentChar);
+                        break;
+                    case 'select-all': 
+                        selection = {startRow: 0, startCol: 0, endRow: ROWS - 1, endCol: COLS - 1};
+                        render();
+                        break;
+                    case 'clear-selection': 
+                        selection = null;
+                        render();
+                        break;
+                    case 'copy': 
+                        if (selection) {
+                            clipboard = [];
+                            for (let r = selection.startRow; r <= selection.endRow; r++) {
+                                clipboard.push(grid[r].slice(selection.startCol, selection.endCol + 1));
+                            }
+                        }
+                        break;
+                    case 'paste': 
+                        if (clipboard && selection) {
+                            saveUndo();
+                            for (let r = 0; r < clipboard.length && selection.startRow + r < ROWS; r++) {
+                                for (let c = 0; c < clipboard[r].length && selection.startCol + c < COLS; c++) {
+                                    grid[selection.startRow + r][selection.startCol + c] = clipboard[r][c];
+                                }
+                            }
+                            render();
+                        }
+                        break;
+                    case 'delete': 
+                        if (selection) {
+                            saveUndo();
+                            for (let r = selection.startRow; r <= selection.endRow; r++) {
+                                for (let c = selection.startCol; c <= selection.endCol; c++) {
+                                    if (r >= 0 && r < ROWS && c >= 0 && c < COLS) {
+                                        grid[r][c] = ' ';
+                                    }
+                                }
+                            }
+                            render();
+                        }
+                        break;
                 }
             });
         });
@@ -1099,6 +1146,13 @@
             } else if (currentTool === 'fill') {
                 floodFill(startPos.row, startPos.col, ' ', currentChar);
                 isDrawing = false;
+            } else if (currentTool === 'select') {
+                selection = {
+                    startRow: startPos.row,
+                    startCol: startPos.col,
+                    endRow: startPos.row,
+                    endCol: startPos.col
+                };
             }
         });
         
@@ -1113,6 +1167,10 @@
                     drawChar(pos.row, pos.col, currentChar);
                     lastPos = pos;
                 }
+            } else if (currentTool === 'select' && selection) {
+                selection.endRow = pos.row;
+                selection.endCol = pos.col;
+                render();
             }
         });
         
@@ -1128,6 +1186,15 @@
                 drawRectangle(startPos.col, startPos.row, endPos.col, endPos.row, currentChar, false);
             } else if (currentTool === 'rectangle-filled') {
                 drawRectangle(startPos.col, startPos.row, endPos.col, endPos.row, currentChar, true);
+            } else if (currentTool === 'select' && selection) {
+                // Normalize selection
+                const tempRow = selection.startRow;
+                const tempCol = selection.startCol;
+                selection.startRow = Math.min(selection.startRow, selection.endRow);
+                selection.startCol = Math.min(selection.startCol, selection.endCol);
+                selection.endRow = Math.max(tempRow, selection.endRow);
+                selection.endCol = Math.max(tempCol, selection.endCol);
+                render();
             }
 
             startPos = null;
