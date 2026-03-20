@@ -418,6 +418,96 @@
                 </div>
             </section>
 
+            <!-- Character Palette -->
+            <div class="tool-section">
+                <h3>✦ Character Palette</h3>
+                <div id="char-palette" class="tool-grid" style="grid-template-columns: repeat(8, 1fr); gap: 6px;"></div>
+            </div>
+
+            <!-- Line Tool -->
+            <div class="tool-section">
+                <h3>📐 Line Tool</h3>
+                <div class="tool-grid">
+                    <button class="tool-btn" data-tool="line">
+                        <span class="tool-icon">📏</span>
+                        <span class="tool-label">Line</span>
+                    </button>
+                    <button class="tool-btn" data-tool="rectangle">
+                        <span class="tool-icon">▢</span>
+                        <span class="tool-label">Rectangle</span>
+                    </button>
+                    <button class="tool-btn" data-tool="rectangle-filled">
+                        <span class="tool-icon">▣</span>
+                        <span class="tool-label">Filled</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Text Tool -->
+            <div class="tool-section">
+                <h3>📝 Text Tool</h3>
+                <div class="tool-grid">
+                    <button class="tool-btn" data-tool="text">
+                        <span class="tool-icon">📝</span>
+                        <span class="tool-label">Text</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Fill Tool -->
+            <div class="tool-section">
+                <h3>🪣 Fill Tool</h3>
+                <div class="tool-grid">
+                    <button class="tool-btn" data-tool="fill">
+                        <span class="tool-icon">🪣</span>
+                        <span class="tool-label">Fill</span>
+                    </button>
+                    <button class="tool-btn" data-tool="fill-all">
+                        <span class="tool-icon">🪣</span>
+                        <span class="tool-label">Fill All</span>
+                    </button>
+                    <button class="tool-btn" data-tool="fill-connected">
+                        <span class="tool-icon">🔗</span>
+                        <span class="tool-label">Fill Connected</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Selection Tool -->
+            <div class="tool-section">
+                <h3>🎯 Selection Tool</h3>
+                <div class="tool-grid">
+                    <button class="tool-btn" data-tool="select">
+                        <span class="tool-icon">🎯</span>
+                        <span class="tool-label">Select</span>
+                    </button>
+                    <button class="tool-btn" data-tool="select-all">
+                        <span class="tool-icon">⬜</span>
+                        <span class="tool-label">Select All</span>
+                    </button>
+                    <button class="tool-btn" data-tool="clear-selection">
+                        <span class="tool-icon">🗑️</span>
+                        <span class="tool-label">Clear</span>
+                    </button>
+                    <button class="tool-btn" data-tool="copy">
+                        <span class="tool-icon">📋</span>
+                        <span class="tool-label">Copy</span>
+                    </button>
+                    <button class="tool-btn" data-tool="paste">
+                        <span class="tool-icon">📋</span>
+                        <span class="tool-label">Paste</span>
+                    </button>
+                    <button class="tool-btn" data-tool="move">
+                        <span class="tool-icon">↔️</span>
+                        <span class="tool-label">Move</span>
+                    </button>
+                    <button class="tool-btn" data-tool="delete">
+                        <span class="tool-icon">🗑️</span>
+                        <span class="tool-label">Delete</span>
+                    </button>
+                </div>
+            </div>
+
             <!-- Export Options -->
             <section class="tool-section">
                 <h3>💾 Export</h3>
@@ -508,6 +598,39 @@
         let currentChar = '*';
         let isDrawing = false;
         let lastPos = null;
+        let startPos = null;
+        let selectedCharIndex = 0;
+        let clipboard = null;
+        
+        // Popular ASCII characters for palette
+        const charPalette = [
+            ' ', '.', ',', ':', ';', '-', '=', '+', '*', '#', '@', '%', '$', '&', '0', 'O',
+            '│', '─', '┌', '┐', '└', '┘', '├', '┤', '┬', '┴', '┼', '╭', '╮', '╰', '╯',
+            '█', '▓', '▒', '░', '■', '□', '◆', '◇', '▲', '▼', '▶', '◀', '★', '☆', '→', '←',
+            '(', ')', '[', ']', '{', '}', '<', '>', '/', '\\', '|', '_', '~', '`', '"', "'"
+        ];
+        
+        function initCharPalette() {
+            const palette = document.getElementById('char-palette');
+            charPalette.forEach((ch, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'tool-btn';
+                btn.style.fontSize = '16px';
+                btn.style.padding = '8px';
+                btn.textContent = ch === ' ' ? '␣' : ch;
+                btn.title = ch === ' ' ? 'Space' : ch;
+                if (i === selectedCharIndex) btn.classList.add('active');
+                
+                btn.addEventListener('click', () => {
+                    currentChar = ch;
+                    selectedCharIndex = i;
+                    document.querySelectorAll('#char-palette .tool-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+                
+                palette.appendChild(btn);
+            });
+        }
         
         // History
         let undoStack = [];
@@ -600,11 +723,111 @@
            DRAWING FUNCTIONS
            =============================================
         
-        function drawChar(row, col, char) {
-            if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
-                grid[row][col] = char;
-                render();
+        function drawLine(x0, y0, x1, y1, char) {
+            saveUndo();
+            
+            const dx = Math.abs(x1 - x0);
+            const dy = Math.abs(y1 - y0);
+            const sx = x0 < x1 ? 1 : -1;
+            const sy = y0 < y1 ? 1 : -1;
+            let err = dx - dy;
+            
+            while (true) {
+                if (x0 >= 0 && x0 < COLS && y0 >= 0 && y0 < ROWS) {
+                    grid[y0][x0] = char || currentChar;
+                }
+                if (x0 === x1 && y0 === y1) break;
+                
+                const e2 = 2 * err;
+                if (e2 > -dy) { err -= dy; x0 += sx; }
+                if (e2 <  dx) { err += dx; y0 += sy; }
             }
+            render();
+        }
+        
+        function drawRectangle(x0, y0, x1, y1, char, filled) {
+            saveUndo();
+            
+            const minX = Math.min(x0, x1);
+            const maxX = Math.max(x0, x1);
+            const minY = Math.min(y0, y1);
+            const maxY = Math.max(y0, y1);
+            
+            for (let y = minY; y <= maxY; y++) {
+                for (let x = minX; x <= maxX; x++) {
+                    if (filled || y === minY || y === maxY || x === minX || x === maxX) {
+                        if (y >= 0 && y < ROWS && x >= 0 && x < COLS) {
+                            grid[y][x] = char || currentChar;
+                        }
+                    }
+                }
+            }
+            render();
+        }
+        
+        function startTextInput(row, col) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.style.position = 'absolute';
+            input.style.left = (col * charWidth + canvas.offsetLeft) + 'px';
+            input.style.top = (row * charHeight + canvas.offsetTop) + 'px';
+            input.style.font = '12px JetBrains Mono';
+            input.style.background = 'rgba(0,212,170,0.2)';
+            input.style.color = '#fff';
+            input.style.border = '1px solid #00d4aa';
+            input.style.padding = '2px 4px';
+            input.style.width = '200px';
+            input.style.zIndex = 100;
+            
+            document.body.appendChild(input);
+            input.focus();
+            
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === 'Escape') {
+                    if (e.key === 'Enter') {
+                        const text = input.value.trim();
+                        if (text) {
+                            saveUndo();
+                            for (let i = 0; i < text.length; i++) {
+                                const c = col + i;
+                                if (c < COLS && row < ROWS) {
+                                    grid[row][c] = text[i];
+                                }
+                            }
+                            render();
+                        }
+                    }
+                    document.body.removeChild(input);
+                }
+            });
+        }
+        
+        function floodFill(startRow, startCol, targetChar, replacementChar) {
+            if (startRow < 0 || startRow >= ROWS || startCol < 0 || startCol >= COLS) return;
+            if (grid[startRow][startCol] !== targetChar) return;
+            if (targetChar === replacementChar) return;
+            
+            const stack = [[startRow, startCol]];
+            const visited = new Set();
+            
+            while (stack.length > 0) {
+                const [row, col] = stack.pop();
+                const key = row + ',' + col;
+                
+                if (visited.has(key)) continue;
+                visited.add(key);
+                
+                if (row < 0 || row >= ROWS || col < 0 || col >= COLS) continue;
+                if (grid[row][col] !== targetChar) continue;
+                
+                grid[row][col] = replacementChar;
+                
+                stack.push([row - 1, col]);
+                stack.push([row + 1, col]);
+                stack.push([row, col - 1]);
+                stack.push([row, col + 1]);
+            }
+            render();
         }
         
         function getMousePos(e) {
@@ -865,17 +1088,27 @@
         // Canvas mouse events
         canvas.addEventListener('mousedown', (e) => {
             isDrawing = true;
-            lastPos = getMousePos(e);
-            
+            startPos = getMousePos(e);
+            lastPos = startPos;
+
             if (currentTool === 'freehand') {
-                drawChar(lastPos.row, lastPos.col, currentChar);
+                drawChar(startPos.row, startPos.col, currentChar);
+            } else if (currentTool === 'text') {
+                startTextInput(startPos.row, startPos.col);
+                isDrawing = false;
+            } else if (currentTool === 'fill') {
+                floodFill(startPos.row, startPos.col, ' ', currentChar);
+                isDrawing = false;
             }
         });
         
         canvas.addEventListener('mousemove', (e) => {
             const pos = getMousePos(e);
-            
-            if (isDrawing && currentTool === 'freehand') {
+            lastPos = pos;
+
+            if (!isDrawing) return;
+
+            if (currentTool === 'freehand') {
                 if (pos.row !== lastPos.row || pos.col !== lastPos.col) {
                     drawChar(pos.row, pos.col, currentChar);
                     lastPos = pos;
@@ -883,8 +1116,21 @@
             }
         });
         
-        canvas.addEventListener('mouseup', () => {
+        canvas.addEventListener('mouseup', (e) => {
+            if (!isDrawing) return;
             isDrawing = false;
+
+            const endPos = getMousePos(e);
+
+            if (currentTool === 'line') {
+                drawLine(startPos.col, startPos.row, endPos.col, endPos.row);
+            } else if (currentTool === 'rectangle') {
+                drawRectangle(startPos.col, startPos.row, endPos.col, endPos.row, currentChar, false);
+            } else if (currentTool === 'rectangle-filled') {
+                drawRectangle(startPos.col, startPos.row, endPos.col, endPos.row, currentChar, true);
+            }
+
+            startPos = null;
         });
         
         canvas.addEventListener('mouseleave', () => {
@@ -991,9 +1237,19 @@ ${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}
             URL.revokeObjectURL(url);
         }
         
+        function drawChar(row, col, char) {
+            if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
+                grid[row][col] = char;
+                render();
+            }
+        }
+        
         // =============================================
            INITIALIZATION
            =============================================
+        
+        // Initialize character palette
+        initCharPalette();
         
         // Set initial tool
         setTool('freehand');
@@ -1004,7 +1260,7 @@ ${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}
         // Focus canvas for keyboard input
         canvas.focus();
         
-        console.log('ASCII Canvas Studio v7.0 - Ready!');
+        console.log('ASCII Canvas Studio v8.4 - Ready with Enhanced Tools!');
     </script>
 </body>
 </html>
