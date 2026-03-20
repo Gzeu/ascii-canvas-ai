@@ -563,37 +563,6 @@
             color: var(--text-primary);
             padding: var(--space-sm);
             border-radius: var(--radius-md);
-            font-family: var(--font-sans);
-            font-size: var(--font-size-sm);
-            transition: var(--transition-fast);
-        }
-
-        .setting-item select:focus,
-        .setting-item input[type="checkbox"]:focus {
-            outline: 2px solid var(--accent);
-            outline-offset: 2px;
-        }
-
-        /* Mobile Responsive Updates */
-
-        /* Modern Canvas Container */
-        .canvas-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: var(--bg-primary);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .canvas-wrapper {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-            background: 
-                linear-gradient(var(--bg-primary) 24px, transparent 24px),
-                linear-gradient(90deg, var(--bg-primary) 24px, transparent 24px),
-                repeating-linear-gradient(
                     0deg,
                     transparent,
                     transparent 23px,
@@ -725,17 +694,153 @@
             cursor: pointer;
         }
 
-        .style-select:hover {
-            border-color: var(--accent);
+        .color-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-xs);
+            background: var(--bg-surface-2);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+            font-family: var(--font-mono);
+            font-size: var(--font-size-xs);
+        }
+
+        /* Mobile Responsive Updates */
+        @media (max-width: 768px) {
+            .shortcuts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .macro-controls {
+                flex-direction: column;
+                gap: var(--space-xs);
+            }
+            
+            .color-presets {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* History Panel */
+        .history-controls {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-sm);
+        }
+
+        .history-btn {
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .history-btn:hover {
             background: var(--bg-surface-3);
+            border-color: var(--accent);
+            color: var(--text-primary);
         }
 
-        .style-select:focus {
-            outline: 2px solid var(--accent);
-            outline-offset: 2px;
+        .history-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        /* Mobile Responsive Design */
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: var(--space-sm);
+        }
+
+        .history-item {
+            padding: var(--space-sm);
+            border-bottom: 1px solid var(--border-subtle);
+            font-family: var(--font-mono);
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .history-item:hover {
+            background: var(--bg-surface-3);
+            color: var(--text-primary);
+        }
+
+        .history-item-time {
+            font-size: var(--font-size-xs);
+            color: var(--text-tertiary);
+        }
+
+        .history-item-action {
+            font-size: var(--font-size-xs);
+            color: var(--accent);
+            cursor: pointer;
+        }
+
+        /* Guides Panel */
+        .guide-controls {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-sm);
+        }
+
+        .guide-btn {
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .guide-btn:hover {
+            background: var(--bg-surface-3);
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+
+        .guide-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--text-inverse);
+        }
+
+        /* Mobile Responsive Updates */
+        @media (max-width: 768px) {
+            .history-controls {
+                flex-direction: column;
+                gap: var(--space-xs);
+            }
+            
+            .guide-controls {
+                flex-direction: column;
+                gap: var(--space-xs);
+            }
+        }
         @media (max-width: 768px) {
             .left-panel {
                 width: 60px;
@@ -1350,7 +1455,90 @@
             </div>
 
             <div class="tool-section">
-                <h3>Arrow Head</h3>
+                <h3>⌨️ Shortcuts</h3>
+                <div class="shortcuts-grid">
+                    <div class="shortcut-item">
+                        <kbd>Ctrl+Z</kbd>
+                        <span>Undo</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>Ctrl+Y</kbd>
+                        <span>Redo</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>Ctrl+S</kbd>
+                        <span>Save</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>Ctrl+Shift+C</kbd>
+                        <span>Copy</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>Ctrl+V</kbd>
+                        <span>Paste</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>Delete</kbd>
+                        <span>Clear</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>Space+Drag</kbd>
+                        <span>Pan</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>Scroll</kbd>
+                        <span>Zoom</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <h3>🎬 Macros</h3>
+                <div class="macro-controls">
+                    <button class="macro-btn" id="recordMacro">
+                        <span>⏺️ Record</span>
+                    </button>
+                    <button class="macro-btn" id="playMacro">
+                        <span>▶️ Play</span>
+                    </button>
+                    <button class="macro-btn" id="stopMacro">
+                        <span>⏹️ Stop</span>
+                    </button>
+                    <button class="macro-btn" id="clearMacro">
+                        <span>🗑️ Clear</span>
+                    </button>
+                </div>
+                <div class="macro-status">
+                    <span id="macroStatus">No macro recorded</span>
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <h3>🎨 Color Picker</h3>
+                <div class="color-controls">
+                    <div class="color-presets">
+                        <button class="color-preset" data-color="#ffffff" style="background: #ffffff; color: #000;">⬜</button>
+                        <button class="color-preset" data-color="#ff0000" style="background: #ff0000;">⬛</button>
+                        <button class="color-preset" data-color="#00ff00" style="background: #00ff00;">🟩</button>
+                        <button class="color-preset" data-color="#0000ff" style="background: #0000ff;">🟦</button>
+                        <button class="color-preset" data-color="#ffff00" style="background: #ffff00;">🟨</button>
+                        <button class="color-preset" data-color="#ff00ff" style="background: #ff00ff;">🟪</button>
+                        <button class="color-preset" data-color="#00ffff" style="background: #00ffff;">🟩</button>
+                        <button class="color-preset" data-color="#ff0080" style="background: #ff0080;">🟠</button>
+                        <button class="color-preset" data-color="#800080" style="background: #800080;">🟩</button>
+                        <button class="color-preset" data-color="#0080ff" style="background: #0080ff;">🟦</button>
+                        <button class="color-preset" data-color="#808000" style="background: #808000;">🟩</button>
+                        <button class="color-preset" data-color="#ff8000" style="background: #ff8000;">🟧</button>
+                        <button class="color-preset" data-color="#ff00ff" style="background: #ff00ff;">🟪</button>
+                        <button class="color-preset" data-color="#ffffff" style="background: #ffffff; border: 2px solid var(--accent);">🌟</button>
+                    </div>
+                    <input type="color" id="customColor" class="color-input" value="#00d4aa">
+                    <div class="color-info">
+                        <span id="colorHex">#00d4aa</span>
+                        <span id="colorRgb">rgb(0, 212, 170)</span>
+                    </div>
+                </div>
+            </div>
                 <select class="style-select" id="arrowHead">
                     <option value="arrow">Arrow (>)</option>
                     <option value="triangle">Triangle (▶)</option>
@@ -1358,7 +1546,37 @@
             </div>
 
             <div class="tool-section">
-                <h3>Line Style</h3>
+                <h3>📜 History</h3>
+                <div class="history-controls">
+                    <button class="history-btn" id="undoBtn">
+                        <span>↶ Undo</span>
+                    </button>
+                    <button class="history-btn" id="redoBtn">
+                        <span>↷ Redo</span>
+                    </button>
+                    <button class="history-btn" id="clearHistoryBtn">
+                        <span>🗑️ Clear</span>
+                    </button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <!-- History items will be added here dynamically -->
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <h3>📐 Guides</h3>
+                <div class="guide-controls">
+                    <button class="guide-btn" id="toggleGrid">
+                        <span>Grid: ON</span>
+                    </button>
+                    <button class="guide-btn" id="toggleRulers">
+                        <span>Rulers: OFF</span>
+                    </button>
+                    <button class="guide-btn" id="toggleSymmetry">
+                        <span>Symmetry: OFF</span>
+                    </button>
+                </div>
+            </div>
                 <select class="style-select" id="lineStyle">
                     <option value="ascii">ASCII (-, |)</option>
                     <option value="light">Light (─, │)</option>
@@ -2458,7 +2676,128 @@
             });
         });
         
-        // Enhanced freehand with pattern support
+        // Advanced features system
+        let isRecording = false;
+        let macroActions = [];
+        let currentColor = '#00d4aa';
+        
+        // Macro recording system
+        const recordMacroBtn = document.getElementById('recordMacro');
+        const playMacroBtn = document.getElementById('playMacro');
+        const stopMacroBtn = document.getElementById('stopMacro');
+        const clearMacroBtn = document.getElementById('clearMacro');
+        const macroStatus = document.getElementById('macroStatus');
+        
+        // Color picker system
+        const customColorInput = document.getElementById('customColor');
+        const colorHex = document.getElementById('colorHex');
+        const colorRgb = document.getElementById('colorRgb');
+        
+        // Event listeners for macros
+        if (recordMacroBtn) {
+            recordMacroBtn.addEventListener('click', startRecording);
+            playMacroBtn.addEventListener('click', playMacro);
+            stopMacroBtn.addEventListener('click', stopRecording);
+            clearMacroBtn.addEventListener('click', clearMacro);
+        }
+        
+        // Event listeners for color picker
+        if (customColorInput) {
+            customColorInput.addEventListener('input', updateColorInfo);
+            customColorInput.addEventListener('change', applyColor);
+        }
+        
+        // Color preset buttons
+        document.querySelectorAll('.color-preset').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const color = btn.dataset.color;
+                applyColor(color);
+                
+                // Visual feedback
+                document.querySelectorAll('.color-preset').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+        
+        function startRecording() {
+            isRecording = true;
+            macroActions = [];
+            recordMacroBtn.classList.add('recording');
+            playMacroBtn.disabled = true;
+            macroStatus.textContent = 'Recording...';
+            showToast('Macro recording started', 'success');
+        }
+        
+        function stopRecording() {
+            isRecording = false;
+            recordMacroBtn.classList.remove('recording');
+            playMacroBtn.disabled = false;
+            macroStatus.textContent = `Macro recorded: ${macroActions.length} actions`;
+            showToast('Macro recording stopped', 'success');
+        }
+        
+        function playMacro() {
+            if (macroActions.length === 0) {
+                showToast('No macro to play', 'warning');
+                return;
+            }
+            
+            saveUndo();
+            macroActions.forEach(action => {
+                if (action.type === 'draw') {
+                    drawFreehand(action.pos, action.char);
+                } else if (action.type === 'tool') {
+                    setTool(action.tool);
+                }
+                render();
+            });
+            
+            showToast('Macro played', 'success');
+        }
+        
+        function clearMacro() {
+            macroActions = [];
+            macroStatus.textContent = 'No macro recorded';
+            showToast('Macro cleared', 'success');
+        }
+        
+        function updateColorInfo() {
+            const color = customColorInput.value;
+            currentColor = color;
+            colorHex.textContent = color;
+            
+            // Convert hex to RGB
+            const hex = color.replace('#', '');
+            const r = parseInt(hex.substr(0, 2), 16);
+            const g = parseInt(hex.substr(2, 2), 16);
+            const b = parseInt(hex.substr(4, 2), 16);
+            colorRgb.textContent = `rgb(${r}, ${g}, ${b})`;
+        }
+        
+        function applyColor(color) {
+            currentColor = color;
+            customColorInput.value = color;
+            updateColorInfo();
+        }
+        
+        // Enhanced mouse tracking for macros
+        const originalDrawFreehand = drawFreehand;
+        drawFreehand = function(pos, char) {
+            originalDrawFreehand(pos, char);
+            
+            // Record action if recording
+            if (isRecording) {
+                macroActions.push({
+                    type: 'draw',
+                    pos: { ...pos },
+                    char: char,
+                macroActions.push({
+                    type: 'tool',
+                    tool: tool,
+                    timestamp: Date.now()
+                });
+            }
+        };
         function drawFreehandWithPattern(pos) {
             if (currentPattern) {
                 const pattern = patterns[currentPattern];
