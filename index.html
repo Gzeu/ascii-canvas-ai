@@ -561,7 +561,7 @@
            =============================================
         
         function updateInfo() {
-            document.getElementById('cursorPos').textContent = `${lastPos ? lastPos.col + ', ' + lastPos.row : '0, 0'}`;
+            document.getElementById('cursorPos').textContent = lastPos ? lastPos.col + ', ' + lastPos.row : '0, 0';
             document.getElementById('currentTool').textContent = currentTool.charAt(0).toUpperCase() + currentTool.substring(1);
             document.getElementById('zoomLevel').textContent = '100%';
             
@@ -577,10 +577,12 @@
                         hasContent = true;
                     }
                 }
-                if (hasContent) lineCount++;
+                if (hasContent) {
+                    lineCount++;
+                }
             }
             
-            document.getElementById('canvasSize').textContent = `${COLS}×${ROWS}`;
+            document.getElementById('canvasSize').textContent = COLS + '×' + ROWS;
             document.getElementById('charCount').textContent = charCount;
             document.getElementById('lineCount').textContent = lineCount;
             
@@ -588,7 +590,7 @@
             if (selection) {
                 const width = selection.endCol - selection.startCol + 1;
                 const height = selection.endRow - selection.startRow + 1;
-                document.getElementById('selectionInfo').textContent = `${width}×${height}`;
+                document.getElementById('selectionInfo').textContent = width + '×' + height;
             } else {
                 document.getElementById('selectionInfo').textContent = 'None';
             }
