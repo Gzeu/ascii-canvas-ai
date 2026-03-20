@@ -1,15 +1,16 @@
 {
   "version": 2,
+  "name": "ascii-canvas-studio",
   "outputDirectory": ".",
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "(.*)",
       "destination": "/index.html"
     }
   ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "(.*)",
       "headers": [
         {
           "key": "Cache-Control",
