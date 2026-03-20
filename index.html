@@ -508,7 +508,50 @@
                 </div>
             </div>
 
-            <!-- Export Options -->
+            <!-- AI Assistant -->
+            <div class="tool-section">
+                <h3>🤖 AI Assistant</h3>
+                <div class="tool-grid">
+                    <button class="tool-btn" data-action="ai-generate">
+                        <span class="tool-icon">🎨</span>
+                        <span class="tool-label">Generate</span>
+                    </button>
+                    <button class="tool-btn" data-action="ai-enhance">
+                        <span class="tool-icon">✨</span>
+                        <span class="tool-label">Enhance</span>
+                    </button>
+                    <button class="tool-btn" data-action="ai-complete">
+                        <span class="tool-icon">🔮</span>
+                        <span class="tool-label">Complete</span>
+                    </button>
+                    <button class="tool-btn" data-action="ai-style">
+                        <span class="tool-icon">🎭</span>
+                        <span class="tool-label">Style</span>
+                    </button>
+                    <button class="tool-btn" data-action="ai-optimize">
+                        <span class="tool-icon">⚡</span>
+                        <span class="tool-label">Optimize</span>
+                    </button>
+                    <button class="tool-btn" data-action="ai-explain">
+                        <span class="tool-icon">💡</span>
+                        <span class="tool-label">Explain</span>
+                    </button>
+                </div>
+                <div class="tool-section" style="margin-top: 8px;">
+                    <h3>🔑 API Key</h3>
+                    <input type="password" id="apiKey" placeholder="Enter OpenAI API Key" style="width: 100%; padding: 8px; background: var(--bg-surface-2); border: 1px solid var(--border); color: var(--text-primary); border-radius: var(--radius-md); font-family: var(--font-mono);">
+                    <button class="tool-btn" id="saveApiKey" style="margin-top: 8px; width: 100%;">
+                        <span class="tool-icon">💾</span>
+                        <span class="tool-label">Save Key</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI Status -->
+            <div class="tool-section" id="aiStatus" style="display: none;">
+                <h3>🤖 AI Status</h3>
+                <div id="aiStatusContent" style="padding: 8px; background: var(--bg-surface-2); border-radius: var(--radius-md); font-size: var(--font-size-sm); color: var(--text-secondary);"></div>
+            </div>
             <section class="tool-section">
                 <h3>💾 Export</h3>
                 <div class="tool-grid">
@@ -1056,8 +1099,218 @@
         }
         
         // =============================================
-           EVENT LISTENERS
+           AI ASSISTANT FUNCTIONS
            =============================================
+        
+        let apiKey = localStorage.getItem('openai_api_key') || '';
+        let aiStatus = 'idle';
+        
+        function updateAIStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('aiStatus');
+            const contentDiv = document.getElementById('aiStatusContent');
+            
+            if (statusDiv && contentDiv) {
+                statusDiv.style.display = 'block';
+                contentDiv.innerHTML = message;
+                
+                if (type === 'error') {
+                    contentDiv.style.background = 'rgba(255, 107, 107, 0.2)';
+                    contentDiv.style.color = '#fff';
+                } else if (type === 'success') {
+                    contentDiv.style.background = 'rgba(0, 200, 83, 0.2)';
+                    contentDiv.style.color = '#fff';
+                } else {
+                    contentDiv.style.background = 'var(--bg-surface-2)';
+                    contentDiv.style.color = 'var(--text-secondary)';
+                }
+            }
+        }
+        
+        function callOpenAI(prompt, options = {}) {
+            if (!apiKey) {
+                updateAIStatus('⚠️ Please enter your OpenAI API key first', 'error');
+                return;
+            }
+            
+            updateAIStatus('🤖 Processing your request...', 'info');
+            
+            const requestBody = {
+                model: 'gpt-3.5-turbo',
+                messages: [{
+                    role: 'user',
+                    content: prompt
+                }],
+                max_tokens: 1000,
+                temperature: 0.7,
+                ...options
+            };
+            
+            fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + apiKey
+                },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.choices && data.choices[0]) {
+                    const aiResponse = data.choices[0].message.content;
+                    updateAIStatus('✅ AI response received', 'success');
+                    return aiResponse;
+                } else {
+                    updateAIStatus('❌ Error: ' + (data.error?.message || 'Unknown error'), 'error');
+                    return null;
+                }
+            })
+            .catch(error => {
+                updateAIStatus('❌ Network error: ' + error.message, 'error');
+                return null;
+            });
+        }
+        
+        function applyAIResponse(response, action) {
+            if (!response) return;
+            
+            saveUndo();
+            
+            switch (action) {
+                case 'ai-generate':
+                    // Generate new ASCII art based on description
+                    const lines = response.split('\n');
+                    const startRow = Math.floor((ROWS - lines.length) / 2);
+                    const startCol = Math.floor((COLS - Math.max(...lines.map(line => line.length))) / 2);
+                    
+                    for (let r = 0; r < lines.length && startRow + r < ROWS; r++) {
+                        for (let c = 0; c < lines[r].length && startCol + c < COLS; c++) {
+                            grid[startRow + r][startCol + c] = lines[r][c];
+                        }
+                    }
+                    break;
+                    
+                case 'ai-enhance':
+                    // Enhance current selection or canvas
+                    if (selection) {
+                        const selectedText = [];
+                        for (let r = selection.startRow; r <= selection.endRow; r++) {
+                            selectedText.push(grid[r].slice(selection.startCol, selection.endCol + 1).join(''));
+                        }
+                        
+                        const enhancedPrompt = `Enhance this ASCII art:\n\n\n${selectedText.join('\n')}\n\nMake it more detailed, add shading, improve composition, fix any issues. Keep it as ASCII art.`;
+                        
+                        callOpenAI(enhancedPrompt).then(enhanced => {
+                            if (enhanced) {
+                                const lines = enhanced.split('\n');
+                                for (let r = 0; r < lines.length && selection.startRow + r < ROWS; r++) {
+                                    for (let c = 0; c < lines[r].length && selection.startCol + c < COLS; c++) {
+                                        grid[selection.startRow + r][selection.startCol + c] = lines[r][c];
+                                    }
+                                }
+                                render();
+                            }
+                        });
+                    }
+                    break;
+                    
+                case 'ai-complete':
+                    // Complete or finish the current drawing
+                    if (selection) {
+                        const selectedText = [];
+                        for (let r = selection.startRow; r <= selection.endRow; r++) {
+                            selectedText.push(grid[r].slice(selection.startCol, selection.endCol + 1).join(''));
+                        }
+                        
+                        const completePrompt = `Complete this ASCII art:\n\n\n${selectedText.join('\n')}\n\nFinish the drawing, add details, make it professional. Keep it as ASCII art format.`;
+                        
+                        callOpenAI(completePrompt).then(completed => {
+                            if (completed) {
+                                const lines = completed.split('\n');
+                                for (let r = 0; r < lines.length && selection.startRow + r < ROWS; r++) {
+                                    for (let c = 0; c < lines[r].length && selection.startCol + c < COLS; c++) {
+                                        grid[selection.startRow + r][selection.startCol + c] = lines[r][c];
+                                    }
+                                }
+                                render();
+                            }
+                        });
+                    }
+                    break;
+                    
+                case 'ai-style':
+                    // Apply different artistic style
+                    if (selection) {
+                        const selectedText = [];
+                        for (let r = selection.startRow; r <= selection.endRow; r++) {
+                            selectedText.push(grid[r].slice(selection.startCol, selection.endCol + 1).join(''));
+                        }
+                        
+                        const stylePrompt = `Restyle this ASCII art:\n\n\n${selectedText.join('\n')}\n\nApply a different artistic style (like 3D, retro, minimalist, cyberpunk, etc.). Keep it as ASCII art format.`;
+                        
+                        callOpenAI(stylePrompt).then(styled => {
+                            if (styled) {
+                                const lines = styled.split('\n');
+                                for (let r = 0; r < lines.length && selection.startRow + r < ROWS; r++) {
+                                    for (let c = 0; c < lines[r].length && selection.startCol + c < COLS; c++) {
+                                        grid[selection.startRow + r][selection.startCol + c] = lines[r][c];
+                                    }
+                                }
+                                render();
+                            }
+                        });
+                    }
+                    break;
+                    
+                case 'ai-optimize':
+                    // Optimize and clean up
+                    const currentContent = [];
+                    for (let r = 0; r < ROWS; r++) {
+                        for (let c = 0; c < COLS; c++) {
+                            if (grid[r][c] !== ' ') {
+                                currentContent.push({r, c, char: grid[r][c]});
+                            }
+                        }
+                    }
+                    
+                    const optimizePrompt = `Optimize this ASCII art:\n\n\n${currentContent.map(item => item.char).join('')}\n\nClean up spacing, fix alignment, improve readability, remove unnecessary characters. Keep it as ASCII art format.`;
+                    
+                    callOpenAI(optimizePrompt).then(optimized => {
+                        if (optimized) {
+                            // Clear and redraw with optimized version
+                            clearCanvas();
+                            const lines = optimized.split('\n');
+                            const startRow = Math.floor((ROWS - lines.length) / 2);
+                            const startCol = Math.floor((COLS - Math.max(...lines.map(line => line.length))) / 2);
+                            
+                            for (let r = 0; r < lines.length && startRow + r < ROWS; r++) {
+                                for (let c = 0; c < lines[r].length && startCol + c < COLS; c++) {
+                                    grid[startRow + r][startCol + c] = lines[r][c];
+                                }
+                            }
+                            render();
+                        }
+                    });
+                    break;
+                    
+                case 'ai-explain':
+                    // Explain current selection
+                    if (selection) {
+                        const selectedText = [];
+                        for (let r = selection.startRow; r <= selection.endRow; r++) {
+                            selectedText.push(grid[r].slice(selection.startCol, selection.endCol + 1).join(''));
+                        }
+                        
+                        const explainPrompt = `Explain this ASCII art:\n\n\n${selectedText.join('\n')}\n\nWhat does this ASCII art represent? How could it be improved? What techniques were used? Provide detailed analysis.`;
+                        
+                        callOpenAI(explainPrompt).then(explanation => {
+                            if (explanation) {
+                                updateAIStatus('💡 Analysis: ' + explanation.substring(0, 200) + '...', 'info');
+                            }
+                        });
+                    }
+                    break;
+            }
+        }
         
         // Tool selection
         document.querySelectorAll('[data-tool]').forEach(function(btn) {
@@ -1124,9 +1377,49 @@
                             render();
                         }
                         break;
+                    // AI Actions
+                    case 'ai-generate':
+                        const prompt = 'Generate creative ASCII art. Include details, shading, and make it visually appealing.';
+                        callOpenAI(prompt).then(response => {
+                            applyAIResponse(response, 'ai-generate');
+                        });
+                        break;
+                    case 'ai-enhance':
+                        applyAIResponse(null, 'ai-enhance');
+                        break;
+                    case 'ai-complete':
+                        applyAIResponse(null, 'ai-complete');
+                        break;
+                    case 'ai-style':
+                        applyAIResponse(null, 'ai-style');
+                        break;
+                    case 'ai-optimize':
+                        applyAIResponse(null, 'ai-optimize');
+                        break;
+                    case 'ai-explain':
+                        applyAIResponse(null, 'ai-explain');
+                        break;
                 }
             });
         });
+        
+        // API Key management
+        document.getElementById('saveApiKey').addEventListener('click', function() {
+            const keyInput = document.getElementById('apiKey');
+            const key = keyInput.value.trim();
+            if (key) {
+                localStorage.setItem('openai_api_key', key);
+                apiKey = key;
+                updateAIStatus('✅ API Key saved successfully', 'success');
+            }
+        });
+        
+        // Load saved API key
+        const savedKey = localStorage.getItem('openai_api_key');
+        if (savedKey) {
+            apiKey = savedKey;
+            document.getElementById('apiKey').value = savedKey;
+        }
         
         // Templates
         document.querySelectorAll('[data-template]').forEach(btn => {
