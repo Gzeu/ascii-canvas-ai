@@ -8,28 +8,76 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        /* =============================================
+           MODERN DESIGN SYSTEM
+           ============================================= */
+        
         :root {
+            /* Color System */
             --bg-primary: #0f0f0f;
             --bg-surface: #1a1a1a;
             --bg-surface-2: #252525;
+            --bg-surface-3: #2f2f2f;
             --border: #3a3a3a;
             --border-subtle: #2a2a2a;
+            
+            /* Brand Colors */
             --accent: #00d4aa;
             --accent-hover: #00f5c2;
             --accent-light: rgba(0, 212, 170, 0.1);
+            --accent-gradient: linear-gradient(135deg, #00d4aa, #00a8cc);
+            
+            /* Semantic Colors */
+            --success: #00c896;
+            --warning: #ffb347;
+            --error: #ff6b6b;
+            --info: #4dabf7;
+            
+            /* Text Colors */
             --text-primary: #ffffff;
             --text-secondary: #b0b0b0;
             --text-tertiary: #808080;
-            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --text-inverse: #0f0f0f;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.25);
+            --shadow-glow: 0 0 20px rgba(0, 212, 170, 0.3);
+            
+            /* Spacing */
+            --space-xs: 4px;
             --space-sm: 8px;
             --space-md: 16px;
             --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            
+            /* Border Radius */
             --radius-sm: 4px;
             --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            
+            /* Typography */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --font-size-xs: 11px;
+            --font-size-sm: 12px;
+            --font-size-base: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            
+            /* Transitions */
             --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* =============================================
+           BASE STYLES
+           ============================================= */
+        
         * {
             margin: 0;
             padding: 0;
@@ -44,8 +92,16 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            font-size: var(--font-size-base);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
+        /* =============================================
+           LAYOUT COMPONENTS
+           ============================================= */
+        
         .app-container {
             display: flex;
             height: 100vh;
@@ -72,7 +128,7 @@
         .header {
             background: var(--bg-surface);
             border-bottom: 1px solid var(--border-subtle);
-            padding: var(--space-md) var(--space-lg);
+            padding: var(--space-md) var(--space-xl);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -81,10 +137,25 @@
 
         .logo {
             font-family: var(--font-mono);
-            font-size: 16px;
+            font-size: var(--font-size-lg);
             font-weight: 600;
             color: var(--accent);
             text-decoration: none;
+        }
+
+        .header-info {
+            display: flex;
+            gap: var(--space-sm);
+            align-items: center;
+        }
+
+        .info-badge {
+            background: var(--accent);
+            color: var(--text-inverse);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
         }
 
         .canvas-container {
@@ -112,22 +183,27 @@
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
-            background: #0f0f0f;
-            cursor: crosshair;
+            will-change: transform;
+            transform-origin: 0 0;
+            transition: transform var(--transition-fast);
         }
 
         .status-bar {
             background: var(--bg-surface);
             border-top: 1px solid var(--border-subtle);
-            padding: var(--space-sm) var(--space-lg);
+            padding: var(--space-sm) var(--space-xl);
             display: flex;
             align-items: center;
-            gap: var(--space-md);
+            gap: var(--space-lg);
             font-family: var(--font-mono);
-            font-size: 11px;
+            font-size: var(--font-size-xs);
             color: var(--text-secondary);
         }
 
+        /* =============================================
+           TOOL PANEL COMPONENTS
+           ============================================= */
+        
         .tool-section {
             padding: var(--space-md);
             border-bottom: 1px solid var(--border-subtle);
@@ -135,13 +211,13 @@
 
         .tool-section h3 {
             font-family: var(--font-sans);
-            font-size: 12px;
+            font-size: var(--font-size-sm);
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: var(--space-md);
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: var(--space-xs);
         }
 
         .tool-grid {
@@ -158,90 +234,70 @@
             border-radius: var(--radius-md);
             cursor: pointer;
             font-family: var(--font-sans);
-            font-size: 11px;
+            font-size: var(--font-size-xs);
             font-weight: 500;
             transition: var(--transition-fast);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: var(--space-xs);
             min-height: 60px;
         }
 
         .tool-btn:hover {
-            background: var(--bg-surface-2);
+            background: var(--bg-surface-3);
             border-color: var(--accent);
             color: var(--text-primary);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .tool-btn.active {
             background: var(--accent);
             border-color: var(--accent);
-            color: #0f0f0f;
+            color: var(--text-inverse);
         }
 
         .tool-icon {
-            font-size: 18px;
+            font-size: var(--font-size-xl);
             line-height: 1;
         }
 
         .tool-label {
-            font-size: 10px;
+            font-size: var(--font-size-xs);
             text-align: center;
             line-height: 1.2;
         }
 
-        #char-palette {
-            grid-template-columns: repeat(8, 1fr);
-            gap: 4px;
+        /* =============================================
+           MOBILE RESPONSIVE
+           ============================================= */
+        
+        @media (max-width: 768px) {
+            .left-panel {
+                width: 280px;
+            }
+            
+            .tool-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
-        #apiKey {
-            width: 100%;
-            padding: 8px;
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            border-radius: var(--radius-md);
-            font-family: var(--font-mono);
-            margin-bottom: 8px;
-        }
-
-        #aiStatus {
-            display: none;
-        }
-
-        #aiStatusContent {
-            padding: 8px;
-            background: var(--bg-surface-2);
-            border-radius: var(--radius-md);
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .header-info {
-            display: flex;
-            gap: var(--space-sm);
-            align-items: center;
-            font-family: var(--font-mono);
-            font-size: 11px;
-        }
-
-        .header-btn {
-            background: var(--accent);
-            color: #0f0f0f;
-            padding: 4px 8px;
-            border-radius: var(--radius-md);
-            font-size: 10px;
-            font-weight: 500;
-            cursor: pointer;
-            border: none;
-            font-family: var(--font-mono);
-        }
-
-        .header-btn:hover {
-            background: var(--accent-hover);
+        @media (max-width: 480px) {
+            .left-panel {
+                position: absolute;
+                z-index: 200;
+                transform: translateX(-100%);
+                transition: transform var(--transition-normal);
+            }
+            
+            .left-panel.mobile-open {
+                transform: translateX(0);
+            }
+            
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -253,7 +309,7 @@
             <header class="header">
                 <a href="#" class="logo">ASCII Studio</a>
                 <div class="header-info">
-                    <span style="background: var(--accent); color: #0f0f0f; padding: 2px 6px; border-radius: 4px; font-size: 10px;">v9.3</span>
+                    <span class="info-badge">v9.2</span>
                 </div>
             </header>
 
@@ -322,7 +378,7 @@
             <!-- Character Palette -->
             <div class="tool-section">
                 <h3>✦ Character Palette</h3>
-                <div id="char-palette" class="tool-grid"></div>
+                <div id="char-palette" class="tool-grid" style="grid-template-columns: repeat(8, 1fr); gap: 6px;"></div>
             </div>
 
             <!-- AI Assistant -->
@@ -344,8 +400,8 @@
                 </div>
                 <div class="tool-section" style="margin-top: 8px;">
                     <h3>🔑 API Key</h3>
-                    <input type="password" id="apiKey" placeholder="Enter OpenAI API Key">
-                    <button class="tool-btn" id="saveApiKey" style="width: 100%;">
+                    <input type="password" id="apiKey" placeholder="Enter OpenAI API Key" style="width: 100%; padding: 8px; background: var(--bg-surface-2); border: 1px solid var(--border); color: var(--text-primary); border-radius: var(--radius-md); font-family: var(--font-mono);">
+                    <button class="tool-btn" id="saveApiKey" style="margin-top: 8px; width: 100%;">
                         <span class="tool-icon">💾</span>
                         <span class="tool-label">Save Key</span>
                     </button>
@@ -353,9 +409,9 @@
             </div>
 
             <!-- AI Status -->
-            <div class="tool-section" id="aiStatus">
+            <div class="tool-section" id="aiStatus" style="display: none;">
                 <h3>🤖 AI Status</h3>
-                <div id="aiStatusContent"></div>
+                <div id="aiStatusContent" style="padding: 8px; background: var(--bg-surface-2); border-radius: var(--radius-md); font-size: var(--font-size-sm); color: var(--text-secondary);"></div>
             </div>
 
             <!-- Export Options -->
@@ -388,9 +444,9 @@
                     <span>Zoom: <span id="zoomLevel">100%</span></span>
                 </div>
                 <div class="header-info">
-                    <button class="header-btn" id="undoBtn">↶ Undo</button>
-                    <button class="header-btn" id="redoBtn">↷ Redo</button>
-                    <button class="header-btn" id="saveBtn">💾 Save</button>
+                    <button class="info-badge" id="undoBtn">↶ Undo</button>
+                    <button class="info-badge" id="redoBtn">↷ Redo</button>
+                    <button class="info-badge" id="saveBtn">💾 Save</button>
                 </div>
             </header>
 
@@ -412,7 +468,10 @@
     </div>
 
     <script>
-        // CANVAS SETUP
+        // =============================================
+           CANVAS SETUP
+           =============================================
+        
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d');
         
@@ -426,9 +485,7 @@
         canvas.height = ROWS * charHeight;
         
         // Grid data
-        var grid = Array(ROWS).fill(null).map(function() { 
-            return Array(COLS).fill(' '); 
-        });
+        var grid = Array(ROWS).fill(null).map(function() { return Array(COLS).fill(' '); });
         
         // Current state
         var currentTool = 'freehand';
@@ -453,7 +510,10 @@
             '(', ')', '[', ']', '{', '}', '<', '>', '/', '\\', '|', '_', '~', '`', '"', "'"
         ];
         
-        // CHARACTER PALETTE
+        // =============================================
+           CHARACTER PALETTE
+           =============================================
+        
         function initCharPalette() {
             var palette = document.getElementById('char-palette');
             charPalette.forEach(function(ch, i) {
@@ -469,9 +529,7 @@
                     currentChar = ch;
                     selectedCharIndex = i;
                     var buttons = document.querySelectorAll('#char-palette .tool-btn');
-                    buttons.forEach(function(b) { 
-                        b.classList.remove('active'); 
-                    });
+                    buttons.forEach(function(b) { b.classList.remove('active'); });
                     btn.classList.add('active');
                 });
                 
@@ -479,7 +537,10 @@
             });
         }
         
-        // RENDERING SYSTEM
+        // =============================================
+           RENDERING SYSTEM
+           =============================================
+        
         function render() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
@@ -515,18 +576,15 @@
             updateInfo();
         }
         
-        // INFO UPDATES
+        // =============================================
+           INFO UPDATES
+           =============================================
+        
         function updateInfo() {
-            document.getElementById('cursorPos').textContent = 
-                lastPos ? lastPos.col + ', ' + lastPos.row : '0, 0';
-            
-            var toolName = currentTool.charAt(0).toUpperCase() + currentTool.slice(1);
-            if (currentChar !== ' ') {
-                toolName += ' (' + currentChar + ')';
-            } else {
-                toolName += ' (space)';
-            }
-            document.getElementById('currentTool').textContent = toolName;
+            document.getElementById('cursorPos').textContent = lastPos ? lastPos.col + ', ' + lastPos.row : '0, 0';
+            document.getElementById('currentTool').textContent = 
+                currentTool.charAt(0).toUpperCase() + currentTool.substring(1) +
+                (currentChar !== ' ' ? ' (' + currentChar + ')' : ' (space)');
             document.getElementById('zoomLevel').textContent = '100%';
             
             // Count characters and lines
@@ -560,7 +618,10 @@
             }
         }
         
-        // DRAWING FUNCTIONS
+        // =============================================
+           DRAWING FUNCTIONS
+           =============================================
+        
         function drawChar(row, col, char) {
             if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
                 grid[row][col] = char;
@@ -584,14 +645,8 @@
                 if (x0 === x1 && y0 === y1) break;
                 
                 var e2 = 2 * err;
-                if (e2 > -dy) { 
-                    err -= dy; 
-                    x0 += sx; 
-                }
-                if (e2 < dx) { 
-                    err += dx; 
-                    y0 += sy; 
-                }
+                if (e2 > -dy) { err -= dy; x0 += sx; }
+                if (e2 <  dx) { err += dx; y0 += sy; }
             }
             render();
         }
@@ -705,7 +760,10 @@
             };
         }
         
-        // TOOL FUNCTIONS
+        // =============================================
+           TOOL FUNCTIONS
+           =============================================
+        
         function setTool(tool) {
             currentTool = tool;
             document.querySelectorAll('.tool-btn').forEach(function(btn) {
@@ -717,9 +775,7 @@
         
         function clearCanvas() {
             saveUndo();
-            grid = Array(ROWS).fill(null).map(function() { 
-                return Array(COLS).fill(' '); 
-            });
+            grid = Array(ROWS).fill(null).map(function() { return Array(COLS).fill(' '); });
             render();
         }
         
@@ -734,9 +790,7 @@
         }
         
         function saveUndo() {
-            var state = grid.map(function(row) { 
-                return row.slice(); 
-            });
+            var state = grid.map(function(row) { return row.slice(); });
             undoStack.push(state);
             if (undoStack.length > MAX_HISTORY) {
                 undoStack.shift();
@@ -746,9 +800,7 @@
         
         function undo() {
             if (undoStack.length > 0) {
-                redoStack.push(grid.map(function(row) { 
-                    return row.slice(); 
-                }));
+                redoStack.push(grid.map(function(row) { return row.slice(); }));
                 grid = undoStack.pop();
                 render();
             }
@@ -756,15 +808,16 @@
         
         function redo() {
             if (redoStack.length > 0) {
-                undoStack.push(grid.map(function(row) { 
-                    return row.slice(); 
-                }));
+                undoStack.push(grid.map(function(row) { return row.slice(); }));
                 grid = redoStack.pop();
                 render();
             }
         }
         
-        // AI FUNCTIONS
+        // =============================================
+           AI FUNCTIONS
+           =============================================
+        
         function updateAIStatus(message, type) {
             type = type || 'info';
             var statusDiv = document.getElementById('aiStatus');
@@ -813,17 +866,14 @@
                 },
                 body: JSON.stringify(requestBody)
             })
-            .then(function(response) { 
-                return response.json(); 
-            })
+            .then(function(response) { return response.json(); })
             .then(function(data) {
                 if (data.choices && data.choices[0]) {
                     var aiResponse = data.choices[0].message.content;
                     updateAIStatus('✅ AI response received', 'success');
                     return aiResponse;
                 } else {
-                    var errorMsg = data.error && data.error.message ? data.error.message : 'Unknown error';
-                    updateAIStatus('❌ Error: ' + errorMsg, 'error');
+                    updateAIStatus('❌ Error: ' + (data.error && data.error.message ? data.error.message : 'Unknown error'), 'error');
                     return null;
                 }
             })
@@ -833,11 +883,12 @@
             });
         }
         
-        // EXPORT FUNCTIONS
+        // =============================================
+           EXPORT FUNCTIONS
+           =============================================
+        
         function exportASCII() {
-            var content = grid.map(function(row) { 
-                return row.join(''); 
-            }).join('\n');
+            var content = grid.map(function(row) { return row.join(''); }).join('\n');
             var blob = new Blob([content], { type: 'text/plain' });
             var url = URL.createObjectURL(blob);
             var a = document.createElement('a');
@@ -854,7 +905,10 @@
             link.click();
         }
         
-        // EVENT LISTENERS
+        // =============================================
+           EVENT LISTENERS
+           =============================================
+        
         // Tool selection
         document.querySelectorAll('[data-tool]').forEach(function(btn) {
             btn.addEventListener('click', function() {
@@ -867,20 +921,15 @@
             btn.addEventListener('click', function() {
                 var action = btn.dataset.action;
                 switch (action) {
-                    case 'clear': 
-                        clearCanvas(); 
-                        break;
-                    case 'fill-all': 
-                        fillCanvas(); 
-                        break;
+                    case 'clear': clearCanvas(); break;
+                    case 'fill-all': fillCanvas(); break;
                     case 'invert': 
                         saveUndo();
                         for (var r = 0; r < ROWS; r++) {
                             for (var c = 0; c < COLS; c++) {
                                 var char = grid[r][c];
                                 if (char !== ' ') {
-                                    grid[r][c] = char === char.toUpperCase() ? 
-                                        char.toLowerCase() : char.toUpperCase();
+                                    grid[r][c] = char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase();
                                 }
                             }
                         }
@@ -893,10 +942,7 @@
                                 saveUndo();
                                 var lines = response.split('\n');
                                 var startRow = Math.floor((ROWS - lines.length) / 2);
-                                var maxLineLength = Math.max.apply(Math, lines.map(function(line) { 
-                                    return line.length; 
-                                }));
-                                var startCol = Math.floor((COLS - maxLineLength) / 2);
+                                var startCol = Math.floor((COLS - Math.max.apply(Math, lines.map(function(line) { return line.length; }))) / 2);
                                 
                                 for (var r = 0; r < lines.length && startRow + r < ROWS; r++) {
                                     for (var c = 0; c < lines[r].length && startCol + c < COLS; c++) {
@@ -922,15 +968,9 @@
             btn.addEventListener('click', function() {
                 var format = btn.dataset.export;
                 switch (format) {
-                    case 'ascii': 
-                        exportASCII(); 
-                        break;
-                    case 'png': 
-                        exportPNG(); 
-                        break;
-                    case 'txt': 
-                        exportASCII(); 
-                        break;
+                    case 'ascii': exportASCII(); break;
+                    case 'png': exportPNG(); break;
+                    case 'txt': exportASCII(); break;
                 }
             });
         });
@@ -1023,7 +1063,10 @@
         document.getElementById('redoBtn').addEventListener('click', redo);
         document.getElementById('saveBtn').addEventListener('click', exportASCII);
         
-        // INITIALIZATION
+        // =============================================
+           INITIALIZATION
+           =============================================
+        
         // Initialize character palette
         initCharPalette();
         
@@ -1043,7 +1086,7 @@
         // Focus canvas for keyboard input
         canvas.focus();
         
-        console.log('ASCII Canvas Studio v9.3 - All Buttons Functional!');
+        console.log('ASCII Canvas Studio v9.2 - Complete Rewrite - All Buttons Functional!');
     </script>
 </body>
 </html>
