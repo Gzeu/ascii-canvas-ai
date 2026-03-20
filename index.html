@@ -3,20 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASCII Canvas AI - Diagram Editor with AI Assistant</title>
+    <title>ASCII Canvas Studio - Professional ASCII Art Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0a;
+            /* Modern Color System */
+            --bg-primary: #0f0f0f;
             --bg-surface: #1a1a1a;
             --bg-surface-2: #252525;
-            --border: #333;
-            --accent: #4f98a3;
-            --accent-hover: #6bb3c0;
-            --text-primary: #e0e0e0;
-            --text-secondary: #999;
-            --success: #4caf50;
-            --error: #f44336;
-            --warning: #ff9800;
+            --bg-surface-3: #2f2f2f;
+            --border: #3a3a3a;
+            --border-subtle: #2a2a2a;
+            
+            /* Brand Colors */
+            --accent: #00d4aa;
+            --accent-hover: #00f5c2;
+            --accent-light: rgba(0, 212, 170, 0.1);
+            --accent-gradient: linear-gradient(135deg, #00d4aa, #00a8cc);
+            
+            /* Semantic Colors */
+            --success: #00c896;
+            --warning: #ffb347;
+            --error: #ff6b6b;
+            --info: #4dabf7;
+            
+            /* Text Colors */
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-tertiary: #808080;
+            --text-inverse: #0f0f0f;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.25);
+            --shadow-glow: 0 0 20px rgba(0, 212, 170, 0.3);
+            
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            
+            /* Border Radius */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            
+            /* Typography */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --font-size-xs: 11px;
+            --font-size-sm: 12px;
+            --font-size-base: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -26,30 +77,84 @@
         }
 
         body {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-sans);
             background: var(--bg-primary);
             color: var(--text-primary);
             height: 100vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            font-size: var(--font-size-base);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Header */
+        /* Modern Header */
         .header {
             background: var(--bg-surface);
-            border-bottom: 1px solid var(--border);
-            padding: 8px 16px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding: var(--space-md) var(--space-xl);
             display: flex;
             align-items: center;
-            gap: 16px;
-            height: 40px;
+            justify-content: space-between;
+            height: 60px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 100;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--accent-gradient);
+            opacity: 0.05;
+            pointer-events: none;
         }
 
         .header h1 {
-            font-size: 14px;
+            font-family: var(--font-sans);
+            font-size: var(--font-size-xl);
             font-weight: 600;
-            color: var(--accent);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .header h1::before {
+            content: '🎨';
+            font-size: var(--font-size-lg);
+        }
+
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            font-family: var(--font-mono);
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+        }
+
+        .info-badge {
+            background: var(--bg-surface-2);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            transition: var(--transition-fast);
+        }
+
+        .info-badge:hover {
+            background: var(--bg-surface-3);
+            border-color: var(--accent);
+            color: var(--text-primary);
         }
 
         .ai-toggle {
@@ -73,136 +178,373 @@
             color: white;
         }
 
-        /* Main Layout */
+        /* Modern Main Layout */
         .main-container {
             flex: 1;
             display: flex;
             overflow: hidden;
+            position: relative;
         }
 
-        /* Left Panel - Tools */
+        /* Modern Sidebar */
         .left-panel {
-            width: 200px;
+            width: 280px;
             background: var(--bg-surface);
-            border-right: 1px solid var(--border);
-            padding: 16px;
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
             overflow-y: auto;
+            position: relative;
+            z-index: 50;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 100%;
+            background: var(--accent-gradient);
+            opacity: 0.3;
         }
 
         .tool-section {
-            margin-bottom: 24px;
+            padding: var(--space-lg);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .tool-section:last-child {
+            border-bottom: none;
         }
 
         .tool-section h3 {
-            font-size: 11px;
+            font-family: var(--font-sans);
+            font-size: var(--font-size-xs);
+            font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .tool-section h3::before {
+            content: '⚡';
+            font-size: var(--font-size-sm);
         }
 
         .tool-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 4px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-sm);
         }
 
         .tool-btn {
             background: var(--bg-surface-2);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 8px;
-            border-radius: 4px;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
             cursor: pointer;
-            font-size: 11px;
-            transition: all 0.2s;
+            font-family: var(--font-sans);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            transition: var(--transition-fast);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+            min-height: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: var(--transition-fast);
         }
 
         .tool-btn:hover {
-            background: var(--accent);
-            color: white;
+            background: var(--bg-surface-3);
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .tool-btn:hover::before {
+            opacity: 0.1;
         }
 
         .tool-btn.active {
             background: var(--accent);
-            color: white;
+            border-color: var(--accent);
+            color: var(--text-inverse);
+            box-shadow: var(--shadow-glow);
         }
 
-        .style-select {
-            width: 100%;
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 4px;
-            border-radius: 4px;
+        .tool-btn.active::before {
+            opacity: 0.2;
+        }
+
+        .tool-icon {
+            font-size: var(--font-size-lg);
+            line-height: 1;
+        }
+
+        .tool-label {
+            font-size: var(--font-size-xs);
+            text-align: center;
+            line-height: 1.2;
             font-size: 11px;
             margin-bottom: 4px;
         }
 
-        /* Canvas Area */
+        /* Modern Canvas Container */
         .canvas-container {
             flex: 1;
             display: flex;
             flex-direction: column;
             background: var(--bg-primary);
             position: relative;
+            overflow: hidden;
         }
 
         .canvas-wrapper {
             flex: 1;
-            overflow: hidden;
             position: relative;
+            overflow: hidden;
+            background: 
+                linear-gradient(var(--bg-primary) 24px, transparent 24px),
+                linear-gradient(90deg, var(--bg-primary) 24px, transparent 24px),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 23px,
+                    var(--border-subtle) 23px,
+                    var(--border-subtle) 24px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 23px,
+                    var(--border-subtle) 23px,
+                    var(--border-subtle) 24px
+                );
+            background-size: 24px 24px;
+            background-position: 0 0, 0 0, 0 0, 0 0;
         }
 
         #canvas {
             position: absolute;
-            font-family: 'JetBrains Mono', monospace;
+            top: 0;
+            left: 0;
+            font-family: var(--font-mono);
             font-size: 12px;
-            line-height: 12px;
-            white-space: pre;
-            cursor: crosshair;
-            transform-origin: top left;
+            line-height: 1;
             image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            will-change: transform;
+            transform-origin: 0 0;
+            transition: transform var(--transition-fast);
         }
 
-        /* Status Bar */
+        /* Modern Status Bar */
         .status-bar {
             background: var(--bg-surface);
-            border-top: 1px solid var(--border);
-            padding: 4px 16px;
-            font-size: 11px;
-            color: var(--text-secondary);
-            display: flex;
-            gap: 16px;
-        }
-
-        /* AI Panel */
-        .ai-panel {
-            width: 280px;
-            background: var(--bg-surface);
-            border-left: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s ease-out;
-            min-width: 200px;
-            max-width: 500px;
-        }
-
-        .ai-panel.collapsed {
-            transform: translateX(100%);
-        }
-
-        .ai-panel-header {
-            background: var(--bg-surface-2);
-            padding: 12px;
-            border-bottom: 1px solid var(--border);
+            border-top: 1px solid var(--border-subtle);
+            padding: var(--space-sm) var(--space-lg);
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: var(--space-lg);
+            font-family: var(--font-mono);
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 50;
         }
 
-        .ai-panel-title {
-            font-size: 12px;
-            font-weight: 600;
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-xs) var(--space-sm);
+            background: var(--bg-surface-2);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+            transition: var(--transition-fast);
+        }
+
+        .status-item:hover {
+            background: var(--bg-surface-3);
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+
+        .status-item strong {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Accessibility & Focus Management */
+        .tool-btn:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .tool-btn:focus {
+            outline: none;
+        }
+
+        /* High Contrast Mode Support */
+        @media (prefers-contrast: high) {
+            :root {
+                --border-subtle: #666;
+                --text-secondary: #ccc;
+            }
+        }
+
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Screen Reader Support */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Keyboard Navigation */
+        .keyboard-focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Modern Selects and Inputs */
+        .style-select {
+            width: 100%;
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            font-family: var(--font-sans);
+            font-size: var(--font-size-sm);
+            transition: var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .style-select:hover {
+            border-color: var(--accent);
+            background: var(--bg-surface-3);
+        }
+
+        .style-select:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Mobile Responsive Design */
+        @media (max-width: 768px) {
+            .left-panel {
+                width: 60px;
+            }
+            
+            .tool-section h3 {
+                font-size: 0;
+                height: 0;
+                margin: 0;
+            }
+            
+            .tool-section h3::before {
+                display: block;
+                font-size: var(--font-size-base);
+                text-align: center;
+            }
+            
+            .tool-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-xs);
+            }
+            
+            .tool-btn {
+                padding: var(--space-sm);
+                min-height: 50px;
+            }
+            
+            .tool-label {
+                display: none;
+            }
+            
+            .header {
+                padding: var(--space-sm) var(--space-md);
+            }
+            
+            .header h1 {
+                font-size: var(--font-size-base);
+            }
+            
+            .header-info {
+                gap: var(--space-sm);
+            }
+            
+            .info-badge span:last-child {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .left-panel {
+                position: absolute;
+                z-index: 200;
+                transform: translateX(-100%);
+                transition: transform var(--transition-normal);
+            }
+            
+            .left-panel.mobile-open {
+                transform: translateX(0);
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+                position: fixed;
+                top: var(--space-md);
+                left: var(--space-md);
+                z-index: 300;
+                background: var(--accent);
+                color: var(--text-inverse);
+                border: none;
+                padding: var(--space-sm);
+                border-radius: var(--radius-md);
+                cursor: pointer;
+                font-size: var(--font-size-lg);
+            }
+        }
             color: var(--accent);
         }
 
@@ -450,43 +792,70 @@
             background: var(--accent);
         }
 
-        /* Toast */
+        /* Modern Toast Notifications */
         .toast {
             position: fixed;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: var(--space-xl);
+            right: var(--space-xl);
             background: var(--bg-surface-2);
-            border: 1px solid var(--border);
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 11px;
-            z-index: 1000;
+            color: var(--text-primary);
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-lg);
+            font-family: var(--font-sans);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
             opacity: 0;
-            transition: opacity 0.2s;
+            transform: translateY(20px);
+            transition: var(--transition-normal);
+            z-index: 1000;
+            max-width: 300px;
         }
 
         .toast.show {
             opacity: 1;
+            transform: translateY(0);
         }
 
         .toast.success {
             border-color: var(--success);
-            color: var(--success);
+            background: var(--success);
+            color: var(--text-inverse);
         }
 
         .toast.error {
             border-color: var(--error);
-            color: var(--error);
+            background: var(--error);
+            color: var(--text-inverse);
+        }
+
+        .toast.warning {
+            border-color: var(--warning);
+            background: var(--warning);
+            color: var(--text-inverse);
         }
     </style>
 </head>
 <body>
     <div class="header">
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+            ☰
+        </button>
         <h1>ASCII Canvas Studio</h1>
         <div class="header-info">
-            <span id="canvasInfo">200×80</span>
-            <span id="toolInfo">Freehand</span>
+            <div class="info-badge">
+                <span>📐</span>
+                <span id="canvasInfo">200×80</span>
+            </div>
+            <div class="info-badge">
+                <span>🎨</span>
+                <span id="toolInfo">Freehand</span>
+            </div>
+            <div class="info-badge">
+                <span>🔍</span>
+                <span id="zoomLevel">100%</span>
+            </div>
         </div>
     </div>
 
@@ -495,18 +864,54 @@
             <div class="tool-section">
                 <h3>Tools</h3>
                 <div class="tool-grid">
-                    <button class="tool-btn active" data-tool="freehand">✏️ Freehand</button>
-                    <button class="tool-btn" data-tool="line">📏 Line</button>
-                    <button class="tool-btn" data-tool="rectangle">▢ Rectangle</button>
-                    <button class="tool-btn" data-tool="diamond">◆ Diamond</button>
-                    <button class="tool-btn" data-tool="circle">○ Circle</button>
-                    <button class="tool-btn" data-tool="arrow">➜ Arrow</button>
-                    <button class="tool-btn" data-tool="text">📝 Text</button>
-                    <button class="tool-btn" data-tool="fill">🪣 Fill</button>
-                    <button class="tool-btn" data-tool="spray">💨 Spray</button>
-                    <button class="tool-btn" data-tool="eraser">🧹 Eraser</button>
-                    <button class="tool-btn" data-tool="select">⬚ Select</button>
-                    <button class="tool-btn" data-tool="move">✋ Move</button>
+                    <button class="tool-btn active" data-tool="freehand">
+                        <span class="tool-icon">✏️</span>
+                        <span class="tool-label">Freehand</span>
+                    </button>
+                    <button class="tool-btn" data-tool="line">
+                        <span class="tool-icon">📏</span>
+                        <span class="tool-label">Line</span>
+                    </button>
+                    <button class="tool-btn" data-tool="rectangle">
+                        <span class="tool-icon">▢</span>
+                        <span class="tool-label">Rectangle</span>
+                    </button>
+                    <button class="tool-btn" data-tool="diamond">
+                        <span class="tool-icon">◆</span>
+                        <span class="tool-label">Diamond</span>
+                    </button>
+                    <button class="tool-btn" data-tool="circle">
+                        <span class="tool-icon">○</span>
+                        <span class="tool-label">Circle</span>
+                    </button>
+                    <button class="tool-btn" data-tool="arrow">
+                        <span class="tool-icon">➜</span>
+                        <span class="tool-label">Arrow</span>
+                    </button>
+                    <button class="tool-btn" data-tool="text">
+                        <span class="tool-icon">📝</span>
+                        <span class="tool-label">Text</span>
+                    </button>
+                    <button class="tool-btn" data-tool="fill">
+                        <span class="tool-icon">🪣</span>
+                        <span class="tool-label">Fill</span>
+                    </button>
+                    <button class="tool-btn" data-tool="spray">
+                        <span class="tool-icon">💨</span>
+                        <span class="tool-label">Spray</span>
+                    </button>
+                    <button class="tool-btn" data-tool="eraser">
+                        <span class="tool-icon">🧹</span>
+                        <span class="tool-label">Eraser</span>
+                    </button>
+                    <button class="tool-btn" data-tool="select">
+                        <span class="tool-icon">⬚</span>
+                        <span class="tool-label">Select</span>
+                    </button>
+                    <button class="tool-btn" data-tool="move">
+                        <span class="tool-icon">✋</span>
+                        <span class="tool-label">Move</span>
+                    </button>
                 </div>
             </div>
 
@@ -576,11 +981,26 @@
                 <canvas id="canvas"></canvas>
             </div>
             <div class="status-bar">
-                <span id="cursorPos">0, 0</span>
-                <span id="canvasSize">200×80</span>
-                <span id="zoomLevel">100%</span>
-                <span id="currentTool">Freehand</span>
-                <span id="hint">Ready to draw</span>
+                <div class="status-item">
+                    <span>📍</span>
+                    <span>Cursor: <strong id="cursorPos">0, 0</strong></span>
+                </div>
+                <div class="status-item">
+                    <span>📏</span>
+                    <span>Canvas: <strong id="canvasSize">200×80</strong></span>
+                </div>
+                <div class="status-item">
+                    <span>🔍</span>
+                    <span>Zoom: <strong id="zoomLevel">100%</strong></span>
+                </div>
+                <div class="status-item">
+                    <span>🎨</span>
+                    <span>Tool: <strong id="currentTool">Freehand</strong></span>
+                </div>
+                <div class="status-item">
+                    <span>💡</span>
+                    <span id="hint">Ready to draw</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1457,6 +1877,88 @@
         // Update header info
         document.getElementById('canvasInfo').textContent = `${COLS}×${ROWS}`;
         document.getElementById('toolInfo').textContent = 'Freehand';
+        
+        // Mobile menu functionality
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const leftPanel = document.querySelector('.left-panel');
+        
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', () => {
+                leftPanel.classList.toggle('mobile-open');
+            });
+        }
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768 && 
+                !leftPanel.contains(e.target) && 
+                !mobileMenuToggle.contains(e.target)) {
+                leftPanel.classList.remove('mobile-open');
+            }
+        });
+        
+        // Keyboard navigation for tools
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+            
+            const toolKeys = {
+                'f': 'freehand',
+                'l': 'line',
+                'r': 'rectangle', 
+                'd': 'diamond',
+                'c': 'circle',
+                'a': 'arrow',
+                't': 'text',
+                'i': 'fill',
+                's': 'spray',
+                'e': 'eraser',
+                'v': 'select',
+                'm': 'move'
+            };
+            
+            if (toolKeys[e.key.toLowerCase()]) {
+                e.preventDefault();
+                setTool(toolKeys[e.key.toLowerCase()]);
+                
+                // Visual feedback
+                const toolBtn = document.querySelector(`[data-tool="${toolKeys[e.key.toLowerCase()]}"]`);
+                if (toolBtn) {
+                    toolBtn.classList.add('keyboard-focus');
+                    setTimeout(() => toolBtn.classList.remove('keyboard-focus'), 200);
+                }
+            }
+        });
+        
+        // Enhanced tool switching with visual feedback
+        function setTool(tool) {
+            currentTool = tool;
+            document.querySelectorAll('.tool-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-tool="${tool}"]`).classList.add('active');
+            
+            // Update status
+            const toolNames = {
+                'freehand': '✏️ Freehand',
+                'line': '📏 Line',
+                'rectangle': '▢ Rectangle',
+                'diamond': '◆ Diamond',
+                'circle': '○ Circle',
+                'arrow': '➜ Arrow',
+                'text': '📝 Text',
+                'fill': '🪣 Fill',
+                'spray': '💨 Spray',
+                'eraser': '🧹 Eraser',
+                'select': '⬚ Select',
+                'move': '✋ Move'
+            };
+            
+            document.getElementById('currentTool').textContent = toolNames[tool] || tool;
+            document.getElementById('toolInfo').textContent = toolNames[tool] || tool;
+            
+            // Show toast for tool change
+            showToast(`${toolNames[tool]} selected`, 'success');
+        }
     </script>
 </body>
 </html>
