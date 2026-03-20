@@ -2780,6 +2780,333 @@
             updateColorInfo();
         }
         
+        // Enhanced keyboard shortcuts with modifiers
+        const advancedShortcuts = {
+            'ctrl+shift+z': 'redo',
+            'ctrl+shift+y': 'redo',
+            'ctrl+shift+s': 'save',
+            'ctrl+shift+a': 'select all',
+            'ctrl+shift+d': 'duplicate',
+            'ctrl+shift+g': 'group',
+            'ctrl+shift+u': 'ungroup',
+            'ctrl+shift+i': 'invert',
+            'ctrl+shift+h': 'flip horizontal',
+            'ctrl+shift+v': 'flip vertical',
+            'ctrl+shift+1': 'brush size 1',
+            'ctrl+shift+2': 'brush size 2',
+            'ctrl+shift+3': 'brush size 3',
+            'ctrl+shift+4': 'brush size 4',
+            'ctrl+shift+5': 'brush size 5',
+            'ctrl+shift+0': 'brush size 0',
+            'ctrl+shift+plus': 'brush size +',
+            'ctrl+shift+minus': 'brush size -',
+            'ctrl+shift+f': 'fill mode',
+            'ctrl+shift+b': 'border mode',
+            'ctrl+shift+n': 'next template',
+            'ctrl+shift+p': 'previous template',
+            'ctrl+shift+l': 'toggle line style',
+            'ctrl+shift+m': 'toggle macro recording',
+            'ctrl+shift+r': 'rotate selection',
+            'ctrl+shift+e': 'export current view'
+        };
+        
+        // Brush sizes for different tools
+        const brushSizes = [1, 2, 3, 4, 5];
+        let currentBrushSize = 1;
+        
+        // Border modes
+        const borderModes = ['solid', 'dashed', 'dotted', 'double'];
+        let currentBorderMode = 0;
+        
+        // Fill modes
+        const fillModes = ['solid', 'pattern', 'gradient'];
+        let currentFillMode = 0;
+        
+        // Enhanced canvas with layers
+        const layers = [];
+        let activeLayer = 0;
+        
+        // Plugin system
+        const plugins = [];
+        
+        // Event listeners for advanced shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+            
+            const key = e.key.toLowerCase();
+            const modifiers = {
+                ctrl: e.ctrlKey,
+                shift: e.shiftKey,
+                alt: e.altKey
+            };
+            
+            const shortcut = `${modifiers.ctrl ? 'ctrl+' : ''}${modifiers.shift ? 'shift+' : ''}${key}`;
+            
+            if (advancedShortcuts[shortcut]) {
+                e.preventDefault();
+                const action = advancedShortcuts[shortcut];
+                
+                if (action === 'redo') {
+                    if (redoStack.length > 0) {
+                        undoStack.push(redoStack.pop());
+                        updateHistoryUI();
+                        render();
+                        showToast('Redo', 'success');
+                    }
+                } else if (action === 'undo') {
+                    if (undoStack.length > 0) {
+                        redoStack.push(undoStack.pop());
+                        updateHistoryUI();
+                        render();
+                        showToast('Undo', 'success');
+                    }
+                } else if (action === 'save') {
+                    saveProject();
+                } else if (action === 'select all') {
+                    selectAll();
+                } else if (action === 'duplicate') {
+                    duplicateSelection();
+                } else if (action === 'group') {
+                    groupSelection();
+                } else if (action === 'ungroup') {
+                    ungroupSelection();
+                } else if (action === 'invert') {
+                    invertSelection();
+                } else if (action === 'flip horizontal') {
+                    flipSelection('horizontal');
+                } else if (action === 'flip vertical') {
+                    flipSelection('vertical');
+                } else if (action === 'rotate') {
+                    rotateSelection();
+                } else if (action === 'fill mode') {
+                    currentFillMode = (currentFillMode + 1) % fillModes.length;
+                    showToast(`Fill mode: ${fillModes[currentFillMode]}`, 'success');
+                } else if (action === 'border mode') {
+                    currentBorderMode = (currentBorderMode + 1) % borderModes.length;
+                    showToast(`Border mode: ${borderModes[currentBorderMode]}`, 'success');
+                } else if (action === 'brush size 1' || action === 'brush size 2' || action === 'brush size 3' || action === 'brush size 4' || action === 'brush size 5') {
+                    const size = parseInt(action.split(' ')[2]);
+                    if (size >= 1 && size <= 5) {
+                        currentBrushSize = size;
+                        showToast(`Brush size: ${size}`, 'success');
+                    }
+                } else if (action === 'brush size +') {
+                    currentBrushSize = Math.min(currentBrushSize + 1, 5);
+                    showToast(`Brush size: ${currentBrushSize}`, 'success');
+                } else if (action === 'brush size -') {
+                    currentBrushSize = Math.max(currentBrushSize - 1, 1);
+                    showToast(`Brush size: ${currentBrushSize}`, 'success');
+                } else if (action === 'next template') {
+                    // Cycle through templates
+                    const templateNames = Object.keys(templates);
+                    const currentIndex = templateNames.indexOf('flowchart');
+                    const nextIndex = (currentIndex + 1) % templateNames.length;
+                    applyTemplate(templateNames[nextIndex]);
+                } else if (action === 'previous template') {
+                    const templateNames = Object.keys(templates);
+                    const currentIndex = templateNames.indexOf('flowchart');
+                    const prevIndex = (currentIndex - 1 + templateNames.length) % templateNames.length;
+                    applyTemplate(templateNames[prevIndex]);
+                } else if (action === 'toggle line style') {
+                    const styles = ['ascii', 'light', 'heavy', 'dashed', 'dotted'];
+                    const currentStyle = document.getElementById('lineStyle').value;
+                    const currentIndex = styles.indexOf(currentStyle);
+                    const nextIndex = (currentIndex + 1) % styles.length;
+                    document.getElementById('lineStyle').value = styles[nextIndex];
+                } else if (action === 'toggle macro recording') {
+                    if (!isRecording) {
+                        startRecording();
+                    } else {
+                        stopRecording();
+                    }
+                } else if (action === 'export current view') {
+                    exportCanvas();
+                }
+            }
+        });
+        
+        // Advanced functions
+        function saveProject() {
+            const projectData = {
+                grid: grid,
+                timestamp: Date.now(),
+                version: '5.0.0'
+            };
+            localStorage.setItem('asciiCanvasProject', JSON.stringify(projectData));
+            showToast('Project saved', 'success');
+        }
+        
+        function loadProject() {
+            const saved = localStorage.getItem('asciiCanvasProject');
+            if (saved) {
+                const projectData = JSON.parse(saved);
+                if (projectData.grid) {
+                    grid = projectData.grid;
+                    render();
+                }
+                showToast('Project loaded', 'success');
+            }
+        }
+        
+        function selectAll() {
+            selection = {
+                startRow: 0,
+                startCol: 0,
+                endRow: ROWS - 1,
+                endCol: COLS - 1,
+                cells: []
+            };
+            
+            for (let row = 0; row < ROWS; row++) {
+                for (let col = 0; col < COLS; col++) {
+                    if (grid[row][col] !== ' ') {
+                        selection.cells.push({row, col});
+                    }
+                }
+            }
+            
+            render();
+            showToast('All selected', 'success');
+        }
+        
+        function duplicateSelection() {
+            if (selection && selection.cells.length > 0) {
+                saveUndo();
+                
+                // Calculate offset for duplication
+                const width = selection.endCol - selection.startCol + 1;
+                const height = selection.endRow - selection.startRow + 1;
+                
+                // Paste selection
+                for (let row = 0; row < height && selection.startRow + row < ROWS; row++) {
+                    for (let col = 0; col < width && selection.startCol + col < COLS; col++) {
+                        const sourceCell = selection.cells.find(c => c.row === selection.startRow + row && c.col === selection.startCol + col);
+                        if (sourceCell) {
+                            grid[selection.startRow + row][selection.startCol + col + width] = sourceCell.char;
+                        }
+                    }
+                }
+                
+                render();
+                showToast('Selection duplicated', 'success');
+            }
+        }
+        
+        function groupSelection() {
+            if (selection && selection.cells.length > 0) {
+                saveUndo();
+                // Group all selected cells
+                selection.cells.forEach(cell => {
+                    grid[cell.row][cell.col] = `[${grid[cell.row][cell.col]}]`;
+                });
+                render();
+                showToast('Selection grouped', 'success');
+            }
+        }
+        
+        function ungroupSelection() {
+            if (selection && selection.cells.length > 0) {
+                saveUndo();
+                // Ungroup all selected cells
+                selection.cells.forEach(cell => {
+                    grid[cell.row][cell.col] = cell.char;
+                });
+                render();
+                showToast('Selection ungrouped', 'success');
+            }
+        }
+        
+        function invertSelection() {
+            if (selection && selection.cells.length > 0) {
+                saveUndo();
+                // Invert all selected cells
+                selection.cells.forEach(cell => {
+                    const char = grid[cell.row][cell.col];
+                    // Simple character inversion
+                    if (char === char.toUpperCase()) {
+                        grid[cell.row][cell.col] = char.toLowerCase();
+                    } else {
+                        grid[cell.row][cell.col] = char.toUpperCase();
+                    }
+                });
+                render();
+                showToast('Selection inverted', 'success');
+            }
+        }
+        
+        function flipSelection(direction) {
+            if (selection && selection.cells.length > 0) {
+                saveUndo();
+                const width = selection.endCol - selection.startCol + 1;
+                const height = selection.endRow - selection.startRow + 1;
+                
+                if (direction === 'horizontal') {
+                    // Flip horizontally
+                    for (let row = 0; row < height; row++) {
+                        for (let col = 0; col < width; col++) {
+                            const sourceCell = selection.cells.find(c => c.row === selection.startRow + row && c.col === selection.startCol + col);
+                            const targetCell = selection.cells.find(c => c.row === selection.startRow + row && c.col === selection.endCol - col);
+                            if (sourceCell && targetCell) {
+                                grid[selection.startRow + row][selection.endCol - col] = targetCell.char;
+                                grid[selection.endRow + row][selection.startCol + col] = sourceCell.char;
+                            }
+                        }
+                    }
+                } else {
+                    // Flip vertically
+                    for (let col = 0; col < width; col++) {
+                        for (let row = 0; row < height; row++) {
+                            const sourceCell = selection.cells.find(c => c.row === selection.startRow + row && c.col === selection.startCol + col);
+                            const targetCell = selection.cells.find(c => c.row === selection.endRow - row && c.col === selection.endCol - col);
+                            if (sourceCell && targetCell) {
+                                grid[selection.endRow - row][selection.startCol + col] = targetCell.char;
+                                grid[selection.startRow + row][selection.endCol - col] = sourceCell.char;
+                            }
+                        }
+                    }
+                }
+                
+                render();
+                showToast(`Selection flipped ${direction}`, 'success');
+            }
+        }
+        
+        function rotateSelection() {
+            if (selection && selection.cells.length > 0) {
+                saveUndo();
+                // Simple 90-degree rotation
+                const centerX = Math.floor((selection.startCol + selection.endCol) / 2);
+                const centerY = Math.floor((selection.startRow + selection.endRow) / 2);
+                
+                selection.cells.forEach(cell => {
+                    const relX = cell.col - centerX;
+                    const relY = cell.row - centerY;
+                    const newX = Math.round(centerY - relY);
+                    const newY = Math.round(centerX + relY);
+                    
+                    if (newX >= 0 && newX < COLS && newY >= 0 && newY < ROWS) {
+                        grid[newY][newX] = cell.char;
+                    }
+                });
+                
+                render();
+                showToast('Selection rotated', 'success');
+            }
+        }
+        
+        function exportCanvas() {
+            const asciiContent = grid.map(row => row.join('')).join('\n');
+            
+            // Create blob and download
+            const blob = new Blob([asciiContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ascii-canvas-${Date.now()}.txt`;
+            a.click();
+            showToast('Canvas exported as ASCII', 'success');
+        }
+        
         // Enhanced mouse tracking for macros
         const originalDrawFreehand = drawFreehand;
         drawFreehand = function(pos, char) {
