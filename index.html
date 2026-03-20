@@ -8,8 +8,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        /* =============================================
+           MODERN DESIGN SYSTEM
+           ============================================= */
+        
         :root {
-            /* Modern Color System */
+            /* Color System */
             --bg-primary: #0f0f0f;
             --bg-surface: #1a1a1a;
             --bg-surface-2: #252525;
@@ -70,6 +74,10 @@
             --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* =============================================
+           BASE STYLES
+           ============================================= */
+        
         * {
             margin: 0;
             padding: 0;
@@ -90,7 +98,33 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Modern Header */
+        /* =============================================
+           LAYOUT COMPONENTS
+           ============================================= */
+        
+        .app-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .left-panel {
+            width: 320px;
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
         .header {
             background: var(--bg-surface);
             border-bottom: 1px solid var(--border-subtle);
@@ -98,142 +132,92 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 60px;
-            backdrop-filter: blur(10px);
-            position: relative;
-            z-index: 100;
+            flex-shrink: 0;
         }
 
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--accent-gradient);
-            opacity: 0.05;
-            pointer-events: none;
-        }
-
-        .header h1 {
-            font-family: var(--font-sans);
-            font-size: var(--font-size-xl);
-            font-weight: 600;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-        }
-
-        .header h1::before {
-            content: '🎨';
+        .logo {
+            font-family: var(--font-mono);
             font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
         }
 
         .header-info {
             display: flex;
+            gap: var(--space-sm);
             align-items: center;
-            gap: var(--space-lg);
-            font-family: var(--font-mono);
-            font-size: var(--font-size-sm);
-            color: var(--text-secondary);
         }
 
         .info-badge {
-            background: var(--bg-surface-2);
+            background: var(--accent);
+            color: var(--text-inverse);
             padding: var(--space-xs) var(--space-sm);
             border-radius: var(--radius-md);
-            border: 1px solid var(--border-subtle);
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            transition: var(--transition-fast);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
         }
 
-        .info-badge:hover {
-            background: var(--bg-surface-3);
-            border-color: var(--accent);
-            color: var(--text-primary);
-        }
-
-        .ai-toggle {
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 4px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
-        }
-
-        .ai-toggle:hover {
-            background: var(--accent);
-            color: white;
-        }
-
-        .ai-toggle.active {
-            background: var(--accent);
-            color: white;
-        }
-
-        /* Modern Main Layout */
-        .main-container {
+        .canvas-container {
             flex: 1;
             display: flex;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* Modern Sidebar */
-        .left-panel {
-            width: 280px;
-            background: var(--bg-surface);
-            border-right: 1px solid var(--border-subtle);
-            display: flex;
             flex-direction: column;
-            overflow-y: auto;
+            background: var(--bg-primary);
             position: relative;
-            z-index: 50;
+            overflow: hidden;
         }
 
-        .left-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 1px;
-            height: 100%;
-            background: var(--accent-gradient);
-            opacity: 0.3;
+        .canvas-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        #canvas {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            line-height: 1;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            will-change: transform;
+            transform-origin: 0 0;
+            transition: transform var(--transition-fast);
+        }
+
+        .status-bar {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border-subtle);
+            padding: var(--space-sm) var(--space-xl);
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            font-family: var(--font-mono);
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+        }
+
+        /* =============================================
+           TOOL PANEL COMPONENTS
+           ============================================= */
+        
         .tool-section {
-            padding: var(--space-lg);
+            padding: var(--space-md);
             border-bottom: 1px solid var(--border-subtle);
-        }
-
-        .tool-section:last-child {
-            border-bottom: none;
         }
 
         .tool-section h3 {
             font-family: var(--font-sans);
-            font-size: var(--font-size-xs);
+            font-size: var(--font-size-sm);
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-secondary);
+            color: var(--text-primary);
             margin-bottom: var(--space-md);
             display: flex;
             align-items: center;
             gap: var(--space-xs);
-        }
-
-        .tool-section h3::before {
-            content: '⚡';
-            font-size: var(--font-size-sm);
         }
 
         .tool-grid {
@@ -246,7 +230,7 @@
             background: var(--bg-surface-2);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
-            padding: var(--space-md);
+            padding: var(--space-sm);
             border-radius: var(--radius-md);
             cursor: pointer;
             font-family: var(--font-sans);
@@ -258,20 +242,6 @@
             align-items: center;
             gap: var(--space-xs);
             min-height: 60px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tool-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--accent-gradient);
-            opacity: 0;
-            transition: var(--transition-fast);
         }
 
         .tool-btn:hover {
@@ -282,23 +252,14 @@
             box-shadow: var(--shadow-md);
         }
 
-        .tool-btn:hover::before {
-            opacity: 0.1;
-        }
-
         .tool-btn.active {
             background: var(--accent);
             border-color: var(--accent);
             color: var(--text-inverse);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .tool-btn.active::before {
-            opacity: 0.2;
         }
 
         .tool-icon {
-            font-size: var(--font-size-lg);
+            font-size: var(--font-size-xl);
             line-height: 1;
         }
 
@@ -308,802 +269,17 @@
             line-height: 1.2;
         }
 
-        /* Template Buttons */
-        .template-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-sm);
-        }
-
-        .template-btn {
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            padding: var(--space-sm);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-family: var(--font-sans);
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-            transition: var(--transition-fast);
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            min-height: 50px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .template-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--accent-gradient);
-            opacity: 0;
-            transition: var(--transition-fast);
-        }
-
-        .template-btn:hover {
-            background: var(--bg-surface-3);
-            border-color: var(--accent);
-            color: var(--text-primary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .template-btn:hover::before {
-            opacity: 0.1;
-        }
-
-        .template-btn.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: var(--text-inverse);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .template-icon {
-            font-size: var(--font-size-lg);
-            line-height: 1;
-        }
-
-        .template-label {
-            font-size: var(--font-size-xs);
-            text-align: center;
-            line-height: 1.2;
-        }
-
-        /* Pattern Buttons */
-        .pattern-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-xs);
-        }
-
-        .pattern-btn {
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            padding: var(--space-xs);
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-family: var(--font-sans);
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-            transition: var(--transition-fast);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--space-xs);
-            min-height: 40px;
-            position: relative;
-        }
-
-        .pattern-btn:hover {
-            background: var(--bg-surface-3);
-            border-color: var(--accent);
-            color: var(--text-primary);
-            transform: translateY(-1px);
-        }
-
-        .pattern-btn.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: var(--text-inverse);
-        }
-
-        .pattern-preview {
-            font-family: var(--font-mono);
-            font-size: var(--font-size-sm);
-            line-height: 1;
-            letter-spacing: 1px;
-        }
-
-        .pattern-label {
-            font-size: 9px;
-            text-align: center;
-            line-height: 1;
-        }
-
-        /* Character Buttons */
-        .char-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: var(--space-xs);
-        }
-
-        .char-btn {
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            padding: var(--space-xs);
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-family: var(--font-mono);
-            font-size: var(--font-size-sm);
-            font-weight: 500;
-            transition: var(--transition-fast);
-            min-height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .char-btn:hover {
-            background: var(--bg-surface-3);
-            border-color: var(--accent);
-            color: var(--text-primary);
-            transform: translateY(-1px);
-        }
-
-        .char-btn.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: var(--text-inverse);
-        }
-
-        /* Advanced Tools Grid */
-        .advanced-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-sm);
-        }
-
-        /* Export and Settings Buttons */
-        .export-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-sm);
-        }
-
-        .export-btn {
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            padding: var(--space-sm);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-family: var(--font-sans);
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-            transition: var(--transition-fast);
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            min-height: 50px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .export-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--accent-gradient);
-            opacity: 0;
-            transition: var(--transition-fast);
-        }
-
-        .export-btn:hover {
-            background: var(--bg-surface-3);
-            border-color: var(--accent);
-            color: var(--text-primary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .export-btn:hover::before {
-            opacity: 0.1;
-        }
-
-        .export-icon {
-            font-size: var(--font-size-lg);
-            line-height: 1;
-        }
-
-        .export-label {
-            font-size: var(--font-size-xs);
-            text-align: center;
-            line-height: 1.2;
-        }
-
-        /* Settings Grid */
-        .settings-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: var(--space-md);
-        }
-
-        .setting-item {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-xs);
-        }
-
-        .setting-item label {
-            font-family: var(--font-sans);
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .setting-item select,
-        .setting-item input[type="checkbox"] {
-            width: 100%;
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-primary);
-            padding: var(--space-sm);
-            border-radius: var(--radius-md);
-            font-family: var(--font-sans);
-            font-size: var(--font-size-sm);
-            transition: var(--transition-fast);
-            cursor: pointer;
-        }
+        /* =============================================
+           MOBILE RESPONSIVE
+           ============================================= */
         
-        #canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            font-family: var(--font-mono);
-            font-size: 12px;
-            line-height: 1;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-            will-change: transform;
-            transform-origin: 0 0;
-            transition: transform var(--transition-fast);
-        }
-        
-        .status-bar {
-            background: var(--bg-surface);
-            border-top: 1px solid var(--border-subtle);
-            padding: var(--space-sm) var(--space-lg);
-            display: flex;
-            align-items: center;
-            gap: var(--space-lg);
-            font-family: var(--font-mono);
-            font-size: var(--font-size-xs);
-            color: var(--text-secondary);
-            backdrop-filter: blur(10px);
-            position: relative;
-            z-index: 50;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            padding: var(--space-xs) var(--space-sm);
-            background: var(--bg-surface-2);
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-subtle);
-            transition: var(--transition-fast);
-        }
-
-        .status-item:hover {
-            background: var(--bg-surface-3);
-            border-color: var(--accent);
-            color: var(--text-primary);
-        }
-
-        .status-item strong {
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        /* Accessibility & Focus Management */
-        .tool-btn:focus-visible {
-            outline: 2px solid var(--accent);
-            outline-offset: 2px;
-            box-shadow: var(--shadow-glow);
-        }
-
-        .tool-btn:focus {
-            outline: none;
-        }
-
-        /* High Contrast Mode Support */
-        @media (prefers-contrast: high) {
-            :root {
-                --border-subtle: #666;
-                --text-secondary: #ccc;
-            }
-        }
-
-        /* Reduced Motion Support */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* Screen Reader Support */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        /* Keyboard Navigation */
-        .keyboard-focus {
-            outline: 2px solid var(--accent);
-            outline-offset: 2px;
-        }
-
-        /* Modern Selects and Inputs */
-        .style-select {
-            width: 100%;
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-primary);
-            padding: var(--space-sm);
-            border-radius: var(--radius-md);
-            font-family: var(--font-sans);
-            font-size: var(--font-size-sm);
-            transition: var(--transition-fast);
-            cursor: pointer;
-        }
-
-        .color-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--space-xs);
-            background: var(--bg-surface-2);
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-subtle);
-            font-family: var(--font-mono);
-            font-size: var(--font-size-xs);
-        }
-
-        /* Mobile Responsive Updates */
-        @media (max-width: 768px) {
-            .shortcuts-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .macro-controls {
-                flex-direction: column;
-                gap: var(--space-xs);
-            }
-            
-            .color-presets {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        /* History Panel */
-        .history-controls {
-            display: flex;
-            gap: var(--space-sm);
-            margin-bottom: var(--space-sm);
-        }
-
-        .history-btn {
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-family: var(--font-sans);
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-            transition: var(--transition-fast);
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-        }
-
-        .history-btn:hover {
-            background: var(--bg-surface-3);
-            border-color: var(--accent);
-            color: var(--text-primary);
-        }
-
-        .history-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .history-list {
-            max-height: 200px;
-            overflow-y: auto;
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            padding: var(--space-sm);
-        }
-
-        .history-item {
-            padding: var(--space-sm);
-            border-bottom: 1px solid var(--border-subtle);
-            font-family: var(--font-mono);
-            font-size: var(--font-size-xs);
-            color: var(--text-secondary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            transition: var(--transition-fast);
-        }
-
-        .history-item:hover {
-            background: var(--bg-surface-3);
-            color: var(--text-primary);
-        }
-
-        .history-item-time {
-            font-size: var(--font-size-xs);
-            color: var(--text-tertiary);
-        }
-
-        .history-item-action {
-            font-size: var(--font-size-xs);
-            color: var(--accent);
-            cursor: pointer;
-        }
-
-        /* Guides Panel */
-        .guide-controls {
-            display: flex;
-            gap: var(--space-sm);
-            margin-bottom: var(--space-sm);
-        }
-
-        .guide-btn {
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-family: var(--font-sans);
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-            transition: var(--transition-fast);
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-        }
-
-        .guide-btn:hover {
-            background: var(--bg-surface-3);
-            border-color: var(--accent);
-            color: var(--text-primary);
-        }
-
-        .guide-btn.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: var(--text-inverse);
-        }
-
-        /* Mobile Responsive Updates */
-        @media (max-width: 768px) {
-            .history-controls {
-                flex-direction: column;
-                gap: var(--space-xs);
-            }
-            
-            .guide-controls {
-                flex-direction: column;
-                gap: var(--space-xs);
-            }
-        }
         @media (max-width: 768px) {
             .left-panel {
-                width: 60px;
-            }
-            
-            .tool-section h3 {
-                font-size: 0;
-                height: 0;
-                margin: 0;
-            }
-            
-            .tool-section h3::before {
-                display: block;
-                font-size: var(--font-size-base);
-                text-align: center;
+                width: 280px;
             }
             
             .tool-grid {
-                grid-template-columns: 1fr;
-                gap: var(--space-xs);
-            }
-            
-            .tool-btn {
-                padding: var(--space-sm);
-                min-height: 50px;
-            }
-            
-            .tool-label {
-                display: none;
-            }
-            
-            .header {
-                padding: var(--space-sm) var(--space-md);
-            }
-            
-            .header h1 {
-                font-size: var(--font-size-base);
-            }
-            
-            .header-info {
-                gap: var(--space-sm);
-            }
-            
-            .info-badge span:last-child {
-                display: none;
-            }
-        }
-
-        /* Quick Actions */
-        .quick-actions-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-sm);
-        }
-
-        .quick-action-btn {
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            padding: var(--space-sm);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-family: var(--font-sans);
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-            transition: var(--transition-fast);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--space-xs);
-            min-height: 60px;
-        }
-
-        .quick-action-btn:hover {
-            background: var(--bg-surface-3);
-            border-color: var(--accent);
-            color: var(--text-primary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .action-icon {
-            font-size: var(--font-size-xl);
-            line-height: 1;
-        }
-
-        .action-label {
-            font-size: var(--font-size-xs);
-            text-align: center;
-            line-height: 1.2;
-        }
-
-        /* Brush Settings */
-        .brush-settings {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-md);
-        }
-
-        .setting-row {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-sm);
-            background: var(--bg-surface-2);
-            border-radius: var(--radius-sm);
-        }
-
-        .setting-row label {
-            font-family: var(--font-sans);
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-            color: var(--text-secondary);
-            min-width: 60px;
-        }
-
-        .brush-slider {
-            flex: 1;
-            height: 4px;
-            background: var(--bg-surface-3);
-            border-radius: 2px;
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        .brush-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            background: var(--accent);
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .brush-slider::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
-            background: var(--accent);
-            border-radius: 50%;
-            cursor: pointer;
-            border: none;
-        }
-
-        .brush-select {
-            flex: 1;
-            background: var(--bg-surface-3);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-primary);
-            padding: var(--space-xs);
-            border-radius: var(--radius-sm);
-            font-family: var(--font-sans);
-            font-size: var(--font-size-sm);
-        }
-
-        /* Canvas Info */
-        .canvas-info {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-xs);
-        }
-
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--space-xs);
-            background: var(--bg-surface-2);
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-subtle);
-        }
-
-        .info-label {
-            font-family: var(--font-sans);
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
-
-        .info-value {
-            font-family: var(--font-mono);
-            font-size: var(--font-size-xs);
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        /* Animation Controls */
-        .animation-controls {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-sm);
-            margin-bottom: var(--space-md);
-        }
-
-        .anim-btn {
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            padding: var(--space-sm);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-family: var(--font-sans);
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-            transition: var(--transition-fast);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 40px;
-        }
-
-        .anim-btn:hover {
-            background: var(--bg-surface-3);
-            border-color: var(--accent);
-            color: var(--text-primary);
-        }
-
-        .anim-btn.playing {
-            background: var(--success);
-            border-color: var(--success);
-            color: var(--text-inverse);
-        }
-
-        .anim-btn.recording {
-            background: var(--error);
-            border-color: var(--error);
-            color: var(--text-inverse);
-            animation: pulse 1.5s infinite;
-        }
-
-        .animation-settings {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-sm);
-        }
-
-        .anim-select {
-            background: var(--bg-surface-3);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-primary);
-            padding: var(--space-xs);
-            border-radius: var(--radius-sm);
-            font-family: var(--font-sans);
-            font-size: var(--font-size-sm);
-        }
-
-        .anim-input {
-            background: var(--bg-surface-3);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-primary);
-            padding: var(--space-xs);
-            border-radius: var(--radius-sm);
-            font-family: var(--font-mono);
-            font-size: var(--font-size-sm);
-            width: 80px;
-        }
-
-        /* Mobile Responsive Updates */
-        @media (max-width: 768px) {
-            .quick-actions-grid {
                 grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .animation-controls {
-                grid-template-columns: 1fr;
-            }
-            
-            .setting-row {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: var(--space-xs);
-            }
-            
-            .setting-row label {
-                min-width: auto;
             }
         }
 
@@ -1119,339 +295,29 @@
                 transform: translateX(0);
             }
             
-            .mobile-menu-toggle {
-                display: block;
-                position: fixed;
-                top: var(--space-md);
-                left: var(--space-md);
-                z-index: 300;
-                background: var(--accent);
-                color: var(--text-inverse);
-                border: none;
-                padding: var(--space-sm);
-                border-radius: var(--radius-md);
-                cursor: pointer;
-                font-size: var(--font-size-lg);
+            .tool-grid {
+                grid-template-columns: 1fr;
             }
-        }
-        
-        .ai-panel-close {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .ai-panel-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        /* API Config */
-        .api-config {
-            background: var(--bg-surface-2);
-            padding: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .config-row {
-            margin-bottom: 8px;
-        }
-
-        .config-row label {
-            display: block;
-            font-size: 10px;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-
-        .config-input {
-            width: 100%;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-        }
-
-        .config-input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .config-btn {
-            background: var(--accent);
-            border: none;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 10px;
-            margin-top: 4px;
-        }
-
-        /* Quick Prompts */
-        .quick-prompts {
-            padding: 8px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            gap: 4px;
-            overflow-x: auto;
-        }
-
-        .quick-prompt {
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 4px 8px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 10px;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-
-        .quick-prompt:hover {
-            background: var(--accent);
-            color: white;
-        }
-
-        /* Chat Messages */
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 12px;
-        }
-
-        .message {
-            margin-bottom: 12px;
-        }
-
-        .message.user {
-            text-align: right;
-        }
-
-        .message-bubble {
-            display: inline-block;
-            padding: 8px 12px;
-            border-radius: 8px;
-            max-width: 100%;
-            font-size: 11px;
-            line-height: 1.4;
-        }
-
-        .message.user .message-bubble {
-            background: var(--accent);
-            color: white;
-        }
-
-        .message.ai .message-bubble {
-            background: var(--bg-surface-2);
-            color: var(--text-primary);
-        }
-
-        .ascii-code-block {
-            background: var(--bg-primary);
-            border-left: 3px solid var(--accent);
-            padding: 8px;
-            margin: 8px 0;
-            border-radius: 4px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
-            line-height: 1.2;
-            white-space: pre;
-            overflow-x: auto;
-        }
-
-        .message-actions {
-            margin-top: 8px;
-            display: flex;
-            gap: 4px;
-        }
-
-        .action-btn {
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 2px 6px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 9px;
-            transition: all 0.2s;
-        }
-
-        .action-btn:hover {
-            background: var(--accent);
-            color: white;
-        }
-
-        /* Chat Input */
-        .chat-input-container {
-            padding: 12px;
-            border-top: 1px solid var(--border);
-        }
-
-        .chat-input-wrapper {
-            display: flex;
-            gap: 8px;
-            align-items: flex-end;
-        }
-
-        .chat-input {
-            flex: 1;
-            background: var(--bg-surface-2);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 6px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            resize: none;
-            min-height: 32px;
-            max-height: 80px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .chat-input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .send-btn {
-            background: var(--accent);
-            border: none;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-        }
-
-        .send-btn:hover {
-            background: var(--accent-hover);
-        }
-
-        .send-btn:disabled {
-            background: var(--border);
-            cursor: not-allowed;
-        }
-
-        /* Loading */
-        .loading {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border: 2px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Error */
-        .error-bubble {
-            background: var(--error);
-            color: white;
-            padding: 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            margin: 8px 0;
-        }
-
-        /* Resize Handle */
-        .resize-handle {
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            cursor: ew-resize;
-            background: transparent;
-        }
-
-        .resize-handle:hover {
-            background: var(--accent);
-        }
-
-        /* Modern Toast Notifications */
-        .toast {
-            position: fixed;
-            bottom: var(--space-xl);
-            right: var(--space-xl);
-            background: var(--bg-surface-2);
-            color: var(--text-primary);
-            padding: var(--space-md) var(--space-lg);
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-subtle);
-            box-shadow: var(--shadow-lg);
-            font-family: var(--font-sans);
-            font-size: var(--font-size-sm);
-            font-weight: 500;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: var(--transition-normal);
-            z-index: 1000;
-            max-width: 300px;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .toast.success {
-            border-color: var(--success);
-            background: var(--success);
-            color: var(--text-inverse);
-        }
-
-        .toast.error {
-            border-color: var(--error);
-            background: var(--error);
-            color: var(--text-inverse);
-        }
-
-        .toast.warning {
-            border-color: var(--warning);
-            background: var(--warning);
-            color: var(--text-inverse);
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-            ☰
-        </button>
-        <h1>ASCII Canvas Studio</h1>
-        <div class="header-info">
-            <div class="info-badge">
-                <span>📐</span>
-                <span id="canvasInfo">200×80</span>
-            </div>
-            <div class="info-badge">
-                <span>🎨</span>
-                <span id="toolInfo">Freehand</span>
-            </div>
-            <div class="info-badge">
-                <span>🔍</span>
-                <span id="zoomLevel">100%</span>
-            </div>
-        </div>
-    </div>
+    <div class="app-container">
+        <!-- Left Panel -->
+        <aside class="left-panel">
+            <!-- Header -->
+            <header class="header">
+                <a href="#" class="logo">ASCII Studio</a>
+                <div class="header-info">
+                    <span class="info-badge">v7.0</span>
+                </div>
+            </header>
 
-    <div class="main-container">
-        <div class="left-panel">
-            <div class="tool-section">
-                <h3>Tools</h3>
+            <!-- Drawing Tools -->
+            <section class="tool-section">
+                <h3>🎨 Drawing Tools</h3>
                 <div class="tool-grid">
-                    <button class="tool-btn active" data-tool="freehand">
+                    <button class="tool-btn" data-tool="freehand">
                         <span class="tool-icon">✏️</span>
                         <span class="tool-label">Freehand</span>
                     </button>
@@ -1463,13 +329,13 @@
                         <span class="tool-icon">▢</span>
                         <span class="tool-label">Rectangle</span>
                     </button>
-                    <button class="tool-btn" data-tool="diamond">
-                        <span class="tool-icon">◆</span>
-                        <span class="tool-label">Diamond</span>
-                    </button>
                     <button class="tool-btn" data-tool="circle">
                         <span class="tool-icon">○</span>
                         <span class="tool-label">Circle</span>
+                    </button>
+                    <button class="tool-btn" data-tool="diamond">
+                        <span class="tool-icon">◆</span>
+                        <span class="tool-label">Diamond</span>
                     </button>
                     <button class="tool-btn" data-tool="arrow">
                         <span class="tool-icon">➜</span>
@@ -1487,2046 +353,219 @@
                         <span class="tool-icon">💨</span>
                         <span class="tool-label">Spray</span>
                     </button>
-                    <button class="tool-btn" data-tool="eraser">
-                        <span class="tool-icon">🧹</span>
-                        <span class="tool-label">Eraser</span>
-                    </button>
-                    <button class="tool-btn" data-tool="select">
-                        <span class="tool-icon">⬚</span>
-                        <span class="tool-label">Select</span>
-                    </button>
-                    <button class="tool-btn" data-tool="move">
-                        <span class="tool-icon">✋</span>
-                        <span class="tool-label">Move</span>
-                    </button>
                 </div>
-            </div>
+            </section>
 
-            <div class="tool-section">
-                <h3>📚 Templates</h3>
-                <div class="template-grid">
-                    <button class="template-btn" data-template="flowchart">
-                        <span class="template-icon">📊</span>
-                        <span class="template-label">Flowchart</span>
+            <!-- Quick Actions -->
+            <section class="tool-section">
+                <h3>⚡ Quick Actions</h3>
+                <div class="tool-grid">
+                    <button class="tool-btn" data-action="clear">
+                        <span class="tool-icon">🗑️</span>
+                        <span class="tool-label">Clear</span>
                     </button>
-                    <button class="template-btn" data-template="diagram">
-                        <span class="template-icon">🔷</span>
-                        <span class="template-label">Diagram</span>
+                    <button class="tool-btn" data-action="fill">
+                        <span class="tool-icon">🪣</span>
+                        <span class="tool-label">Fill All</span>
                     </button>
-                    <button class="template-btn" data-template="network">
-                        <span class="template-icon">🌐</span>
-                        <span class="template-label">Network</span>
+                    <button class="tool-btn" data-action="invert">
+                        <span class="tool-icon">🔄</span>
+                        <span class="tool-label">Invert</span>
                     </button>
-                    <button class="template-btn" data-template="mindmap">
-                        <span class="template-icon">🧠</span>
-                        <span class="template-label">Mind Map</span>
-                    </button>
-                    <button class="template-btn" data-template="timeline">
-                        <span class="template-icon">📅</span>
-                        <span class="template-label">Timeline</span>
-                    </button>
-                    <button class="template-btn" data-template="table">
-                        <span class="template-icon">📋</span>
-                        <span class="template-label">Table</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="tool-section">
-                <h3>🎨 Patterns</h3>
-                <div class="pattern-grid">
-                    <button class="pattern-btn" data-pattern="dots">
-                        <span class="pattern-preview">••••</span>
-                        <span class="pattern-label">Dots</span>
-                    </button>
-                    <button class="pattern-btn" data-pattern="cross">
-                        <span class="pattern-preview">++++</span>
-                        <span class="pattern-label">Cross</span>
-                    </button>
-                    <button class="pattern-btn" data-pattern="diagonal">
-                        <span class="pattern-preview">////</span>
-                        <span class="pattern-label">Diagonal</span>
-                    </button>
-                    <button class="pattern-btn" data-pattern="wave">
-                        <span class="pattern-preview">~~~~</span>
-                        <span class="pattern-label">Wave</span>
-                    </button>
-                    <button class="pattern-btn" data-pattern="brick">
-                        <span class="pattern-preview">███</span>
-                        <span class="pattern-label">Brick</span>
-                    </button>
-                </div>
-            </div>
-            <div class="tool-section">
-                <h3>🎨 Styles</h3>
-                <select class="style-select" id="borderStyle">
-                    <option value="simple">Simple</option>
-                    <option value="double">Double</option>
-                    <option value="rounded">Rounded</option>
-                    <option value="heavy">Heavy</option>
-                    <option value="light">Light</option>
-                    <option value="dashed">Dashed</option>
-                    <option value="dotted">Dotted</option>
-                </select>
-            </div>
-
-            <div class="tool-section">
-                <h3>🖊 Characters</h3>
-                <div class="char-grid">
-                    <button class="char-btn" data-char="*">*</button>
-                    <button class="char-btn" data-char="#">#</button>
-                    <button class="char-btn" data-char="@">@</button>
-                    <button class="char-btn" data-char="+">+</button>
-                    <button class="char-btn" data-char="-">-</button>
-                    <button class="char-btn" data-char="=">=</button>
-                    <button class="char-btn" data-char="|">|</button>
-                    <button class="char-btn" data-char="/">/</button>
-                    <button class="char-btn" data-char="\\">\\</button>
-                    <button class="char-btn" data-char=".">.</button>
-                    <button class="char-btn" data-char=":">:</button>
-                    <button class="char-btn" data-char="o">o</button>
-                    <button class="char-btn" data-char="x">x</button>
-                    <button class="char-btn" data-char="~">~</button>
-                </div>
-            </div>
-
-            <div class="tool-section">
-                <h3>🎯 Advanced</h3>
-                <div class="advanced-grid">
-                    <button class="tool-btn" data-tool="gradient">
-                        <span class="tool-icon">🌈</span>
-                        <span class="tool-label">Gradient</span>
-                    </button>
-                    <button class="tool-btn" data-tool="mirror">
+                    <button class="tool-btn" data-action="mirror">
                         <span class="tool-icon">🪞</span>
                         <span class="tool-label">Mirror</span>
                     </button>
-                    <button class="tool-btn" data-tool="rotate">
-                        <span class="tool-icon">🔄</span>
-                        <span class="tool-label">Rotate</span>
+                    <button class="tool-btn" data-action="center">
+                        <span class="tool-icon">⊕</span>
+                        <span class="tool-label">Center</span>
                     </button>
-                    <button class="tool-btn" data-tool="grid">
-                        <span class="tool-icon">⚏</span>
-                        <span class="tool-label">Grid</span>
-                    </button>
-                    <button class="tool-btn" data-tool="ruler">
-                        <span class="tool-icon">📏</span>
-                        <span class="tool-label">Ruler</span>
+                    <button class="tool-btn" data-action="random">
+                        <span class="tool-icon">🎲</span>
+                        <span class="tool-label">Random</span>
                     </button>
                 </div>
-            </div>
-            </div>
+            </section>
 
-            <div class="tool-section">
+            <!-- Templates -->
+            <section class="tool-section">
+                <h3>📋 Templates</h3>
+                <div class="tool-grid">
+                    <button class="tool-btn" data-template="flowchart">
+                        <span class="tool-icon">📊</span>
+                        <span class="tool-label">Flowchart</span>
+                    </button>
+                    <button class="tool-btn" data-template="diagram">
+                        <span class="tool-icon">🔷</span>
+                        <span class="tool-label">Diagram</span>
+                    </button>
+                    <button class="tool-btn" data-template="network">
+                        <span class="tool-icon">🌐</span>
+                        <span class="tool-label">Network</span>
+                    </button>
+                    <button class="tool-btn" data-template="mindmap">
+                        <span class="tool-icon">🧠</span>
+                        <span class="tool-label">Mind Map</span>
+                    </button>
+                    <button class="tool-btn" data-template="timeline">
+                        <span class="tool-icon">📅</span>
+                        <span class="tool-label">Timeline</span>
+                    </button>
+                    <button class="tool-btn" data-template="table">
+                        <span class="tool-icon">📊</span>
+                        <span class="tool-label">Table</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Export Options -->
+            <section class="tool-section">
                 <h3>💾 Export</h3>
-                <div class="export-grid">
-                    <button class="export-btn" data-export="ascii">
-                        <span class="export-icon">📄</span>
-                        <span class="export-label">ASCII</span>
+                <div class="tool-grid">
+                    <button class="tool-btn" data-export="ascii">
+                        <span class="tool-icon">📄</span>
+                        <span class="tool-label">ASCII</span>
                     </button>
-                    <button class="export-btn" data-export="png">
-                        <span class="export-icon">🖼️</span>
-                        <span class="export-label">PNG</span>
+                    <button class="tool-btn" data-export="png">
+                        <span class="tool-icon">🖼️</span>
+                        <span class="tool-label">PNG</span>
                     </button>
-                    <button class="export-btn" data-export="svg">
-                        <span class="export-icon">🎨</span>
-                        <span class="export-label">SVG</span>
+                    <button class="tool-btn" data-export="svg">
+                        <span class="tool-icon">🎨</span>
+                        <span class="tool-label">SVG</span>
                     </button>
-                    <button class="export-btn" data-export="json">
-                        <span class="export-icon">📋</span>
-                        <span class="export-label">JSON</span>
+                    <button class="tool-btn" data-export="json">
+                        <span class="tool-icon">📋</span>
+                        <span class="tool-label">JSON</span>
                     </button>
-                    <button class="export-btn" data-export="html">
-                        <span class="export-icon">🌐</span>
-                        <span class="export-label">HTML</span>
+                    <button class="tool-btn" data-export="html">
+                        <span class="tool-icon">🌐</span>
+                        <span class="tool-label">HTML</span>
                     </button>
+                    <button class="tool-btn" data-export="txt">
+                        <span class="tool-icon">📝</span>
+                        <span class="tool-label">TXT</span>
+                    </button>
+                </div>
+            </section>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Canvas Header -->
+            <header class="header">
+                <div class="header-info">
+                    <span>Position: <span id="cursorPos">0, 0</span></span>
+                    <span>Tool: <span id="currentTool">Freehand</span></span>
+                    <span>Zoom: <span id="zoomLevel">100%</span></span>
+                </div>
+                <div class="header-info">
+                    <button class="info-badge" id="undoBtn">↶ Undo</button>
+                    <button class="info-badge" id="redoBtn">↷ Redo</button>
+                    <button class="info-badge" id="saveBtn">💾 Save</button>
+                </div>
+            </header>
+
+            <!-- Canvas Container -->
+            <div class="canvas-container">
+                <div class="canvas-wrapper">
+                    <canvas id="canvas"></canvas>
                 </div>
             </div>
 
-            <div class="tool-section">
-                <h3>⚙️ Settings</h3>
-                <div class="settings-grid">
-                    <div class="setting-item">
-                        <label>Grid Size</label>
-                        <select id="gridSize">
-                            <option value="small">Small (100×40)</option>
-                            <option value="medium" selected>Medium (200×80)</option>
-                            <option value="large">Large (300×120)</option>
-                            <option value="xlarge">XLarge (400×160)</option>
-                        </select>
-                    </div>
-                    <div class="setting-item">
-                        <label>Theme</label>
-                        <select id="theme">
-                            <option value="dark" selected>Dark</option>
-                            <option value="light">Light</option>
-                            <option value="auto">Auto</option>
-                        </select>
-                    </div>
-                    <div class="setting-item">
-                        <label>Auto-save</label>
-                        <input type="checkbox" id="autosave" checked>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tool-section">
-                <h3>⌨️ Shortcuts</h3>
-                <div class="shortcuts-grid">
-                    <div class="shortcut-item">
-                        <kbd>Ctrl+Z</kbd>
-                        <span>Undo</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>Ctrl+Y</kbd>
-                        <span>Redo</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>Ctrl+S</kbd>
-                        <span>Save</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>Ctrl+Shift+C</kbd>
-                        <span>Copy</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>Ctrl+V</kbd>
-                        <span>Paste</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>Delete</kbd>
-                        <span>Clear</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>Space+Drag</kbd>
-                        <span>Pan</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>Scroll</kbd>
-                        <span>Zoom</span>
-                    </div>
-                </div>
-            </div>
-
-            </div>
-
-            <div class="tool-section">
-                <h3>🎯 Quick Actions</h3>
-                <div class="quick-actions-grid">
-                    <button class="quick-action-btn" data-action="clear">
-                        <span class="action-icon">🗑️</span>
-                        <span class="action-label">Clear All</span>
-                    </button>
-                    <button class="quick-action-btn" data-action="fill">
-                        <span class="action-icon">🪣</span>
-                        <span class="action-label">Fill Canvas</span>
-                    </button>
-                    <button class="quick-action-btn" data-action="invert">
-                        <span class="action-icon">🔄</span>
-                        <span class="action-label">Invert</span>
-                    </button>
-                    <button class="quick-action-btn" data-action="mirror">
-                        <span class="action-icon">🪞</span>
-                        <span class="action-label">Mirror</span>
-                    </button>
-                    <button class="quick-action-btn" data-action="center">
-                        <span class="action-icon">⊕</span>
-                        <span class="action-label">Center</span>
-                    </button>
-                    <button class="quick-action-btn" data-action="random">
-                        <span class="action-icon">🎲</span>
-                        <span class="action-label">Random Art</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="tool-section">
-                <h3>🎨 Brush Settings</h3>
-                <div class="brush-settings">
-                    <div class="setting-row">
-                        <label>Size</label>
-                        <input type="range" id="brushSize" min="1" max="10" value="1" class="brush-slider">
-                        <span id="brushSizeValue">1</span>
-                    </div>
-                    <div class="setting-row">
-                        <label>Opacity</label>
-                        <input type="range" id="brushOpacity" min="0" max="100" value="100" class="brush-slider">
-                        <span id="brushOpacityValue">100%</span>
-                    </div>
-                    <div class="setting-row">
-                        <label>Shape</label>
-                        <select id="brushShape" class="brush-select">
-                            <option value="round">Round</option>
-                            <option value="square">Square</option>
-                            <option value="diamond">Diamond</option>
-                            <option value="star">Star</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tool-section">
-                <h3>📊 Canvas Info</h3>
-                <div class="canvas-info">
-                    <div class="info-item">
-                        <span class="info-label">Size:</span>
-                        <span class="info-value" id="canvasSize">200×80</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Characters:</span>
-                        <span class="info-value" id="charCount">0</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Lines:</span>
-                        <span class="info-value" id="lineCount">0</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Selection:</span>
-                        <span class="info-value" id="selectionInfo">None</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Zoom:</span>
-                        <span class="info-value" id="zoomLevel">100%</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tool-section">
-                <h3>🎬 Animation</h3>
-                <div class="animation-controls">
-                    <button class="anim-btn" id="playAnim">
-                        <span>▶️ Play</span>
-                    </button>
-                    <button class="anim-btn" id="pauseAnim">
-                        <span>⏸️ Pause</span>
-                    </button>
-                    <button class="anim-btn" id="stopAnim">
-                        <span>⏹️ Stop</span>
-                    </button>
-                    <button class="anim-btn" id="recordAnim">
-                        <span>⏺️ Record</span>
-                    </button>
-                </div>
-                <div class="animation-settings">
-                    <div class="setting-row">
-                        <label>FPS</label>
-                        <select id="animFps" class="anim-select">
-                            <option value="12">12 FPS</option>
-                            <option value="24" selected>24 FPS</option>
-                            <option value="30">30 FPS</option>
-                            <option value="60">60 FPS</option>
-                        </select>
-                    </div>
-                    <div class="setting-row">
-                        <label>Duration</label>
-                        <input type="number" id="animDuration" value="5" min="1" max="60" class="anim-input">
-                        <span>seconds</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tool-section">
-                <h3>🎬 Macros</h3>
-                <div class="macro-controls">
-                    <button class="macro-btn" id="recordMacro">
-                        <span>⏺️ Record</span>
-                    </button>
-                    <button class="macro-btn" id="playMacro">
-                        <span>▶️ Play</span>
-                    </button>
-                    <button class="macro-btn" id="stopMacro">
-                        <span>⏹️ Stop</span>
-                    </button>
-                    <button class="macro-btn" id="clearMacro">
-                        <span>🗑️ Clear</span>
-                    </button>
-                </div>
-                <div class="macro-status">
-                    <span id="macroStatus">No macro recorded</span>
-                </div>
-            </div>
-
-            <div class="tool-section">
-                <h3>🎨 Color Picker</h3>
-                <div class="color-controls">
-                    <div class="color-presets">
-                        <button class="color-preset" data-color="#ffffff" style="background: #ffffff; color: #000;">⬜</button>
-                        <button class="color-preset" data-color="#ff0000" style="background: #ff0000;">⬛</button>
-                        <button class="color-preset" data-color="#00ff00" style="background: #00ff00;">🟩</button>
-                        <button class="color-preset" data-color="#0000ff" style="background: #0000ff;">🟦</button>
-                        <button class="color-preset" data-color="#ffff00" style="background: #ffff00;">🟨</button>
-                        <button class="color-preset" data-color="#ff00ff" style="background: #ff00ff;">🟪</button>
-                        <button class="color-preset" data-color="#00ffff" style="background: #00ffff;">🟩</button>
-                        <button class="color-preset" data-color="#ff0080" style="background: #ff0080;">🟠</button>
-                        <button class="color-preset" data-color="#800080" style="background: #800080;">🟩</button>
-                        <button class="color-preset" data-color="#0080ff" style="background: #0080ff;">🟦</button>
-                        <button class="color-preset" data-color="#808000" style="background: #808000;">🟩</button>
-                        <button class="color-preset" data-color="#ff8000" style="background: #ff8000;">🟧</button>
-                        <button class="color-preset" data-color="#ff00ff" style="background: #ff00ff;">🟪</button>
-                        <button class="color-preset" data-color="#ffffff" style="background: #ffffff; border: 2px solid var(--accent);">🌟</button>
-                    </div>
-                    <input type="color" id="customColor" class="color-input" value="#00d4aa">
-                    <div class="color-info">
-                        <span id="colorHex">#00d4aa</span>
-                        <span id="colorRgb">rgb(0, 212, 170)</span>
-                    </div>
-                </div>
-            </div>
-                <select class="style-select" id="arrowHead">
-                    <option value="arrow">Arrow (>)</option>
-                    <option value="triangle">Triangle (▶)</option>
-                </select>
-            </div>
-
-            <div class="tool-section">
-                <h3>📜 History</h3>
-                <div class="history-controls">
-                    <button class="history-btn" id="undoBtn">
-                        <span>↶ Undo</span>
-                    </button>
-                    <button class="history-btn" id="redoBtn">
-                        <span>↷ Redo</span>
-                    </button>
-                    <button class="history-btn" id="clearHistoryBtn">
-                        <span>🗑️ Clear</span>
-                    </button>
-                </div>
-                <div class="history-list" id="historyList">
-                    <!-- History items will be added here dynamically -->
-                </div>
-            </div>
-
-            <div class="tool-section">
-                <h3>📐 Guides</h3>
-                <div class="guide-controls">
-                    <button class="guide-btn" id="toggleGrid">
-                        <span>Grid: ON</span>
-                    </button>
-                    <button class="guide-btn" id="toggleRulers">
-                        <span>Rulers: OFF</span>
-                    </button>
-                    <button class="guide-btn" id="toggleSymmetry">
-                        <span>Symmetry: OFF</span>
-                    </button>
-                </div>
-            </div>
-                <select class="style-select" id="lineStyle">
-                    <option value="ascii">ASCII (-, |)</option>
-                    <option value="light">Light (─, │)</option>
-                    <option value="heavy">Heavy (━, ┃)</option>
-                    <option value="dashed">Dashed</option>
-                    <option value="dotted">Dotted</option>
-                </select>
-            </div>
-
-            <div class="tool-section">
-                <h3>Diamond Style</h3>
-                <select class="style-select" id="diamondStyle">
-                    <option value="simple">Simple (/, \)</option>
-                    <option value="unicode">Unicode (◇)</option>
-                </select>
-            </div>
-
-            <div class="tool-section">
-                <h3>Freehand Char</h3>
-                <select class="style-select" id="freehandChar">
-                    <option value="*">*</option>
-                    <option value="#">#</option>
-                    <option value="+">+</option>
-                    <option value=".">.</option>
-                    <option value="x">x</option>
-                    <option value="o">o</option>
-                    <option value="~">~</option>
-                </select>
-            </div>
-
-            <div class="tool-section">
-                <h3>Eraser Size</h3>
-                <select class="style-select" id="eraserSize">
-                    <option value="1">1×1</option>
-                    <option value="3">3×3</option>
-                    <option value="5">5×5</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="canvas-container">
-            <div class="canvas-wrapper">
-                <canvas id="canvas"></canvas>
-            </div>
-            <div class="status-bar">
-                <div class="status-item">
-                    <span>📍</span>
-                    <span>Cursor: <strong id="cursorPos">0, 0</strong></span>
-                </div>
-                <div class="status-item">
-                    <span>📏</span>
-                    <span>Canvas: <strong id="canvasSize">200×80</strong></span>
-                </div>
-                <div class="status-item">
-                    <span>🔍</span>
-                    <span>Zoom: <strong id="zoomLevel">100%</strong></span>
-                </div>
-                <div class="status-item">
-                    <span>🎨</span>
-                    <span>Tool: <strong id="currentTool">Freehand</strong></span>
-                </div>
-                <div class="status-item">
-                    <span>💡</span>
-                    <span id="hint">Ready to draw</span>
-                </div>
-            </div>
-        </div>
+            <!-- Status Bar -->
+            <footer class="status-bar">
+                <span>Size: <span id="canvasSize">200×80</span></span>
+                <span>Chars: <span id="charCount">0</span></span>
+                <span>Lines: <span id="lineCount">0</span></span>
+                <span>Selection: <span id="selectionInfo">None</span></span>
+            </footer>
+        </main>
     </div>
 
-    <div class="toast" id="toast"></div>
-
     <script>
-        // Canvas Setup
-        const COLS = 200;
-        const ROWS = 80;
-        let grid = Array(ROWS).fill().map(() => Array(COLS).fill(' '));
-        let currentTool = 'freehand';
-        let isDrawing = false;
-        let startPos = null;
-        let currentPos = null;
-        let moveStartPos = null;
-        let zoom = 1;
-        let panX = 0;
-        let panY = 0;
-        let isPanning = false;
-        let lastPanPos = null;
-        let selection = null;
-        let undoStack = [];
-        let redoStack = [];
-
-        // Canvas Element
+        // =============================================
+           CANVAS SETUP
+           =============================================
+        
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-
-        // UI Elements
-        const cursorPos = document.getElementById('cursorPos');
-        const canvasSize = document.getElementById('canvasSize');
-        const zoomLevel = document.getElementById('zoomLevel');
-        const currentToolSpan = document.getElementById('currentTool');
-        const hint = document.getElementById('hint');
-
-        // AI Panel Elements
-        const aiToggle = document.getElementById('aiToggle');
-        const aiPanel = document.getElementById('aiPanel');
-        const aiPanelClose = document.getElementById('aiPanelClose');
-        const resizeHandle = document.getElementById('resizeHandle');
-        const chatMessages = document.getElementById('chatMessages');
-        const chatInput = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('sendBtn');
-
-        // Initialize Canvas
-        function initCanvas() {
-            canvas.width = COLS * 8;
-            canvas.height = ROWS * 12;
-            render();
-        }
-
-        // Render Grid
+        
+        // Canvas dimensions
+        const COLS = 200;
+        const ROWS = 80;
+        const charWidth = 8;
+        const charHeight = 12;
+        
+        canvas.width = COLS * charWidth;
+        canvas.height = ROWS * charHeight;
+        
+        // Grid data
+        let grid = Array(ROWS).fill(null).map(() => Array(COLS).fill(' '));
+        
+        // Current state
+        let currentTool = 'freehand';
+        let currentChar = '*';
+        let isDrawing = false;
+        let lastPos = null;
+        
+        // History
+        let undoStack = [];
+        let redoStack = [];
+        const MAX_HISTORY = 50;
+        
+        // Selection
+        let selection = null;
+        
+        // =============================================
+           RENDERING SYSTEM
+           =============================================
+        
         function render() {
-            ctx.fillStyle = '#0a0a0a';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw background
+            ctx.fillStyle = '#0f0f0f';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             // Draw grid
-            ctx.strokeStyle = '#1a1a1a';
-            ctx.lineWidth = 0.5;
-            for (let i = 0; i <= COLS; i++) {
-                ctx.beginPath();
-                ctx.moveTo(i * 8, 0);
-                ctx.lineTo(i * 8, canvas.height);
-                ctx.stroke();
-            }
-            for (let i = 0; i <= ROWS; i++) {
-                ctx.beginPath();
-                ctx.moveTo(0, i * 12);
-                ctx.lineTo(canvas.width, i * 12);
-                ctx.stroke();
-            }
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '12px JetBrains Mono';
             
-            // Draw text
-            ctx.fillStyle = '#e0e0e0';
-            ctx.font = '12px JetBrains Mono, monospace';
             for (let row = 0; row < ROWS; row++) {
                 for (let col = 0; col < COLS; col++) {
                     const char = grid[row][col];
                     if (char !== ' ') {
-                        ctx.fillText(char, col * 8, row * 12 + 10);
+                        ctx.fillText(char, col * charWidth, row * charHeight);
                     }
                 }
             }
             
             // Draw selection
             if (selection) {
-                ctx.strokeStyle = '#4f98a3';
+                ctx.strokeStyle = '#00d4aa';
                 ctx.lineWidth = 2;
                 ctx.strokeRect(
-                    selection.startCol * 8,
-                    selection.startRow * 12,
-                    (selection.endCol - selection.startCol + 1) * 8,
-                    (selection.endRow - selection.startRow + 1) * 12
+                    selection.startCol * charWidth,
+                    selection.startRow * charHeight,
+                    (selection.endCol - selection.startCol + 1) * charWidth,
+                    (selection.endRow - selection.startRow + 1) * charHeight
                 );
             }
-        }
-
-        // Get mouse position in grid coordinates
-        function getGridPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / zoom - panX;
-            const y = (e.clientY - rect.top) / zoom - panY;
-            return {
-                col: Math.floor(x / 8),
-                row: Math.floor(y / 12)
-            };
-        }
-
-        // Save state for undo
-        function saveUndo() {
-            undoStack.push(grid.map(row => [...row]));
-            if (undoStack.length > 50) undoStack.shift();
-            redoStack = [];
-        }
-
-        // Tool functions
-        function drawRectangle(start, end, style) {
-            const chars = getBorderChars(style);
             
-            // Ensure proper coordinates
-            const minCol = Math.min(start.col, end.col);
-            const maxCol = Math.max(start.col, end.col);
-            const minRow = Math.min(start.row, end.row);
-            const maxRow = Math.max(start.row, end.row);
-            
-            // Don't draw if rectangle is too small
-            if (maxCol - minCol < 1 || maxRow - minRow < 1) return;
-            
-            // Draw horizontal lines
-            for (let col = minCol; col <= maxCol; col++) {
-                if (minRow >= 0 && minRow < ROWS && col >= 0 && col < COLS) {
-                    grid[minRow][col] = chars.h;
-                }
-                if (maxRow >= 0 && maxRow < ROWS && col >= 0 && col < COLS) {
-                    grid[maxRow][col] = chars.h;
-                }
-            }
-            
-            // Draw vertical lines
-            for (let row = minRow + 1; row < maxRow; row++) {
-                if (row >= 0 && row < ROWS && minCol >= 0 && minCol < COLS) {
-                    grid[row][minCol] = chars.v;
-                }
-                if (row >= 0 && row < ROWS && maxCol >= 0 && maxCol < COLS) {
-                    grid[row][maxCol] = chars.v;
-                }
-            }
-            
-            // Draw corners
-            if (minRow >= 0 && minRow < ROWS && minCol >= 0 && minCol < COLS) {
-                grid[minRow][minCol] = chars.tl;
-            }
-            if (minRow >= 0 && minRow < ROWS && maxCol >= 0 && maxCol < COLS) {
-                grid[minRow][maxCol] = chars.tr;
-            }
-            if (maxRow >= 0 && maxRow < ROWS && minCol >= 0 && minCol < COLS) {
-                grid[maxRow][minCol] = chars.bl;
-            }
-            if (maxRow >= 0 && maxRow < ROWS && maxCol >= 0 && maxCol < COLS) {
-                grid[maxRow][maxCol] = chars.br;
-            }
-        }
-
-        function drawDiamond(start, end, style) {
-            // Ensure proper coordinates
-            const minCol = Math.min(start.col, end.col);
-            const maxCol = Math.max(start.col, end.col);
-            const minRow = Math.min(start.row, end.row);
-            const maxRow = Math.max(start.row, end.row);
-            
-            const midRow = Math.floor((minRow + maxRow) / 2);
-            const midCol = Math.floor((minCol + maxCol) / 2);
-            
-            if (style === 'unicode') {
-                // Fill diamond with unicode diamonds
-                for (let row = minRow; row <= maxRow; row++) {
-                    for (let col = minCol; col <= maxCol; col++) {
-                        const relRow = Math.abs(row - midRow);
-                        const relCol = Math.abs(col - midCol);
-                        const maxDist = Math.max(Math.abs(maxRow - midRow), Math.abs(maxCol - midCol));
-                        
-                        if (relRow + relCol <= maxDist) {
-                            if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
-                                grid[row][col] = '◇';
-                            }
-                        }
-                    }
-                }
-            } else {
-                // Draw diamond outline with / and \
-                // Top half
-                for (let row = minRow; row <= midRow; row++) {
-                    const progress = (row - minRow) / (midRow - minRow);
-                    const leftCol = Math.floor(minCol + (midCol - minCol) * progress);
-                    const rightCol = Math.floor(midCol + (maxCol - midCol) * progress);
-                    
-                    if (row >= 0 && row < ROWS && leftCol >= 0 && leftCol < COLS) {
-                        grid[row][leftCol] = row === minRow ? '/' : '\\';
-                    }
-                    if (row >= 0 && row < ROWS && rightCol >= 0 && rightCol < COLS) {
-                        grid[row][rightCol] = row === minRow ? '\\' : '/';
-                    }
-                }
-                
-                // Bottom half
-                for (let row = midRow + 1; row <= maxRow; row++) {
-                    const progress = (row - midRow) / (maxRow - midRow);
-                    const leftCol = Math.floor(midCol - (midCol - minCol) * progress);
-                    const rightCol = Math.floor(midCol + (maxCol - midCol) * progress);
-                    
-                    if (row >= 0 && row < ROWS && leftCol >= 0 && leftCol < COLS) {
-                        grid[row][leftCol] = row === maxRow ? '\\' : '/';
-                    }
-                    if (row >= 0 && row < ROWS && rightCol >= 0 && rightCol < COLS) {
-                        grid[row][rightCol] = row === maxRow ? '/' : '\\';
-                    }
-                }
-            }
-        }
-
-        function drawLine(start, end, style) {
-            const chars = getLineChars(style);
-            const dx = Math.abs(end.col - start.col);
-            const dy = Math.abs(end.row - start.row);
-            const sx = start.col < end.col ? 1 : -1;
-            const sy = start.row < end.row ? 1 : -1;
-            let err = dx - dy;
-            let x = start.col;
-            let y = start.row;
-
-            while (true) {
-                // Draw the current point
-                if (y >= 0 && y < ROWS && x >= 0 && x < COLS) {
-                    const isHorizontal = dx > dy;
-                    grid[y][x] = isHorizontal ? chars.h : chars.v;
-                }
-                
-                // Check if we've reached the end
-                if (x === end.col && y === end.row) break;
-                
-                // Bresenham's line algorithm
-                const e2 = 2 * err;
-                if (e2 > -dy) {
-                    err -= dy;
-                    x += sx;
-                }
-                if (e2 < dx) {
-                    err += dx;
-                    y += sy;
-                }
-            }
-        }
-
-        function drawArrow(start, end, style, head) {
-            drawLine(start, end, style);
-            
-            // Calculate arrow head
-            const dx = end.col - start.col;
-            const dy = end.row - start.row;
-            const len = Math.sqrt(dx * dx + dy * dy);
-            
-            if (len === 0) return; // Prevent division by zero
-            
-            const ux = dx / len;
-            const uy = dy / len;
-            
-            if (head === 'arrow') {
-                // Simple arrow head >
-                if (end.row >= 0 && end.row < ROWS && end.col >= 0 && end.col < COLS) {
-                    grid[end.row][end.col] = '>';
-                }
-            } else {
-                // Triangle arrow head ▶
-                const headSize = 2;
-                const perpX = -uy;
-                const perpY = ux;
-                
-                // Calculate triangle points
-                const tipRow = Math.round(end.row - uy * headSize);
-                const tipCol = Math.round(end.col - ux * headSize);
-                const base1Row = Math.round(tipRow + perpY * headSize);
-                const base1Col = Math.round(tipCol + perpX * headSize);
-                const base2Row = Math.round(tipRow - perpY * headSize);
-                const base2Col = Math.round(tipCol - perpX * headSize);
-                
-                // Draw triangle points
-                const points = [
-                    {row: tipRow, col: tipCol},
-                    {row: base1Row, col: base1Col},
-                    {row: base2Row, col: base2Col}
-                ];
-                
-                points.forEach(point => {
-                    if (point.row >= 0 && point.row < ROWS && point.col >= 0 && point.col < COLS) {
-                        grid[point.row][point.col] = '▶';
-                    }
-                });
-            }
-        }
-
-        function drawFreehand(pos, char) {
-            if (pos.row >= 0 && pos.row < ROWS && pos.col >= 0 && pos.col < COLS) {
-                grid[pos.row][pos.col] = char;
-            }
-        }
-
-        function erase(pos, size) {
-            const half = Math.floor(size / 2);
-            for (let row = pos.row - half; row <= pos.row + half; row++) {
-                for (let col = pos.col - half; col <= pos.col + half; col++) {
-                    if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
-                        grid[row][col] = ' ';
-                    }
-                }
-            }
-        }
-
-        function floodSelect(start) {
-            // Get the character at the start position
-            if (start.row < 0 || start.row >= ROWS || start.col < 0 || start.col >= COLS) {
-                return null;
-            }
-            
-            const char = grid[start.row][start.col];
-            if (char === ' ') return null; // Don't select empty spaces
-            
-            const visited = new Set();
-            const queue = [start];
-            const cells = [];
-            
-            while (queue.length > 0) {
-                const pos = queue.shift();
-                const key = `${pos.row},${pos.col}`;
-                
-                if (visited.has(key)) continue;
-                visited.add(key);
-                
-                // Check bounds
-                if (pos.row < 0 || pos.row >= ROWS || pos.col < 0 || pos.col >= COLS) continue;
-                
-                // Check if character matches
-                if (grid[pos.row][pos.col] !== char) continue;
-                
-                cells.push(pos);
-                
-                // Add adjacent cells
-                queue.push({row: pos.row - 1, col: pos.col});
-                queue.push({row: pos.row + 1, col: pos.col});
-                queue.push({row: pos.row, col: pos.col - 1});
-                queue.push({row: pos.row, col: pos.col + 1});
-            }
-            
-            if (cells.length === 0) return null;
-            
-            // Calculate bounding box
-            const minRow = Math.min(...cells.map(c => c.row));
-            const maxRow = Math.max(...cells.map(c => c.row));
-            const minCol = Math.min(...cells.map(c => c.col));
-            const maxCol = Math.max(...cells.map(c => c.col));
-            
-            return {
-                startRow: minRow,
-                endRow: maxRow,
-                startCol: minCol,
-                endCol: maxCol,
-                cells: cells,
-                char: char
-            };
-        }
-
-        // Helper functions
-        function getBorderChars(style) {
-            const styles = {
-                simple: {h: '-', v: '|', tl: '+', tr: '+', bl: '+', br: '+'},
-                double: {h: '=', v: '||', tl: '+', tr: '+', bl: '+', br: '+'},
-                rounded: {h: '-', v: '|', tl: '/', tr: '\\', bl: '\\', br: '/'},
-                heavy: {h: '━', v: '┃', tl: '┏', tr: '┓', bl: '┗', br: '┛'},
-                light: {h: '─', v: '│', tl: '┌', tr: '┐', bl: '└', br: '┘'}
-            };
-            return styles[style] || styles.simple;
-        }
-
-        function getLineChars(style) {
-            const styles = {
-                ascii: {h: '-', v: '|'},
-                light: {h: '─', v: '│'},
-                heavy: {h: '━', v: '┃'},
-                dashed: {h: '- -', v: '| |'},
-                dotted: {h: '. .', v: '. .'}
-            };
-            return styles[style] || styles.ascii;
-        }
-
-        // Event handlers
-        canvas.addEventListener('mousedown', (e) => {
-            const pos = getGridPos(e);
-            
-            if (e.button === 1 || (e.button === 0 && e.spaceKey)) {
-                isPanning = true;
-                lastPanPos = {x: e.clientX, y: e.clientY};
-                canvas.style.cursor = 'grabbing';
-                return;
-            }
-            
-            isDrawing = true;
-            startPos = pos;
-            currentPos = pos;
-            
-            if (currentTool === 'select') {
-                const selected = floodSelect(pos);
-                if (selected) {
-                    selection = selected;
-                    render();
-                }
-            } else if (currentTool === 'text') {
-                const text = prompt('Enter text:');
-                if (text && text.trim()) {
-                    saveUndo();
-                    const cleanText = text.trim();
-                    let currentCol = pos.col;
-                    let currentRow = pos.row;
-                    
-                    // Handle multi-line text
-                    const lines = cleanText.split('\n');
-                    
-                    for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-                        const line = lines[lineIndex];
-                        
-                        // Check if we're within canvas bounds
-                        if (currentRow >= 0 && currentRow < ROWS) {
-                            // Draw each character of the line
-                            for (let i = 0; i < line.length && currentCol + i < COLS; i++) {
-                                if (currentCol + i >= 0) {
-                                    grid[currentRow][currentCol + i] = line[i];
-                                }
-                            }
-                        }
-                        
-                        // Move to next line for multi-line text
-                        currentRow++;
-                        currentCol = pos.col; // Reset column for new line
-                    }
-                    
-                    render();
-                }
-            } else if (currentTool === 'freehand' || currentTool === 'eraser') {
-                saveUndo();
-                if (currentTool === 'freehand') {
-                    const char = document.getElementById('freehandChar').value;
-                    drawFreehand(pos, char);
-                } else {
-                    const size = parseInt(document.getElementById('eraserSize').value);
-                    erase(pos, size);
-                }
-                render();
-            }
-        });
-
-        canvas.addEventListener('mousemove', (e) => {
-            const pos = getGridPos(e);
-            cursorPos.textContent = `${pos.col}, ${pos.row}`;
-            
-            if (isPanning && lastPanPos) {
-                panX += e.clientX - lastPanPos.x;
-                panY += e.clientY - lastPanPos.y;
-                lastPanPos = {x: e.clientX, y: e.clientY};
-                canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
-                return;
-            }
-            
-            if (!isDrawing) return;
-            
-            currentPos = pos;
-            
-            if (currentTool === 'freehand') {
-                const char = document.getElementById('freehandChar').value;
-                drawFreehand(pos, char);
-                render();
-            } else if (currentTool === 'spray') {
-                const char = document.getElementById('freehandChar').value;
-                sprayArea(pos, char);
-                render();
-            } else if (currentTool === 'eraser') {
-                const size = parseInt(document.getElementById('eraserSize').value);
-                erase(pos, size);
-                render();
-            }
-        });
-
-        canvas.addEventListener('mouseup', (e) => {
-            if (isPanning) {
-                isPanning = false;
-                lastPanPos = null;
-                canvas.style.cursor = 'crosshair';
-                return;
-            }
-            
-            if (!isDrawing || !startPos || !currentPos) return;
-            
-            saveUndo();
-            
-            const borderStyle = document.getElementById('borderStyle').value;
-            const lineStyle = document.getElementById('lineStyle').value;
-            const arrowHead = document.getElementById('arrowHead').value;
-            const diamondStyle = document.getElementById('diamondStyle').value;
-            
-            if (currentTool === 'rectangle') {
-                drawRectangle(startPos, currentPos, borderStyle);
-            } else if (currentTool === 'diamond') {
-                drawDiamond(startPos, currentPos, diamondStyle);
-            } else if (currentTool === 'circle') {
-                const radius = Math.sqrt(
-                    Math.pow(currentPos.col - startPos.col, 2) + 
-                    Math.pow(currentPos.row - startPos.row, 2)
-                );
-                drawCircle(startPos, Math.round(radius), borderStyle);
-            } else if (currentTool === 'line') {
-                drawLine(startPos, currentPos, lineStyle);
-            } else if (currentTool === 'arrow') {
-                drawArrow(startPos, currentPos, lineStyle, arrowHead);
-            } else if (currentTool === 'move') {
-                moveSelection(moveStartPos, currentPos);
-            }
-            
-            isDrawing = false;
-            startPos = null;
-            currentPos = null;
-            moveStartPos = null;
-            render();
-        });
-
-        canvas.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            const delta = e.deltaY > 0 ? 0.9 : 1.1;
-            zoom = Math.max(0.5, Math.min(3, zoom * delta));
-            canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
-            zoomLevel.textContent = `${Math.round(zoom * 100)}%`;
-        });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
-            
-            e.spaceKey = e.code === 'Space';
-            
-            if (e.ctrlKey && e.key === 'z') {
-                e.preventDefault();
-                if (undoStack.length > 0) {
-                    redoStack.push(grid.map(row => [...row]));
-                    grid = undoStack.pop();
-                    render();
-                }
-            } else if (e.ctrlKey && e.key === 'y') {
-                e.preventDefault();
-                if (redoStack.length > 0) {
-                    undoStack.push(grid.map(row => [...row]));
-                    grid = redoStack.pop();
-                    render();
-                }
-            } else if (e.ctrlKey && e.shiftKey && e.key === 'C') {
-                e.preventDefault();
-                const ascii = grid.map(row => row.join('')).join('\n');
-                navigator.clipboard.writeText(ascii);
-                showToast('Copied to clipboard', 'success');
-            } else if (e.key === 'Delete') {
-                saveUndo();
-                grid = Array(ROWS).fill().map(() => Array(COLS).fill(' '));
-                render();
-            } else if (e.key === 'v') {
-                setTool('select');
-            } else if (e.key === 'r') {
-                setTool('rectangle');
-            } else if (e.key === 'd') {
-                setTool('diamond');
-            } else if (e.key === 'l') {
-                setTool('line');
-            } else if (e.key === 'a') {
-                setTool('arrow');
-            } else if (e.key === 't') {
-                setTool('text');
-            } else if (e.key === 'f') {
-                setTool('freehand');
-            } else if (e.key === 'e') {
-                setTool('eraser');
-            }
-        });
-
-        document.addEventListener('keyup', (e) => {
-            if (e.code === 'Space') {
-                e.spaceKey = false;
-            }
-        });
-
-        // Tool selection
-        function setTool(tool) {
-            currentTool = tool;
-            document.querySelectorAll('.tool-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.tool === tool);
-            });
-            currentToolSpan.textContent = tool.charAt(0).toUpperCase() + tool.slice(1);
-            
-            if (tool === 'text') {
-                canvas.style.cursor = 'text';
-            } else if (tool === 'eraser') {
-                canvas.style.cursor = 'crosshair';
-            } else {
-                canvas.style.cursor = 'crosshair';
-            }
-        }
-
-        document.querySelectorAll('.tool-btn').forEach(btn => {
-            btn.addEventListener('click', () => setTool(btn.dataset.tool));
-        });
-
-        // Toast notification
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `toast ${type} show`;
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // New creative tools functionality
-        
-        // Circle drawing tool
-        function drawCircle(center, radius, style) {
-            const chars = getBorderChars(style);
-            
-            for (let angle = 0; angle < 360; angle += 5) {
-                const radians = (angle * Math.PI) / 180;
-                const x = Math.round(center.col + radius * Math.cos(radians));
-                const y = Math.round(center.row + radius * Math.sin(radians));
-                
-                if (y >= 0 && y < ROWS && x >= 0 && x < COLS) {
-                    grid[y][x] = chars.h;
-                }
-            }
+            updateInfo();
         }
         
-        // Fill tool
-        function fillArea(start, char) {
-            if (start.row < 0 || start.row >= ROWS || start.col < 0 || start.col >= COLS) return;
+        // =============================================
+           INFO UPDATES
+           =============================================
+        
+        function updateInfo() {
+            document.getElementById('cursorPos').textContent = `${lastPos ? lastPos.col + ', ' + lastPos.row : '0, 0'}`;
+            document.getElementById('currentTool').textContent = currentTool.charAt(0).toUpperCase() + currentTool.slice(1);
+            document.getElementById('zoomLevel').textContent = '100%';
             
-            const targetChar = grid[start.row][start.col];
-            if (targetChar === char) return; // Already filled with this character
-            
-            const visited = new Set();
-            const queue = [start];
-            
-            while (queue.length > 0) {
-                const pos = queue.shift();
-                const key = `${pos.row},${pos.col}`;
-                
-                if (visited.has(key)) continue;
-                visited.add(key);
-                
-                if (pos.row < 0 || pos.row >= ROWS || pos.col < 0 || pos.col >= COLS) continue;
-                if (grid[pos.row][pos.col] !== targetChar) continue;
-                
-                grid[pos.row][pos.col] = char;
-                
-                queue.push({row: pos.row - 1, col: pos.col});
-                queue.push({row: pos.row + 1, col: pos.col});
-                queue.push({row: pos.row, col: pos.col - 1});
-                queue.push({row: pos.row, col: pos.col + 1});
-            }
-        }
-        
-        // Spray tool
-        function sprayArea(center, char, density = 0.3) {
-            const radius = 3;
-            
-            for (let dy = -radius; dy <= radius; dy++) {
-                for (let dx = -radius; dx <= radius; dx++) {
-                    if (Math.random() > density) continue;
-                    
-                    const x = center.col + dx;
-                    const y = center.row + dy;
-                    
-                    if (y >= 0 && y < ROWS && x >= 0 && x < COLS) {
-                        grid[y][x] = char;
-                    }
-                }
-            }
-        }
-        
-        // Move tool
-        function moveSelection(from, to) {
-            if (!selection) return;
-            
-            saveUndo();
-            const dx = to.col - from.col;
-            const dy = to.row - from.row;
-            
-            // Clear original position
-            selection.cells.forEach(cell => {
-                grid[cell.row][cell.col] = ' ';
-            });
-            
-            // Draw at new position
-            selection.cells.forEach(cell => {
-                const newRow = cell.row + dy;
-                const newCol = cell.col + dx;
-                if (newRow >= 0 && newRow < ROWS && newCol >= 0 && newCol < COLS) {
-                    grid[newRow][newCol] = selection.char || '*';
-                }
-            });
-            
-            selection = null;
-            render();
-        }
-
-        // Add message to chat
-        function addMessage(type, content) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
-            
-            if (type === 'error') {
-                messageDiv.innerHTML = `<div class="error-bubble">${content}</div>`;
-            } else {
-                let processedContent = content;
-                
-                // Extract ASCII code blocks
-                const asciiBlocks = [];
-                const regex = /```(?:ascii|art)?\n([\s\S]*?)```/gi;
-                let match;
-                while ((match = regex.exec(content)) !== null) {
-                    asciiBlocks.push(match[1]);
-                    processedContent = processedContent.replace(match[0], `<div class="ascii-code-block">${match[1]}</div>`);
-                }
-                
-                messageDiv.innerHTML = `<div class="message-bubble">${processedContent}</div>`;
-                
-                // Add action buttons if ASCII blocks found
-                if (asciiBlocks.length > 0 && type === 'ai') {
-                    const actionsDiv = document.createElement('div');
-                    actionsDiv.className = 'message-actions';
-                    
-                    const applyBtn = document.createElement('button');
-                    applyBtn.className = 'action-btn';
-                    applyBtn.textContent = 'Apply to Canvas';
-                    applyBtn.onclick = () => applyAsciiToCanvas(asciiBlocks[asciiBlocks.length - 1], 0, 0);
-                    
-                    const atCursorBtn = document.createElement('button');
-                    atCursorBtn.className = 'action-btn';
-                    atCursorBtn.textContent = 'Apply at Cursor';
-                    atCursorBtn.onclick = () => {
-                        const pos = getGridPos({clientX: canvas.width / 2, clientY: canvas.height / 2});
-                        applyAsciiToCanvas(asciiBlocks[asciiBlocks.length - 1], pos.col, pos.row);
-                    };
-                    
-                    const appendBtn = document.createElement('button');
-                    appendBtn.className = 'action-btn';
-                    appendBtn.textContent = 'Append';
-                    appendBtn.onclick = () => {
-                        let firstEmptyRow = 0;
-                        for (let row = 0; row < ROWS; row++) {
-                            if (grid[row].every(char => char === ' ')) {
-                                firstEmptyRow = row;
-                                break;
-                            }
-                        }
-                        applyAsciiToCanvas(asciiBlocks[asciiBlocks.length - 1], 0, firstEmptyRow);
-                    };
-                    
-                    actionsDiv.appendChild(applyBtn);
-                    actionsDiv.appendChild(atCursorBtn);
-                    actionsDiv.appendChild(appendBtn);
-                    messageDiv.appendChild(actionsDiv);
-                }
-            }
-            
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        // Apply ASCII to canvas
-        function applyAsciiToCanvas(asciiText, startCol = 0, startRow = 0) {
-            saveUndo();
-            const lines = asciiText.split('\n');
-            for (let r = 0; r < lines.length && startRow + r < ROWS; r++) {
-                for (let c = 0; c < lines[r].length && startCol + c < COLS; c++) {
-                    grid[startRow + r][startCol + c] = lines[r][c];
-                }
-            }
-            render();
-            showToast('Applied to canvas', 'success');
-        }
-
-        // Update event handlers for new tools
-        canvas.addEventListener('mousedown', (e) => {
-            const pos = getGridPos(e);
-            
-            if (e.button === 1 || (e.button === 0 && e.spaceKey)) {
-                isPanning = true;
-                lastPanPos = {x: e.clientX, y: e.clientY};
-                canvas.style.cursor = 'grabbing';
-                return;
-            }
-            
-            isDrawing = true;
-            startPos = pos;
-            currentPos = pos;
-            
-            if (currentTool === 'select') {
-                const selected = floodSelect(pos);
-                if (selected) {
-                    selection = selected;
-                    render();
-                }
-            } else if (currentTool === 'move') {
-                if (selection) {
-                    moveStartPos = pos;
-                }
-            } else if (currentTool === 'text') {
-                const text = prompt('Enter text:');
-                if (text && text.trim()) {
-                    saveUndo();
-                    const cleanText = text.trim();
-                    let currentCol = pos.col;
-                    let currentRow = pos.row;
-                    
-                    const lines = cleanText.split('\n');
-                    
-                    for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-                        const line = lines[lineIndex];
-                        
-                        if (currentRow >= 0 && currentRow < ROWS) {
-                            for (let i = 0; i < line.length && currentCol + i < COLS; i++) {
-                                if (currentCol + i >= 0) {
-                                    grid[currentRow][currentCol + i] = line[i];
-                                }
-                            }
-                        }
-                        
-                        currentRow++;
-                        currentCol = pos.col;
-                    }
-                    
-                    render();
-                }
-            } else if (currentTool === 'fill') {
-                saveUndo();
-                const fillChar = prompt('Enter fill character:', '*');
-                if (fillChar) {
-                    fillArea(pos, fillChar);
-                    render();
-                }
-            } else if (currentTool === 'freehand' || currentTool === 'spray' || currentTool === 'eraser') {
-                saveUndo();
-                if (currentTool === 'freehand') {
-                    const char = document.getElementById('freehandChar').value;
-                    drawFreehand(pos, char);
-                } else if (currentTool === 'spray') {
-                    const char = document.getElementById('freehandChar').value;
-                    sprayArea(pos, char);
-                } else {
-                    const size = parseInt(document.getElementById('eraserSize').value);
-                    erase(pos, size);
-                }
-                render();
-            }
-        });
-
-        // Panel resize - removed
-        
-        // Initialize
-        initCanvas();
-        setTool('freehand');
-        
-        // Update header info
-        document.getElementById('canvasInfo').textContent = `${COLS}×${ROWS}`;
-        document.getElementById('toolInfo').textContent = 'Freehand';
-        
-        // Mobile menu functionality
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const leftPanel = document.querySelector('.left-panel');
-        
-        if (mobileMenuToggle) {
-            mobileMenuToggle.addEventListener('click', () => {
-                leftPanel.classList.toggle('mobile-open');
-            });
-        }
-        
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768 && 
-                !leftPanel.contains(e.target) && 
-                !mobileMenuToggle.contains(e.target)) {
-                leftPanel.classList.remove('mobile-open');
-            }
-        });
-        
-        // Keyboard navigation for tools
-        document.addEventListener('keydown', (e) => {
-            if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
-            
-            const toolKeys = {
-                'f': 'freehand',
-                'l': 'line',
-                'r': 'rectangle', 
-                'd': 'diamond',
-                'c': 'circle',
-                'a': 'arrow',
-                't': 'text',
-                'i': 'fill',
-                's': 'spray',
-                'e': 'eraser',
-                'v': 'select',
-                'm': 'move'
-            };
-            
-            if (toolKeys[e.key.toLowerCase()]) {
-                e.preventDefault();
-                setTool(toolKeys[e.key.toLowerCase()]);
-                
-                // Visual feedback
-                const toolBtn = document.querySelector(`[data-tool="${toolKeys[e.key.toLowerCase()]}"]`);
-                if (toolBtn) {
-                    toolBtn.classList.add('keyboard-focus');
-                    setTimeout(() => toolBtn.classList.remove('keyboard-focus'), 200);
-                }
-            }
-        });
-        
-        // Template generator system
-        const templates = {
-            flowchart: {
-                content: `┌─────────────┐\n│   Start    │\n└─────┬─────┘\n      │\n┌─────▼─────┐\n│  Process    │\n└─────┬─────┘\n      │\n┌─────▼─────┐\n│    End      │\n└─────────────┘`,
-                description: 'Basic flowchart template'
-            },
-            diagram: {
-                content: `┌─────────────┐     ┌─────────────┐\n│   System    │────▶│   Database   │\n└─────────────┘     └─────────────┘`,
-                description: 'System architecture diagram'
-            },
-            network: {
-                content: `┌─────┐    ┌─────┐    ┌─────┐\n│ PC1  │────│ PC2  │────│ Hub  │────│ PC3  │\n└─────┘    └─────┘    └─────┘\n     │           │          │\n     └──────────┘          └─────┘\n          │                │\n     ┌─────┐          ┌─────┐\n     │ PC4  │          │ PC5  │\n     └─────┘          └─────┘`,
-                description: 'Network topology'
-            },
-            mindmap: {
-                content: `        Central Topic\n       /    |    \\\n  Branch1  Branch2  Branch3\n     |        |      |\n    Sub1    Sub2    Sub3`,
-                description: 'Mind map structure'
-            },
-            timeline: {
-                content: `2024-01 ──────┬─────┬─────┬───── 2024-12\nJan      │ Feb   │ Mar   │ Apr   │ May   │\n├────────┼───────┼───────┼──────┤\n│Project  │Design │Develop│Test  │Deploy│\n└────────┴───────┴───────┴──────┘`,
-                description: 'Project timeline'
-            },
-            table: {
-                content: `┌─────────┬─────────┬─────────┐\n│ Name    │ Type    │ Status  │\n├─────────┼─────────┼─────────┤\n│ Item 1  │ Active  │ Done    │\n│ Item 2  │ Pending │ In Prog │\n│ Item 3  │ Review  │ Ready   │\n└─────────┴─────────┴─────────┘`,
-                description: 'Data table'
-            }
-        };
-        
-        // Pattern system
-        const patterns = {
-            dots: { char: '•', spacing: 2 },
-            cross: { char: '+', spacing: 1 },
-            diagonal: { char: '/', spacing: 1 },
-            wave: { char: '~', spacing: 1 },
-            brick: { char: '█', spacing: 0 }
-        };
-        
-        let currentTemplate = null;
-        let currentPattern = null;
-        let currentChar = '*';
-        let selectedText = null;
-        
-        // Apply template
-        function applyTemplate(templateName) {
-            if (!templates[templateName]) return;
-            
-            saveUndo();
-            const template = templates[templateName];
-            const lines = template.content.split('\n');
-            
-            // Center the template on canvas
-            const startRow = Math.floor((ROWS - lines.length) / 2);
-            const startCol = Math.floor((COLS - Math.max(...lines.map(line => line.length))) / 2);
-            
-            for (let r = 0; r < lines.length && startRow + r < ROWS; r++) {
-                for (let c = 0; c < lines[r].length && startCol + c < COLS; c++) {
-                    grid[startRow + r][startCol + c] = lines[r][c];
-                }
-            }
-            
-            render();
-            showToast(`${templateName} template applied`, 'success');
-        }
-        
-        // Apply pattern
-        function applyPattern(patternName) {
-            if (!patterns[patternName]) return;
-            currentPattern = patternName;
-            showToast(`${patternName} pattern selected`, 'success');
-        }
-        
-        // Template and pattern event handlers
-        document.querySelectorAll('.template-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const templateName = btn.dataset.template;
-                applyTemplate(templateName);
-                
-                // Visual feedback
-                document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-        
-        document.querySelectorAll('.pattern-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const patternName = btn.dataset.pattern;
-                applyPattern(patternName);
-                
-                // Visual feedback
-                document.querySelectorAll('.pattern-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-        
-        // Character selection
-        document.querySelectorAll('.char-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                currentChar = btn.dataset.char;
-                
-                // Visual feedback
-                document.querySelectorAll('.char-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                showToast(`Character ${currentChar} selected`, 'success');
-            });
-        });
-        
-        // Advanced features system
-        let isRecording = false;
-        let macroActions = [];
-        let currentColor = '#00d4aa';
-        
-        // Macro recording system
-        const recordMacroBtn = document.getElementById('recordMacro');
-        const playMacroBtn = document.getElementById('playMacro');
-        const stopMacroBtn = document.getElementById('stopMacro');
-        const clearMacroBtn = document.getElementById('clearMacro');
-        const macroStatus = document.getElementById('macroStatus');
-        
-        // Color picker system
-        const customColorInput = document.getElementById('customColor');
-        const colorHex = document.getElementById('colorHex');
-        const colorRgb = document.getElementById('colorRgb');
-        
-        // Event listeners for macros
-        if (recordMacroBtn) {
-            recordMacroBtn.addEventListener('click', startRecording);
-            playMacroBtn.addEventListener('click', playMacro);
-            stopMacroBtn.addEventListener('click', stopRecording);
-            clearMacroBtn.addEventListener('click', clearMacro);
-        }
-        
-        // Event listeners for color picker
-        if (customColorInput) {
-            customColorInput.addEventListener('input', updateColorInfo);
-            customColorInput.addEventListener('change', applyColor);
-        }
-        
-        // Color preset buttons
-        document.querySelectorAll('.color-preset').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const color = btn.dataset.color;
-                applyColor(color);
-                
-                // Visual feedback
-                document.querySelectorAll('.color-preset').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-        
-        function startRecording() {
-            isRecording = true;
-            macroActions = [];
-            recordMacroBtn.classList.add('recording');
-            playMacroBtn.disabled = true;
-            macroStatus.textContent = 'Recording...';
-            showToast('Macro recording started', 'success');
-        }
-        
-        function stopRecording() {
-            isRecording = false;
-            recordMacroBtn.classList.remove('recording');
-            playMacroBtn.disabled = false;
-            macroStatus.textContent = `Macro recorded: ${macroActions.length} actions`;
-            showToast('Macro recording stopped', 'success');
-        }
-        
-        function playMacro() {
-            if (macroActions.length === 0) {
-                showToast('No macro to play', 'warning');
-                return;
-            }
-            
-            saveUndo();
-            macroActions.forEach(action => {
-                if (action.type === 'draw') {
-                    drawFreehand(action.pos, action.char);
-                } else if (action.type === 'tool') {
-                    setTool(action.tool);
-                }
-                render();
-            });
-            
-            showToast('Macro played', 'success');
-        }
-        
-        function clearMacro() {
-            macroActions = [];
-            macroStatus.textContent = 'No macro recorded';
-            showToast('Macro cleared', 'success');
-        }
-        
-        function updateColorInfo() {
-            const color = customColorInput.value;
-            currentColor = color;
-            colorHex.textContent = color;
-            
-            // Convert hex to RGB
-            const hex = color.replace('#', '');
-            const r = parseInt(hex.substr(0, 2), 16);
-            const g = parseInt(hex.substr(2, 2), 16);
-            const b = parseInt(hex.substr(4, 2), 16);
-            colorRgb.textContent = `rgb(${r}, ${g}, ${b})`;
-        }
-        
-        function applyColor(color) {
-            currentColor = color;
-            customColorInput.value = color;
-            updateColorInfo();
-        }
-        
-        // Enhanced keyboard shortcuts with modifiers
-        const advancedShortcuts = {
-            'ctrl+shift+z': 'redo',
-            'ctrl+shift+y': 'redo',
-            'ctrl+shift+s': 'save',
-            'ctrl+shift+a': 'select all',
-            'ctrl+shift+d': 'duplicate',
-            'ctrl+shift+g': 'group',
-            'ctrl+shift+u': 'ungroup',
-            'ctrl+shift+i': 'invert',
-            'ctrl+shift+h': 'flip horizontal',
-            'ctrl+shift+v': 'flip vertical',
-            'ctrl+shift+1': 'brush size 1',
-            'ctrl+shift+2': 'brush size 2',
-            'ctrl+shift+3': 'brush size 3',
-            'ctrl+shift+4': 'brush size 4',
-            'ctrl+shift+5': 'brush size 5',
-            'ctrl+shift+0': 'brush size 0',
-            'ctrl+shift+plus': 'brush size +',
-            'ctrl+shift+minus': 'brush size -',
-            'ctrl+shift+f': 'fill mode',
-            'ctrl+shift+b': 'border mode',
-            'ctrl+shift+n': 'next template',
-            'ctrl+shift+p': 'previous template',
-            'ctrl+shift+l': 'toggle line style',
-            'ctrl+shift+m': 'toggle macro recording',
-            'ctrl+shift+r': 'rotate selection',
-            'ctrl+shift+e': 'export current view'
-        };
-        
-        // Brush sizes for different tools
-        const brushSizes = [1, 2, 3, 4, 5];
-        let currentBrushSize = 1;
-        
-        // Border modes
-        const borderModes = ['solid', 'dashed', 'dotted', 'double'];
-        let currentBorderMode = 0;
-        
-        // Fill modes
-        const fillModes = ['solid', 'pattern', 'gradient'];
-        let currentFillMode = 0;
-        
-        // Enhanced canvas with layers
-        const layers = [];
-        let activeLayer = 0;
-        
-        // Plugin system
-        const plugins = [];
-        
-        // Event listeners for advanced shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
-            
-            const key = e.key.toLowerCase();
-            const modifiers = {
-                ctrl: e.ctrlKey,
-                shift: e.shiftKey,
-                alt: e.altKey
-            };
-            
-            const shortcut = `${modifiers.ctrl ? 'ctrl+' : ''}${modifiers.shift ? 'shift+' : ''}${key}`;
-            
-            if (advancedShortcuts[shortcut]) {
-                e.preventDefault();
-                const action = advancedShortcuts[shortcut];
-                
-                if (action === 'redo') {
-                    if (redoStack.length > 0) {
-                        undoStack.push(redoStack.pop());
-                        updateHistoryUI();
-                        render();
-                        showToast('Redo', 'success');
-                    }
-                } else if (action === 'undo') {
-                    if (undoStack.length > 0) {
-                        redoStack.push(undoStack.pop());
-                        updateHistoryUI();
-                        render();
-                        showToast('Undo', 'success');
-                    }
-                } else if (action === 'save') {
-                    saveProject();
-                } else if (action === 'select all') {
-                    selectAll();
-                } else if (action === 'duplicate') {
-                    duplicateSelection();
-                } else if (action === 'group') {
-                    groupSelection();
-                } else if (action === 'ungroup') {
-                    ungroupSelection();
-                } else if (action === 'invert') {
-                    invertSelection();
-                } else if (action === 'flip horizontal') {
-                    flipSelection('horizontal');
-                } else if (action === 'flip vertical') {
-                    flipSelection('vertical');
-                } else if (action === 'rotate') {
-                    rotateSelection();
-                } else if (action === 'fill mode') {
-                    currentFillMode = (currentFillMode + 1) % fillModes.length;
-                    showToast(`Fill mode: ${fillModes[currentFillMode]}`, 'success');
-                } else if (action === 'border mode') {
-                    currentBorderMode = (currentBorderMode + 1) % borderModes.length;
-                    showToast(`Border mode: ${borderModes[currentBorderMode]}`, 'success');
-                } else if (action === 'brush size 1' || action === 'brush size 2' || action === 'brush size 3' || action === 'brush size 4' || action === 'brush size 5') {
-                    const size = parseInt(action.split(' ')[2]);
-                    if (size >= 1 && size <= 5) {
-                        currentBrushSize = size;
-                        showToast(`Brush size: ${size}`, 'success');
-                    }
-                } else if (action === 'brush size +') {
-                    currentBrushSize = Math.min(currentBrushSize + 1, 5);
-                    showToast(`Brush size: ${currentBrushSize}`, 'success');
-                } else if (action === 'brush size -') {
-                    currentBrushSize = Math.max(currentBrushSize - 1, 1);
-                    showToast(`Brush size: ${currentBrushSize}`, 'success');
-                } else if (action === 'next template') {
-                    // Cycle through templates
-                    const templateNames = Object.keys(templates);
-                    const currentIndex = templateNames.indexOf('flowchart');
-                    const nextIndex = (currentIndex + 1) % templateNames.length;
-                    applyTemplate(templateNames[nextIndex]);
-                } else if (action === 'previous template') {
-                    const templateNames = Object.keys(templates);
-                    const currentIndex = templateNames.indexOf('flowchart');
-                    const prevIndex = (currentIndex - 1 + templateNames.length) % templateNames.length;
-                    applyTemplate(templateNames[prevIndex]);
-                } else if (action === 'toggle line style') {
-                    const styles = ['ascii', 'light', 'heavy', 'dashed', 'dotted'];
-                    const currentStyle = document.getElementById('lineStyle').value;
-                    const currentIndex = styles.indexOf(currentStyle);
-                    const nextIndex = (currentIndex + 1) % styles.length;
-                    document.getElementById('lineStyle').value = styles[nextIndex];
-                } else if (action === 'toggle macro recording') {
-                    if (!isRecording) {
-                        startRecording();
-                    } else {
-                        stopRecording();
-                    }
-                } else if (action === 'export current view') {
-                    exportCanvas();
-                }
-            }
-        });
-        
-        // Advanced functions
-        function saveProject() {
-            const projectData = {
-                grid: grid,
-                timestamp: Date.now(),
-                version: '5.0.0'
-            };
-            localStorage.setItem('asciiCanvasProject', JSON.stringify(projectData));
-            showToast('Project saved', 'success');
-        }
-        
-        function loadProject() {
-            const saved = localStorage.getItem('asciiCanvasProject');
-            if (saved) {
-                const projectData = JSON.parse(saved);
-                if (projectData.grid) {
-                    grid = projectData.grid;
-                    render();
-                }
-                showToast('Project loaded', 'success');
-            }
-        }
-        
-        function selectAll() {
-            selection = {
-                startRow: 0,
-                startCol: 0,
-                endRow: ROWS - 1,
-                endCol: COLS - 1,
-                cells: []
-            };
-            
-            for (let row = 0; row < ROWS; row++) {
-                for (let col = 0; col < COLS; col++) {
-                    if (grid[row][col] !== ' ') {
-                        selection.cells.push({row, col});
-                    }
-                }
-            }
-            
-            render();
-            showToast('All selected', 'success');
-        }
-        
-        function duplicateSelection() {
-            if (selection && selection.cells.length > 0) {
-                saveUndo();
-                
-                // Calculate offset for duplication
-                const width = selection.endCol - selection.startCol + 1;
-                const height = selection.endRow - selection.startRow + 1;
-                
-                // Paste selection
-                for (let row = 0; row < height && selection.startRow + row < ROWS; row++) {
-                    for (let col = 0; col < width && selection.startCol + col < COLS; col++) {
-                        const sourceCell = selection.cells.find(c => c.row === selection.startRow + row && c.col === selection.startCol + col);
-                        if (sourceCell) {
-                            grid[selection.startRow + row][selection.startCol + col + width] = sourceCell.char;
-                        }
-                    }
-                }
-                
-                render();
-                showToast('Selection duplicated', 'success');
-            }
-        }
-        
-        function groupSelection() {
-            if (selection && selection.cells.length > 0) {
-                saveUndo();
-                // Group all selected cells
-                selection.cells.forEach(cell => {
-                    grid[cell.row][cell.col] = `[${grid[cell.row][cell.col]}]`;
-                });
-                render();
-                showToast('Selection grouped', 'success');
-            }
-        }
-        
-        function ungroupSelection() {
-            if (selection && selection.cells.length > 0) {
-                saveUndo();
-                // Ungroup all selected cells
-                selection.cells.forEach(cell => {
-                    grid[cell.row][cell.col] = cell.char;
-                });
-                render();
-                showToast('Selection ungrouped', 'success');
-            }
-        }
-        
-        function invertSelection() {
-            if (selection && selection.cells.length > 0) {
-                saveUndo();
-                // Invert all selected cells
-                selection.cells.forEach(cell => {
-                    const char = grid[cell.row][cell.col];
-                    // Simple character inversion
-                    if (char === char.toUpperCase()) {
-                        grid[cell.row][cell.col] = char.toLowerCase();
-                    } else {
-                        grid[cell.row][cell.col] = char.toUpperCase();
-                    }
-                });
-                render();
-                showToast('Selection inverted', 'success');
-            }
-        }
-        
-        function flipSelection(direction) {
-            if (selection && selection.cells.length > 0) {
-                saveUndo();
-                const width = selection.endCol - selection.startCol + 1;
-                const height = selection.endRow - selection.startRow + 1;
-                
-                if (direction === 'horizontal') {
-                    // Flip horizontally
-                    for (let row = 0; row < height; row++) {
-                        for (let col = 0; col < width; col++) {
-                            const sourceCell = selection.cells.find(c => c.row === selection.startRow + row && c.col === selection.startCol + col);
-                            const targetCell = selection.cells.find(c => c.row === selection.startRow + row && c.col === selection.endCol - col);
-                            if (sourceCell && targetCell) {
-                                grid[selection.startRow + row][selection.endCol - col] = targetCell.char;
-                                grid[selection.endRow + row][selection.startCol + col] = sourceCell.char;
-                            }
-                        }
-                    }
-                } else {
-                    // Flip vertically
-                    for (let col = 0; col < width; col++) {
-                        for (let row = 0; row < height; row++) {
-                            const sourceCell = selection.cells.find(c => c.row === selection.startRow + row && c.col === selection.startCol + col);
-                            const targetCell = selection.cells.find(c => c.row === selection.endRow - row && c.col === selection.endCol - col);
-                            if (sourceCell && targetCell) {
-                                grid[selection.endRow - row][selection.startCol + col] = targetCell.char;
-                                grid[selection.startRow + row][selection.endCol - col] = sourceCell.char;
-                            }
-                        }
-                    }
-                }
-                
-                render();
-                showToast(`Selection flipped ${direction}`, 'success');
-            }
-        }
-        
-        function rotateSelection() {
-            if (selection && selection.cells.length > 0) {
-                saveUndo();
-                // Simple 90-degree rotation
-                const centerX = Math.floor((selection.startCol + selection.endCol) / 2);
-                const centerY = Math.floor((selection.startRow + selection.endRow) / 2);
-                
-                selection.cells.forEach(cell => {
-                    const relX = cell.col - centerX;
-                    const relY = cell.row - centerY;
-                    const newX = Math.round(centerY - relY);
-                    const newY = Math.round(centerX + relY);
-                    
-                    if (newX >= 0 && newX < COLS && newY >= 0 && newY < ROWS) {
-                        grid[newY][newX] = cell.char;
-                    }
-                });
-                
-                render();
-                showToast('Selection rotated', 'success');
-            }
-        }
-        
-        function exportCanvas() {
-            const asciiContent = grid.map(row => row.join('')).join('\n');
-            
-            // Create blob and download
-            const blob = new Blob([asciiContent], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `ascii-canvas-${Date.now()}.txt`;
-            a.click();
-            showToast('Canvas exported as ASCII', 'success');
-        }
-        
-        // Enhanced mouse tracking for macros
-        const originalDrawFreehand = drawFreehand;
-        drawFreehand = function(pos, char) {
-            originalDrawFreehand(pos, char);
-            
-            // Record action if recording
-            if (isRecording) {
-                macroActions.push({
-                    type: 'draw',
-                    pos: { ...pos },
-                    char: char,
-                    timestamp: Date.now()
-                });
-            }
-        };
-        
-        // UX Enhancement System
-        let currentZoom = 100;
-        let isAnimating = false;
-        let animationFrame = null;
-        let uxBrushSize = 1;
-        let currentBrushOpacity = 100;
-        let currentBrushShape = 'round';
-        
-        // Quick Actions Event Listeners
-        document.querySelectorAll('.quick-action-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const action = btn.dataset.action;
-                executeQuickAction(action);
-            });
-        });
-        
-        // Brush Settings Event Listeners
-        const brushSizeSlider = document.getElementById('brushSize');
-        const brushOpacitySlider = document.getElementById('brushOpacity');
-        const brushShapeSelect = document.getElementById('brushShape');
-        const brushSizeValue = document.getElementById('brushSizeValue');
-        const brushOpacityValue = document.getElementById('brushOpacityValue');
-        
-        if (brushSizeSlider) {
-            brushSizeSlider.addEventListener('input', (e) => {
-                uxBrushSize = parseInt(e.target.value);
-                brushSizeValue.textContent = uxBrushSize;
-                showToast(`Brush size: ${uxBrushSize}`, 'success');
-            });
-        }
-        
-        if (brushOpacitySlider) {
-            brushOpacitySlider.addEventListener('input', (e) => {
-                currentBrushOpacity = parseInt(e.target.value);
-                brushOpacityValue.textContent = `${currentBrushOpacity}%`;
-                showToast(`Brush opacity: ${currentBrushOpacity}%`, 'success');
-            });
-        }
-        
-        if (brushShapeSelect) {
-            brushShapeSelect.addEventListener('change', (e) => {
-                currentBrushShape = e.target.value;
-                showToast(`Brush shape: ${currentBrushShape}`, 'success');
-            });
-        }
-        
-        // Animation Controls Event Listeners
-        const playAnimBtn = document.getElementById('playAnim');
-        const pauseAnimBtn = document.getElementById('pauseAnim');
-        const stopAnimBtn = document.getElementById('stopAnim');
-        const recordAnimBtn = document.getElementById('recordAnim');
-        const animFpsSelect = document.getElementById('animFps');
-        const animDurationInput = document.getElementById('animDuration');
-        
-        if (playAnimBtn) {
-            playAnimBtn.addEventListener('click', startAnimation);
-            pauseAnimBtn.addEventListener('click', pauseAnimation);
-            stopAnimBtn.addEventListener('click', stopAnimation);
-            recordAnimBtn.addEventListener('click', recordAnimation);
-        }
-        
-        // Canvas Info Update
-        function updateCanvasInfo() {
-            const canvasSizeEl = document.getElementById('canvasSize');
-            const charCountEl = document.getElementById('charCount');
-            const lineCountEl = document.getElementById('lineCount');
-            const selectionInfoEl = document.getElementById('selectionInfo');
-            const zoomLevelEl = document.getElementById('zoomLevel');
-            
-            if (canvasSizeEl) canvasSizeEl.textContent = `${COLS}×${ROWS}`;
-            
+            // Count characters and lines
             let charCount = 0;
             let lineCount = 0;
             
@@ -3541,267 +580,463 @@
                 if (hasContent) lineCount++;
             }
             
-            if (charCountEl) charCountEl.textContent = charCount;
-            if (lineCountEl) lineCountEl.textContent = lineCount;
+            document.getElementById('canvasSize').textContent = `${COLS}×${ROWS}`;
+            document.getElementById('charCount').textContent = charCount;
+            document.getElementById('lineCount').textContent = lineCount;
             
-            if (selectionInfoEl) {
-                if (selection && selection.cells.length > 0) {
-                    const width = selection.endCol - selection.startCol + 1;
-                    const height = selection.endRow - selection.startRow + 1;
-                    selectionInfoEl.textContent = `${width}×${height} (${selection.cells.length} cells)`;
-                } else {
-                    selectionInfoEl.textContent = 'None';
-                }
+            // Selection info
+            if (selection) {
+                const width = selection.endCol - selection.startCol + 1;
+                const height = selection.endRow - selection.startRow + 1;
+                document.getElementById('selectionInfo').textContent = `${width}×${height}`;
+            } else {
+                document.getElementById('selectionInfo').textContent = 'None';
             }
-            
-            if (zoomLevelEl) zoomLevelEl.textContent = `${currentZoom}%`;
         }
         
-        function executeQuickAction(action) {
-            saveUndo();
-            
-            switch (action) {
-                case 'clear':
-                    for (let row = 0; row < ROWS; row++) {
-                        for (let col = 0; col < COLS; col++) {
-                            grid[row][col] = ' ';
-                        }
-                    }
-                    showToast('Canvas cleared', 'success');
-                    break;
-                    
-                case 'fill':
-                    for (let row = 0; row < ROWS; row++) {
-                        for (let col = 0; col < COLS; col++) {
-                            if (grid[row][col] === ' ') {
-                                grid[row][col] = currentChar;
-                            }
-                        }
-                    }
-                    showToast('Canvas filled', 'success');
-                    break;
-                    
-                case 'invert':
-                    for (let row = 0; row < ROWS; row++) {
-                        for (let col = 0; col < COLS; col++) {
-                            const char = grid[row][col];
-                            if (char !== ' ') {
-                                grid[row][col] = char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase();
-                            }
-                        }
-                    }
-                    showToast('Canvas inverted', 'success');
-                    break;
-                    
-                case 'mirror':
-                    for (let row = 0; row < ROWS; row++) {
-                        for (let col = 0; col < COLS / 2; col++) {
-                            const source = grid[row][col];
-                            const target = grid[row][COLS - 1 - col];
-                            grid[row][COLS - 1 - col] = source;
-                            grid[row][col] = target;
-                        }
-                    }
-                    showToast('Canvas mirrored', 'success');
-                    break;
-                    
-                case 'center':
-                    const content = [];
-                    for (let row = 0; row < ROWS; row++) {
-                        for (let col = 0; col < COLS; col++) {
-                            if (grid[row][col] !== ' ') {
-                                content.push({row, col, char: grid[row][col]});
-                            }
-                        }
-                    }
-                    
-                    if (content.length > 0) {
-                        const minRow = Math.min(...content.map(c => c.row));
-                        const maxRow = Math.max(...content.map(c => c.row));
-                        const minCol = Math.min(...content.map(c => c.col));
-                        const maxCol = Math.max(...content.map(c => c.col));
-                        
-                        const height = maxRow - minRow + 1;
-                        const width = maxCol - minCol + 1;
-                        
-                        const centerRow = Math.floor((ROWS - height) / 2);
-                        const centerCol = Math.floor((COLS - width) / 2);
-                        
-                        // Clear canvas
-                        for (let row = 0; row < ROWS; row++) {
-                            for (let col = 0; col < COLS; col++) {
-                                grid[row][col] = ' ';
-                            }
-                        }
-                        
-                        // Center content
-                        content.forEach(cell => {
-                            const newRow = centerRow + (cell.row - minRow);
-                            const newCol = centerCol + (cell.col - minCol);
-                            if (newRow >= 0 && newRow < ROWS && newCol >= 0 && newCol < COLS) {
-                                grid[newRow][newCol] = cell.char;
-                            }
-                        });
-                        
-                        showToast('Content centered', 'success');
-                    }
-                    break;
-                    
-                case 'random':
-                    const chars = ['*', '#', '@', '+', '-', '=', '|', '/', '\\', '.', ':', 'o', 'x', '~'];
-                    for (let row = 0; row < ROWS; row++) {
-                        for (let col = 0; col < COLS; col++) {
-                            if (Math.random() > 0.7) {
-                                grid[row][col] = chars[Math.floor(Math.random() * chars.length)];
-                            }
-                        }
-                    }
-                    showToast('Random art generated', 'success');
-                    break;
-            }
-            
-            render();
-            updateCanvasInfo();
-        }
+        // =============================================
+           DRAWING FUNCTIONS
+           =============================================
         
-        function startAnimation() {
-            if (isAnimating) return;
-            
-            isAnimating = true;
-            playAnimBtn.classList.add('playing');
-            showToast('Animation started', 'success');
-            
-            const fps = parseInt(animFpsSelect.value);
-            const duration = parseInt(animDurationInput.value);
-            const totalFrames = fps * duration;
-            let currentFrame = 0;
-            
-            const animate = () => {
-                if (!isAnimating || currentFrame >= totalFrames) {
-                    stopAnimation();
-                    return;
-                }
-                
-                // Simple animation effect - rotate colors
-                const hue = (currentFrame / totalFrames) * 360;
-                const color = `hsl(${hue}, 70%, 50%)`;
-                
-                // Apply color effect to some characters
-                for (let row = 0; row < ROWS; row++) {
-                    for (let col = 0; col < COLS; col++) {
-                        if (grid[row][col] !== ' ' && Math.random() > 0.8) {
-                            // This would require color support in ASCII
-                            // For now, we'll just cycle through characters
-                            const chars = ['*', '#', '@', '+', '-', '='];
-                            grid[row][col] = chars[Math.floor((currentFrame / 10) % chars.length)];
-                        }
-                    }
-                }
-                
+        function drawChar(row, col, char) {
+            if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
+                grid[row][col] = char;
                 render();
-                currentFrame++;
-                animationFrame = requestAnimationFrame(animate);
+            }
+        }
+        
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                col: Math.floor((e.clientX - rect.left) / charWidth),
+                row: Math.floor((e.clientY - rect.top) / charHeight)
             };
-            
-            animationFrame = requestAnimationFrame(animate);
         }
         
-        function pauseAnimation() {
-            isAnimating = false;
-            playAnimBtn.classList.remove('playing');
-            if (animationFrame) {
-                cancelAnimationFrame(animationFrame);
-                animationFrame = null;
-            }
-            showToast('Animation paused', 'success');
-        }
+        // =============================================
+           TOOL FUNCTIONS
+           =============================================
         
-        function stopAnimation() {
-            isAnimating = false;
-            playAnimBtn.classList.remove('playing');
-            if (animationFrame) {
-                cancelAnimationFrame(animationFrame);
-                animationFrame = null;
-            }
-            showToast('Animation stopped', 'success');
-        }
-        
-        function recordAnimation() {
-            recordAnimBtn.classList.toggle('recording');
-            if (recordAnimBtn.classList.contains('recording')) {
-                showToast('Animation recording started', 'success');
-                startRecording();
-            } else {
-                showToast('Animation recording stopped', 'success');
-                stopRecording();
-            }
-        }
-        
-        // Update canvas info on every render
-        const originalRender = render;
-        render = function() {
-            originalRender();
-            updateCanvasInfo();
-        };
-        const originalSetTool = setTool;
-        setTool = function(tool) {
-            originalSetTool(tool);
-            
-            // Record action if recording
-            if (isRecording) {
-                macroActions.push({
-                    type: 'tool',
-                    tool: tool,
-                    timestamp: Date.now()
-                });
-            }
-        };
-        function drawFreehandWithPattern(pos) {
-            if (currentPattern) {
-                const pattern = patterns[currentPattern];
-                // Apply pattern in area around position
-                for (let dy = -2; dy <= 2; dy++) {
-                    for (let dx = -2; dx <= 2; dx++) {
-                        const x = pos.col + dx * pattern.spacing;
-                        const y = pos.row + dy;
-                        if (x >= 0 && x < COLS && y >= 0 && y < ROWS) {
-                            grid[y][x] = pattern.char;
-                        }
-                    }
-                }
-            } else {
-                drawFreehand(pos, currentChar);
-            }
-        }
         function setTool(tool) {
             currentTool = tool;
             document.querySelectorAll('.tool-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            document.querySelector(`[data-tool="${tool}"]`).classList.add('active');
+            document.querySelector(`[data-tool="${tool}"]`)?.classList.add('active');
+        }
+        
+        function clearCanvas() {
+            saveUndo();
+            grid = Array(ROWS).fill(null).map(() => Array(COLS).fill(' '));
+            render();
+        }
+        
+        function fillCanvas() {
+            saveUndo();
+            for (let row = 0; row < ROWS; row++) {
+                for (let col = 0; col < COLS; col++) {
+                    grid[row][col] = currentChar;
+                }
+            }
+            render();
+        }
+        
+        function invertCanvas() {
+            saveUndo();
+            for (let row = 0; row < ROWS; row++) {
+                for (let col = 0; col < COLS; col++) {
+                    const char = grid[row][col];
+                    if (char !== ' ') {
+                        grid[row][col] = char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase();
+                    }
+                }
+            }
+            render();
+        }
+        
+        function mirrorCanvas() {
+            saveUndo();
+            for (let row = 0; row < ROWS; row++) {
+                for (let col = 0; col < COLS / 2; col++) {
+                    const source = grid[row][col];
+                    const target = grid[row][COLS - 1 - col];
+                    grid[row][COLS - 1 - col] = source;
+                    grid[row][col] = target;
+                }
+            }
+            render();
+        }
+        
+        function centerContent() {
+            saveUndo();
+            const content = [];
             
-            // Update status
-            const toolNames = {
-                'freehand': '✏️ Freehand',
-                'line': '📏 Line',
-                'rectangle': '▢ Rectangle',
-                'diamond': '◆ Diamond',
-                'circle': '○ Circle',
-                'arrow': '➜ Arrow',
-                'text': '📝 Text',
-                'fill': '🪣 Fill',
-                'spray': '💨 Spray',
-                'eraser': '🧹 Eraser',
-                'select': '⬚ Select',
-                'move': '✋ Move'
+            // Find all non-space characters
+            for (let row = 0; row < ROWS; row++) {
+                for (let col = 0; col < COLS; col++) {
+                    if (grid[row][col] !== ' ') {
+                        content.push({row, col, char: grid[row][col]});
+                    }
+                }
+            }
+            
+            if (content.length === 0) return;
+            
+            // Calculate bounds
+            const minRow = Math.min(...content.map(c => c.row));
+            const maxRow = Math.max(...content.map(c => c.row));
+            const minCol = Math.min(...content.map(c => c.col));
+            const maxCol = Math.max(...content.map(c => c.col));
+            
+            const height = maxRow - minRow + 1;
+            const width = maxCol - minCol + 1;
+            
+            // Clear canvas
+            grid = Array(ROWS).fill(null).map(() => Array(COLS).fill(' '));
+            
+            // Center content
+            const centerRow = Math.floor((ROWS - height) / 2);
+            const centerCol = Math.floor((COLS - width) / 2);
+            
+            content.forEach(cell => {
+                const newRow = centerRow + (cell.row - minRow);
+                const newCol = centerCol + (cell.col - minCol);
+                if (newRow >= 0 && newRow < ROWS && newCol >= 0 && newCol < COLS) {
+                    grid[newRow][newCol] = cell.char;
+                }
+            });
+            
+            render();
+        }
+        
+        function generateRandomArt() {
+            saveUndo();
+            const chars = ['*', '#', '@', '+', '-', '=', '|', '/', '\\', '.', ':', 'o', 'x', '~'];
+            
+            for (let row = 0; row < ROWS; row++) {
+                for (let col = 0; col < COLS; col++) {
+                    if (Math.random() > 0.7) {
+                        grid[row][col] = chars[Math.floor(Math.random() * chars.length)];
+                    }
+                }
+            }
+            render();
+        }
+        
+        // =============================================
+           HISTORY MANAGEMENT
+           =============================================
+        
+        function saveUndo() {
+            const state = grid.map(row => [...row]);
+            undoStack.push(state);
+            if (undoStack.length > MAX_HISTORY) {
+                undoStack.shift();
+            }
+            redoStack = [];
+        }
+        
+        function undo() {
+            if (undoStack.length > 0) {
+                redoStack.push(grid.map(row => [...row]));
+                grid = undoStack.pop();
+                render();
+            }
+        }
+        
+        function redo() {
+            if (redoStack.length > 0) {
+                undoStack.push(grid.map(row => [...row]));
+                grid = redoStack.pop();
+                render();
+            }
+        }
+        
+        // =============================================
+           EXPORT FUNCTIONS
+           =============================================
+        
+        function exportASCII() {
+            const content = grid.map(row => row.join('')).join('\\n');
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ascii-art-${Date.now()}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function exportPNG() {
+            const link = document.createElement('a');
+            link.download = `ascii-art-${Date.now()}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // =============================================
+           TEMPLATE SYSTEM
+           =============================================
+        
+        const templates = {
+            flowchart: `┌─────────────┐
+│   Start    │
+└─────┬─────┘
+      │
+┌─────▼─────┐
+│  Process    │
+└─────┬─────┘
+      │
+┌─────▼─────┐
+│    End      │
+└─────────────┘`,
+            
+            diagram: `┌─────────────┐     ┌─────────────┐
+│   System    │────▶│   Database   │
+└─────────────┘     └─────────────┘`,
+            
+            network: `┌─────┐    ┌─────┐    ┌─────┐
+│ PC1  │────│ PC2  │────│ Hub  │────│ PC3  │
+└─────┘    └─────┘    └─────┘
+     │           │          │
+     └──────────┘          └─────┘
+          │                │
+     ┌─────┐          ┌─────┐
+     │ PC4  │          │ PC5  │
+     └─────┘          └─────┘`,
+            
+            mindmap: `        Central Topic
+       /    |    \\
+  Branch1  Branch2  Branch3
+     |        |      |
+    Sub1    Sub2    Sub3`,
+            
+            timeline: `2024-01 ──────┬─────┬─────┬───── 2024-12
+Jan      │ Feb   │ Mar   │ Apr   │ May   │
+├────────┼───────┼───────┼──────┤
+│Project  │Design │Develop│Test  │Deploy│
+└────────┴───────┴───────┴──────┘`,
+            
+            table: `┌─────────┬─────────┬─────────┐
+│ Name    │ Type    │ Status  │
+├─────────┼─────────┼─────────┤
+│ Item 1  │ Active  │ Done    │
+│ Item 2  │ Pending │ In Prog │
+│ Item 3  │ Review  │ Ready   │
+└─────────┴─────────┴─────────┘`
+        };
+        
+        function applyTemplate(templateName) {
+            if (!templates[templateName]) return;
+            
+            saveUndo();
+            const template = templates[templateName];
+            const lines = template.split('\\n');
+            
+            // Center template on canvas
+            const startRow = Math.floor((ROWS - lines.length) / 2);
+            const startCol = Math.floor((COLS - Math.max(...lines.map(line => line.length))) / 2);
+            
+            for (let r = 0; r < lines.length && startRow + r < ROWS; r++) {
+                for (let c = 0; c < lines[r].length && startCol + c < COLS; c++) {
+                    grid[startRow + r][startCol + c] = lines[r][c];
+                }
+            }
+            
+            render();
+        }
+        
+        // =============================================
+           EVENT LISTENERS
+           =============================================
+        
+        // Tool selection
+        document.querySelectorAll('[data-tool]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setTool(btn.dataset.tool);
+            });
+        });
+        
+        // Quick actions
+        document.querySelectorAll('[data-action]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const action = btn.dataset.action;
+                switch (action) {
+                    case 'clear': clearCanvas(); break;
+                    case 'fill': fillCanvas(); break;
+                    case 'invert': invertCanvas(); break;
+                    case 'mirror': mirrorCanvas(); break;
+                    case 'center': centerContent(); break;
+                    case 'random': generateRandomArt(); break;
+                }
+            });
+        });
+        
+        // Templates
+        document.querySelectorAll('[data-template]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                applyTemplate(btn.dataset.template);
+            });
+        });
+        
+        // Export options
+        document.querySelectorAll('[data-export]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const format = btn.dataset.export;
+                switch (format) {
+                    case 'ascii': exportASCII(); break;
+                    case 'png': exportPNG(); break;
+                    case 'svg': exportSVG(); break;
+                    case 'json': exportJSON(); break;
+                    case 'html': exportHTML(); break;
+                    case 'txt': exportASCII(); break;
+                }
+            });
+        });
+        
+        // Canvas mouse events
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            lastPos = getMousePos(e);
+            
+            if (currentTool === 'freehand') {
+                drawChar(lastPos.row, lastPos.col, currentChar);
+            }
+        });
+        
+        canvas.addEventListener('mousemove', (e) => {
+            const pos = getMousePos(e);
+            
+            if (isDrawing && currentTool === 'freehand') {
+                if (pos.row !== lastPos.row || pos.col !== lastPos.col) {
+                    drawChar(pos.row, pos.col, currentChar);
+                    lastPos = pos;
+                }
+            }
+        });
+        
+        canvas.addEventListener('mouseup', () => {
+            isDrawing = false;
+        });
+        
+        canvas.addEventListener('mouseleave', () => {
+            isDrawing = false;
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            switch (e.key.toLowerCase()) {
+                case 'z': if (e.ctrlKey) { e.preventDefault(); undo(); } break;
+                case 'y': if (e.ctrlKey) { e.preventDefault(); redo(); } break;
+                case 's': if (e.ctrlKey) { e.preventDefault(); exportASCII(); } break;
+                case 'delete': clearCanvas(); break;
+                case 'c': setTool('circle'); break;
+                case 'r': setTool('rectangle'); break;
+                case 'l': setTool('line'); break;
+                case 'f': setTool('freehand'); break;
+                case 't': setTool('text'); break;
+                case '1': setTool('freehand'); break;
+                case '2': setTool('line'); break;
+                case '3': setTool('rectangle'); break;
+                case '4': setTool('circle'); break;
+                case '5': setTool('diamond'); break;
+            }
+        });
+        
+        // Header buttons
+        document.getElementById('undoBtn').addEventListener('click', undo);
+        document.getElementById('redoBtn').addEventListener('click', redo);
+        document.getElementById('saveBtn').addEventListener('click', exportASCII);
+        
+        // Additional export functions
+        function exportSVG() {
+            const content = grid.map(row => row.join('')).join('\\n');
+            const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}">
+<rect width="100%" height="100%" fill="#0f0f0f"/>
+<text x="10" y="20" font-family="JetBrains Mono" font-size="12" fill="#ffffff" white-space="pre">
+${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+</text>
+</svg>`;
+            
+            const blob = new Blob([svg], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ascii-art-${Date.now()}.svg`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function exportJSON() {
+            const data = {
+                grid: grid,
+                metadata: {
+                    cols: COLS,
+                    rows: ROWS,
+                    timestamp: Date.now(),
+                    version: '7.0'
+                }
             };
             
-            document.getElementById('currentTool').textContent = toolNames[tool] || tool;
-            document.getElementById('toolInfo').textContent = toolNames[tool] || tool;
-            
-            // Show toast for tool change
-            showToast(`${toolNames[tool]} selected`, 'success');
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ascii-art-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
         }
+        
+        function exportHTML() {
+            const content = grid.map(row => row.join('')).join('\\n');
+            const html = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ASCII Art</title>
+    <style>
+        body {
+            background: #0f0f0f;
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1;
+            white-space: pre;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+<pre>${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+</body>
+</html>`;
+            
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ascii-art-${Date.now()}.html`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // =============================================
+           INITIALIZATION
+           =============================================
+        
+        // Set initial tool
+        setTool('freehand');
+        
+        // Initial render
+        render();
+        
+        // Focus canvas for keyboard input
+        canvas.focus();
+        
+        console.log('ASCII Canvas Studio v7.0 - Ready!');
     </script>
 </body>
 </html>
