@@ -877,6 +877,236 @@
             }
         }
 
+        /* Quick Actions */
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-sm);
+        }
+
+        .quick-action-btn {
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            transition: var(--transition-fast);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+            min-height: 60px;
+        }
+
+        .quick-action-btn:hover {
+            background: var(--bg-surface-3);
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-icon {
+            font-size: var(--font-size-xl);
+            line-height: 1;
+        }
+
+        .action-label {
+            font-size: var(--font-size-xs);
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* Brush Settings */
+        .brush-settings {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm);
+            background: var(--bg-surface-2);
+            border-radius: var(--radius-sm);
+        }
+
+        .setting-row label {
+            font-family: var(--font-sans);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            color: var(--text-secondary);
+            min-width: 60px;
+        }
+
+        .brush-slider {
+            flex: 1;
+            height: 4px;
+            background: var(--bg-surface-3);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .brush-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .brush-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .brush-select {
+            flex: 1;
+            background: var(--bg-surface-3);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: var(--space-xs);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-sans);
+            font-size: var(--font-size-sm);
+        }
+
+        /* Canvas Info */
+        .canvas-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-xs);
+            background: var(--bg-surface-2);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .info-label {
+            font-family: var(--font-sans);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-family: var(--font-mono);
+            font-size: var(--font-size-xs);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Animation Controls */
+        .animation-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .anim-btn {
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+        }
+
+        .anim-btn:hover {
+            background: var(--bg-surface-3);
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+
+        .anim-btn.playing {
+            background: var(--success);
+            border-color: var(--success);
+            color: var(--text-inverse);
+        }
+
+        .anim-btn.recording {
+            background: var(--error);
+            border-color: var(--error);
+            color: var(--text-inverse);
+            animation: pulse 1.5s infinite;
+        }
+
+        .animation-settings {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .anim-select {
+            background: var(--bg-surface-3);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: var(--space-xs);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-sans);
+            font-size: var(--font-size-sm);
+        }
+
+        .anim-input {
+            background: var(--bg-surface-3);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: var(--space-xs);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: var(--font-size-sm);
+            width: 80px;
+        }
+
+        /* Mobile Responsive Updates */
+        @media (max-width: 768px) {
+            .quick-actions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .animation-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .setting-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-xs);
+            }
+            
+            .setting-row label {
+                min-width: auto;
+            }
+        }
+
         @media (max-width: 480px) {
             .left-panel {
                 position: absolute;
@@ -1474,6 +1704,123 @@
                     <div class="shortcut-item">
                         <kbd>Scroll</kbd>
                         <span>Zoom</span>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+
+            <div class="tool-section">
+                <h3>🎯 Quick Actions</h3>
+                <div class="quick-actions-grid">
+                    <button class="quick-action-btn" data-action="clear">
+                        <span class="action-icon">🗑️</span>
+                        <span class="action-label">Clear All</span>
+                    </button>
+                    <button class="quick-action-btn" data-action="fill">
+                        <span class="action-icon">🪣</span>
+                        <span class="action-label">Fill Canvas</span>
+                    </button>
+                    <button class="quick-action-btn" data-action="invert">
+                        <span class="action-icon">🔄</span>
+                        <span class="action-label">Invert</span>
+                    </button>
+                    <button class="quick-action-btn" data-action="mirror">
+                        <span class="action-icon">🪞</span>
+                        <span class="action-label">Mirror</span>
+                    </button>
+                    <button class="quick-action-btn" data-action="center">
+                        <span class="action-icon">⊕</span>
+                        <span class="action-label">Center</span>
+                    </button>
+                    <button class="quick-action-btn" data-action="random">
+                        <span class="action-icon">🎲</span>
+                        <span class="action-label">Random Art</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <h3>🎨 Brush Settings</h3>
+                <div class="brush-settings">
+                    <div class="setting-row">
+                        <label>Size</label>
+                        <input type="range" id="brushSize" min="1" max="10" value="1" class="brush-slider">
+                        <span id="brushSizeValue">1</span>
+                    </div>
+                    <div class="setting-row">
+                        <label>Opacity</label>
+                        <input type="range" id="brushOpacity" min="0" max="100" value="100" class="brush-slider">
+                        <span id="brushOpacityValue">100%</span>
+                    </div>
+                    <div class="setting-row">
+                        <label>Shape</label>
+                        <select id="brushShape" class="brush-select">
+                            <option value="round">Round</option>
+                            <option value="square">Square</option>
+                            <option value="diamond">Diamond</option>
+                            <option value="star">Star</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <h3>📊 Canvas Info</h3>
+                <div class="canvas-info">
+                    <div class="info-item">
+                        <span class="info-label">Size:</span>
+                        <span class="info-value" id="canvasSize">200×80</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Characters:</span>
+                        <span class="info-value" id="charCount">0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Lines:</span>
+                        <span class="info-value" id="lineCount">0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Selection:</span>
+                        <span class="info-value" id="selectionInfo">None</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Zoom:</span>
+                        <span class="info-value" id="zoomLevel">100%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <h3>🎬 Animation</h3>
+                <div class="animation-controls">
+                    <button class="anim-btn" id="playAnim">
+                        <span>▶️ Play</span>
+                    </button>
+                    <button class="anim-btn" id="pauseAnim">
+                        <span>⏸️ Pause</span>
+                    </button>
+                    <button class="anim-btn" id="stopAnim">
+                        <span>⏹️ Stop</span>
+                    </button>
+                    <button class="anim-btn" id="recordAnim">
+                        <span>⏺️ Record</span>
+                    </button>
+                </div>
+                <div class="animation-settings">
+                    <div class="setting-row">
+                        <label>FPS</label>
+                        <select id="animFps" class="anim-select">
+                            <option value="12">12 FPS</option>
+                            <option value="24" selected>24 FPS</option>
+                            <option value="30">30 FPS</option>
+                            <option value="60">60 FPS</option>
+                        </select>
+                    </div>
+                    <div class="setting-row">
+                        <label>Duration</label>
+                        <input type="number" id="animDuration" value="5" min="1" max="60" class="anim-input">
+                        <span>seconds</span>
                     </div>
                 </div>
             </div>
@@ -3109,7 +3456,293 @@
             }
         };
         
-        // Enhanced tool switching with macro recording
+        // UX Enhancement System
+        let currentZoom = 100;
+        let isAnimating = false;
+        let animationFrame = null;
+        let uxBrushSize = 1;
+        let currentBrushOpacity = 100;
+        let currentBrushShape = 'round';
+        
+        // Quick Actions Event Listeners
+        document.querySelectorAll('.quick-action-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const action = btn.dataset.action;
+                executeQuickAction(action);
+            });
+        });
+        
+        // Brush Settings Event Listeners
+        const brushSizeSlider = document.getElementById('brushSize');
+        const brushOpacitySlider = document.getElementById('brushOpacity');
+        const brushShapeSelect = document.getElementById('brushShape');
+        const brushSizeValue = document.getElementById('brushSizeValue');
+        const brushOpacityValue = document.getElementById('brushOpacityValue');
+        
+        if (brushSizeSlider) {
+            brushSizeSlider.addEventListener('input', (e) => {
+                uxBrushSize = parseInt(e.target.value);
+                brushSizeValue.textContent = uxBrushSize;
+                showToast(`Brush size: ${uxBrushSize}`, 'success');
+            });
+        }
+        
+        if (brushOpacitySlider) {
+            brushOpacitySlider.addEventListener('input', (e) => {
+                currentBrushOpacity = parseInt(e.target.value);
+                brushOpacityValue.textContent = `${currentBrushOpacity}%`;
+                showToast(`Brush opacity: ${currentBrushOpacity}%`, 'success');
+            });
+        }
+        
+        if (brushShapeSelect) {
+            brushShapeSelect.addEventListener('change', (e) => {
+                currentBrushShape = e.target.value;
+                showToast(`Brush shape: ${currentBrushShape}`, 'success');
+            });
+        }
+        
+        // Animation Controls Event Listeners
+        const playAnimBtn = document.getElementById('playAnim');
+        const pauseAnimBtn = document.getElementById('pauseAnim');
+        const stopAnimBtn = document.getElementById('stopAnim');
+        const recordAnimBtn = document.getElementById('recordAnim');
+        const animFpsSelect = document.getElementById('animFps');
+        const animDurationInput = document.getElementById('animDuration');
+        
+        if (playAnimBtn) {
+            playAnimBtn.addEventListener('click', startAnimation);
+            pauseAnimBtn.addEventListener('click', pauseAnimation);
+            stopAnimBtn.addEventListener('click', stopAnimation);
+            recordAnimBtn.addEventListener('click', recordAnimation);
+        }
+        
+        // Canvas Info Update
+        function updateCanvasInfo() {
+            const canvasSizeEl = document.getElementById('canvasSize');
+            const charCountEl = document.getElementById('charCount');
+            const lineCountEl = document.getElementById('lineCount');
+            const selectionInfoEl = document.getElementById('selectionInfo');
+            const zoomLevelEl = document.getElementById('zoomLevel');
+            
+            if (canvasSizeEl) canvasSizeEl.textContent = `${COLS}×${ROWS}`;
+            
+            let charCount = 0;
+            let lineCount = 0;
+            
+            for (let row = 0; row < ROWS; row++) {
+                let hasContent = false;
+                for (let col = 0; col < COLS; col++) {
+                    if (grid[row][col] !== ' ') {
+                        charCount++;
+                        hasContent = true;
+                    }
+                }
+                if (hasContent) lineCount++;
+            }
+            
+            if (charCountEl) charCountEl.textContent = charCount;
+            if (lineCountEl) lineCountEl.textContent = lineCount;
+            
+            if (selectionInfoEl) {
+                if (selection && selection.cells.length > 0) {
+                    const width = selection.endCol - selection.startCol + 1;
+                    const height = selection.endRow - selection.startRow + 1;
+                    selectionInfoEl.textContent = `${width}×${height} (${selection.cells.length} cells)`;
+                } else {
+                    selectionInfoEl.textContent = 'None';
+                }
+            }
+            
+            if (zoomLevelEl) zoomLevelEl.textContent = `${currentZoom}%`;
+        }
+        
+        function executeQuickAction(action) {
+            saveUndo();
+            
+            switch (action) {
+                case 'clear':
+                    for (let row = 0; row < ROWS; row++) {
+                        for (let col = 0; col < COLS; col++) {
+                            grid[row][col] = ' ';
+                        }
+                    }
+                    showToast('Canvas cleared', 'success');
+                    break;
+                    
+                case 'fill':
+                    for (let row = 0; row < ROWS; row++) {
+                        for (let col = 0; col < COLS; col++) {
+                            if (grid[row][col] === ' ') {
+                                grid[row][col] = currentChar;
+                            }
+                        }
+                    }
+                    showToast('Canvas filled', 'success');
+                    break;
+                    
+                case 'invert':
+                    for (let row = 0; row < ROWS; row++) {
+                        for (let col = 0; col < COLS; col++) {
+                            const char = grid[row][col];
+                            if (char !== ' ') {
+                                grid[row][col] = char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase();
+                            }
+                        }
+                    }
+                    showToast('Canvas inverted', 'success');
+                    break;
+                    
+                case 'mirror':
+                    for (let row = 0; row < ROWS; row++) {
+                        for (let col = 0; col < COLS / 2; col++) {
+                            const source = grid[row][col];
+                            const target = grid[row][COLS - 1 - col];
+                            grid[row][COLS - 1 - col] = source;
+                            grid[row][col] = target;
+                        }
+                    }
+                    showToast('Canvas mirrored', 'success');
+                    break;
+                    
+                case 'center':
+                    const content = [];
+                    for (let row = 0; row < ROWS; row++) {
+                        for (let col = 0; col < COLS; col++) {
+                            if (grid[row][col] !== ' ') {
+                                content.push({row, col, char: grid[row][col]});
+                            }
+                        }
+                    }
+                    
+                    if (content.length > 0) {
+                        const minRow = Math.min(...content.map(c => c.row));
+                        const maxRow = Math.max(...content.map(c => c.row));
+                        const minCol = Math.min(...content.map(c => c.col));
+                        const maxCol = Math.max(...content.map(c => c.col));
+                        
+                        const height = maxRow - minRow + 1;
+                        const width = maxCol - minCol + 1;
+                        
+                        const centerRow = Math.floor((ROWS - height) / 2);
+                        const centerCol = Math.floor((COLS - width) / 2);
+                        
+                        // Clear canvas
+                        for (let row = 0; row < ROWS; row++) {
+                            for (let col = 0; col < COLS; col++) {
+                                grid[row][col] = ' ';
+                            }
+                        }
+                        
+                        // Center content
+                        content.forEach(cell => {
+                            const newRow = centerRow + (cell.row - minRow);
+                            const newCol = centerCol + (cell.col - minCol);
+                            if (newRow >= 0 && newRow < ROWS && newCol >= 0 && newCol < COLS) {
+                                grid[newRow][newCol] = cell.char;
+                            }
+                        });
+                        
+                        showToast('Content centered', 'success');
+                    }
+                    break;
+                    
+                case 'random':
+                    const chars = ['*', '#', '@', '+', '-', '=', '|', '/', '\\', '.', ':', 'o', 'x', '~'];
+                    for (let row = 0; row < ROWS; row++) {
+                        for (let col = 0; col < COLS; col++) {
+                            if (Math.random() > 0.7) {
+                                grid[row][col] = chars[Math.floor(Math.random() * chars.length)];
+                            }
+                        }
+                    }
+                    showToast('Random art generated', 'success');
+                    break;
+            }
+            
+            render();
+            updateCanvasInfo();
+        }
+        
+        function startAnimation() {
+            if (isAnimating) return;
+            
+            isAnimating = true;
+            playAnimBtn.classList.add('playing');
+            showToast('Animation started', 'success');
+            
+            const fps = parseInt(animFpsSelect.value);
+            const duration = parseInt(animDurationInput.value);
+            const totalFrames = fps * duration;
+            let currentFrame = 0;
+            
+            const animate = () => {
+                if (!isAnimating || currentFrame >= totalFrames) {
+                    stopAnimation();
+                    return;
+                }
+                
+                // Simple animation effect - rotate colors
+                const hue = (currentFrame / totalFrames) * 360;
+                const color = `hsl(${hue}, 70%, 50%)`;
+                
+                // Apply color effect to some characters
+                for (let row = 0; row < ROWS; row++) {
+                    for (let col = 0; col < COLS; col++) {
+                        if (grid[row][col] !== ' ' && Math.random() > 0.8) {
+                            // This would require color support in ASCII
+                            // For now, we'll just cycle through characters
+                            const chars = ['*', '#', '@', '+', '-', '='];
+                            grid[row][col] = chars[Math.floor((currentFrame / 10) % chars.length)];
+                        }
+                    }
+                }
+                
+                render();
+                currentFrame++;
+                animationFrame = requestAnimationFrame(animate);
+            };
+            
+            animationFrame = requestAnimationFrame(animate);
+        }
+        
+        function pauseAnimation() {
+            isAnimating = false;
+            playAnimBtn.classList.remove('playing');
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+                animationFrame = null;
+            }
+            showToast('Animation paused', 'success');
+        }
+        
+        function stopAnimation() {
+            isAnimating = false;
+            playAnimBtn.classList.remove('playing');
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+                animationFrame = null;
+            }
+            showToast('Animation stopped', 'success');
+        }
+        
+        function recordAnimation() {
+            recordAnimBtn.classList.toggle('recording');
+            if (recordAnimBtn.classList.contains('recording')) {
+                showToast('Animation recording started', 'success');
+                startRecording();
+            } else {
+                showToast('Animation recording stopped', 'success');
+                stopRecording();
+            }
+        }
+        
+        // Update canvas info on every render
+        const originalRender = render;
+        render = function() {
+            originalRender();
+            updateCanvasInfo();
+        };
         const originalSetTool = setTool;
         setTool = function(tool) {
             originalSetTool(tool);
