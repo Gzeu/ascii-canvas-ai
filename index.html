@@ -306,9 +306,275 @@
             font-size: var(--font-size-xs);
             text-align: center;
             line-height: 1.2;
-            font-size: 11px;
-            margin-bottom: 4px;
         }
+
+        /* Template Buttons */
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-sm);
+        }
+
+        .template-btn {
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            min-height: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .template-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: var(--transition-fast);
+        }
+
+        .template-btn:hover {
+            background: var(--bg-surface-3);
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .template-btn:hover::before {
+            opacity: 0.1;
+        }
+
+        .template-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--text-inverse);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .template-icon {
+            font-size: var(--font-size-lg);
+            line-height: 1;
+        }
+
+        .template-label {
+            font-size: var(--font-size-xs);
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* Pattern Buttons */
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-xs);
+        }
+
+        .pattern-btn {
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: var(--space-xs);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            transition: var(--transition-fast);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+            min-height: 40px;
+            position: relative;
+        }
+
+        .pattern-btn:hover {
+            background: var(--bg-surface-3);
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+        }
+
+        .pattern-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--text-inverse);
+        }
+
+        .pattern-preview {
+            font-family: var(--font-mono);
+            font-size: var(--font-size-sm);
+            line-height: 1;
+            letter-spacing: 1px;
+        }
+
+        .pattern-label {
+            font-size: 9px;
+            text-align: center;
+            line-height: 1;
+        }
+
+        /* Character Buttons */
+        .char-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: var(--space-xs);
+        }
+
+        .char-btn {
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: var(--space-xs);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            transition: var(--transition-fast);
+            min-height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .char-btn:hover {
+            background: var(--bg-surface-3);
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+        }
+
+        .char-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--text-inverse);
+        }
+
+        /* Advanced Tools Grid */
+        .advanced-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-sm);
+        }
+
+        /* Export and Settings Buttons */
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-sm);
+        }
+
+        .export-btn {
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            min-height: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .export-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: var(--transition-fast);
+        }
+
+        .export-btn:hover {
+            background: var(--bg-surface-3);
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .export-btn:hover::before {
+            opacity: 0.1;
+        }
+
+        .export-icon {
+            font-size: var(--font-size-lg);
+            line-height: 1;
+        }
+
+        .export-label {
+            font-size: var(--font-size-xs);
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* Settings Grid */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-md);
+        }
+
+        .setting-item {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+
+        .setting-item label {
+            font-family: var(--font-sans);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .setting-item select,
+        .setting-item input[type="checkbox"] {
+            width: 100%;
+            background: var(--bg-surface-2);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            font-family: var(--font-sans);
+            font-size: var(--font-size-sm);
+            transition: var(--transition-fast);
+        }
+
+        .setting-item select:focus,
+        .setting-item input[type="checkbox"]:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Mobile Responsive Updates */
 
         /* Modern Canvas Container */
         .canvas-container {
@@ -916,14 +1182,171 @@
             </div>
 
             <div class="tool-section">
-                <h3>Border Style</h3>
+                <h3>📚 Templates</h3>
+                <div class="template-grid">
+                    <button class="template-btn" data-template="flowchart">
+                        <span class="template-icon">📊</span>
+                        <span class="template-label">Flowchart</span>
+                    </button>
+                    <button class="template-btn" data-template="diagram">
+                        <span class="template-icon">🔷</span>
+                        <span class="template-label">Diagram</span>
+                    </button>
+                    <button class="template-btn" data-template="network">
+                        <span class="template-icon">🌐</span>
+                        <span class="template-label">Network</span>
+                    </button>
+                    <button class="template-btn" data-template="mindmap">
+                        <span class="template-icon">🧠</span>
+                        <span class="template-label">Mind Map</span>
+                    </button>
+                    <button class="template-btn" data-template="timeline">
+                        <span class="template-icon">📅</span>
+                        <span class="template-label">Timeline</span>
+                    </button>
+                    <button class="template-btn" data-template="table">
+                        <span class="template-icon">📋</span>
+                        <span class="template-label">Table</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <h3>🎨 Patterns</h3>
+                <div class="pattern-grid">
+                    <button class="pattern-btn" data-pattern="dots">
+                        <span class="pattern-preview">••••</span>
+                        <span class="pattern-label">Dots</span>
+                    </button>
+                    <button class="pattern-btn" data-pattern="cross">
+                        <span class="pattern-preview">++++</span>
+                        <span class="pattern-label">Cross</span>
+                    </button>
+                    <button class="pattern-btn" data-pattern="diagonal">
+                        <span class="pattern-preview">////</span>
+                        <span class="pattern-label">Diagonal</span>
+                    </button>
+                    <button class="pattern-btn" data-pattern="wave">
+                        <span class="pattern-preview">~~~~</span>
+                        <span class="pattern-label">Wave</span>
+                    </button>
+                    <button class="pattern-btn" data-pattern="brick">
+                        <span class="pattern-preview">███</span>
+                        <span class="pattern-label">Brick</span>
+                    </button>
+                </div>
+            </div>
+            <div class="tool-section">
+                <h3>🎨 Styles</h3>
                 <select class="style-select" id="borderStyle">
                     <option value="simple">Simple</option>
                     <option value="double">Double</option>
                     <option value="rounded">Rounded</option>
                     <option value="heavy">Heavy</option>
                     <option value="light">Light</option>
+                    <option value="dashed">Dashed</option>
+                    <option value="dotted">Dotted</option>
                 </select>
+            </div>
+
+            <div class="tool-section">
+                <h3>🖊 Characters</h3>
+                <div class="char-grid">
+                    <button class="char-btn" data-char="*">*</button>
+                    <button class="char-btn" data-char="#">#</button>
+                    <button class="char-btn" data-char="@">@</button>
+                    <button class="char-btn" data-char="+">+</button>
+                    <button class="char-btn" data-char="-">-</button>
+                    <button class="char-btn" data-char="=">=</button>
+                    <button class="char-btn" data-char="|">|</button>
+                    <button class="char-btn" data-char="/">/</button>
+                    <button class="char-btn" data-char="\\">\\</button>
+                    <button class="char-btn" data-char=".">.</button>
+                    <button class="char-btn" data-char=":">:</button>
+                    <button class="char-btn" data-char="o">o</button>
+                    <button class="char-btn" data-char="x">x</button>
+                    <button class="char-btn" data-char="~">~</button>
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <h3>🎯 Advanced</h3>
+                <div class="advanced-grid">
+                    <button class="tool-btn" data-tool="gradient">
+                        <span class="tool-icon">🌈</span>
+                        <span class="tool-label">Gradient</span>
+                    </button>
+                    <button class="tool-btn" data-tool="mirror">
+                        <span class="tool-icon">🪞</span>
+                        <span class="tool-label">Mirror</span>
+                    </button>
+                    <button class="tool-btn" data-tool="rotate">
+                        <span class="tool-icon">🔄</span>
+                        <span class="tool-label">Rotate</span>
+                    </button>
+                    <button class="tool-btn" data-tool="grid">
+                        <span class="tool-icon">⚏</span>
+                        <span class="tool-label">Grid</span>
+                    </button>
+                    <button class="tool-btn" data-tool="ruler">
+                        <span class="tool-icon">📏</span>
+                        <span class="tool-label">Ruler</span>
+                    </button>
+                </div>
+            </div>
+            </div>
+
+            <div class="tool-section">
+                <h3>💾 Export</h3>
+                <div class="export-grid">
+                    <button class="export-btn" data-export="ascii">
+                        <span class="export-icon">📄</span>
+                        <span class="export-label">ASCII</span>
+                    </button>
+                    <button class="export-btn" data-export="png">
+                        <span class="export-icon">🖼️</span>
+                        <span class="export-label">PNG</span>
+                    </button>
+                    <button class="export-btn" data-export="svg">
+                        <span class="export-icon">🎨</span>
+                        <span class="export-label">SVG</span>
+                    </button>
+                    <button class="export-btn" data-export="json">
+                        <span class="export-icon">📋</span>
+                        <span class="export-label">JSON</span>
+                    </button>
+                    <button class="export-btn" data-export="html">
+                        <span class="export-icon">🌐</span>
+                        <span class="export-label">HTML</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <h3>⚙️ Settings</h3>
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label>Grid Size</label>
+                        <select id="gridSize">
+                            <option value="small">Small (100×40)</option>
+                            <option value="medium" selected>Medium (200×80)</option>
+                            <option value="large">Large (300×120)</option>
+                            <option value="xlarge">XLarge (400×160)</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label>Theme</label>
+                        <select id="theme">
+                            <option value="dark" selected>Dark</option>
+                            <option value="light">Light</option>
+                            <option value="auto">Auto</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label>Auto-save</label>
+                        <input type="checkbox" id="autosave" checked>
+                    </div>
+                </div>
             </div>
 
             <div class="tool-section">
@@ -1929,7 +2352,130 @@
             }
         });
         
-        // Enhanced tool switching with visual feedback
+        // Template generator system
+        const templates = {
+            flowchart: {
+                content: `┌─────────────┐\n│   Start    │\n└─────┬─────┘\n      │\n┌─────▼─────┐\n│  Process    │\n└─────┬─────┘\n      │\n┌─────▼─────┐\n│    End      │\n└─────────────┘`,
+                description: 'Basic flowchart template'
+            },
+            diagram: {
+                content: `┌─────────────┐     ┌─────────────┐\n│   System    │────▶│   Database   │\n└─────────────┘     └─────────────┘`,
+                description: 'System architecture diagram'
+            },
+            network: {
+                content: `┌─────┐    ┌─────┐    ┌─────┐\n│ PC1  │────│ PC2  │────│ Hub  │────│ PC3  │\n└─────┘    └─────┘    └─────┘\n     │           │          │\n     └──────────┘          └─────┘\n          │                │\n     ┌─────┐          ┌─────┐\n     │ PC4  │          │ PC5  │\n     └─────┘          └─────┘`,
+                description: 'Network topology'
+            },
+            mindmap: {
+                content: `        Central Topic\n       /    |    \\\n  Branch1  Branch2  Branch3\n     |        |      |\n    Sub1    Sub2    Sub3`,
+                description: 'Mind map structure'
+            },
+            timeline: {
+                content: `2024-01 ──────┬─────┬─────┬───── 2024-12\nJan      │ Feb   │ Mar   │ Apr   │ May   │\n├────────┼───────┼───────┼──────┤\n│Project  │Design │Develop│Test  │Deploy│\n└────────┴───────┴───────┴──────┘`,
+                description: 'Project timeline'
+            },
+            table: {
+                content: `┌─────────┬─────────┬─────────┐\n│ Name    │ Type    │ Status  │\n├─────────┼─────────┼─────────┤\n│ Item 1  │ Active  │ Done    │\n│ Item 2  │ Pending │ In Prog │\n│ Item 3  │ Review  │ Ready   │\n└─────────┴─────────┴─────────┘`,
+                description: 'Data table'
+            }
+        };
+        
+        // Pattern system
+        const patterns = {
+            dots: { char: '•', spacing: 2 },
+            cross: { char: '+', spacing: 1 },
+            diagonal: { char: '/', spacing: 1 },
+            wave: { char: '~', spacing: 1 },
+            brick: { char: '█', spacing: 0 }
+        };
+        
+        let currentTemplate = null;
+        let currentPattern = null;
+        let currentChar = '*';
+        let selectedText = null;
+        
+        // Apply template
+        function applyTemplate(templateName) {
+            if (!templates[templateName]) return;
+            
+            saveUndo();
+            const template = templates[templateName];
+            const lines = template.content.split('\n');
+            
+            // Center the template on canvas
+            const startRow = Math.floor((ROWS - lines.length) / 2);
+            const startCol = Math.floor((COLS - Math.max(...lines.map(line => line.length))) / 2);
+            
+            for (let r = 0; r < lines.length && startRow + r < ROWS; r++) {
+                for (let c = 0; c < lines[r].length && startCol + c < COLS; c++) {
+                    grid[startRow + r][startCol + c] = lines[r][c];
+                }
+            }
+            
+            render();
+            showToast(`${templateName} template applied`, 'success');
+        }
+        
+        // Apply pattern
+        function applyPattern(patternName) {
+            if (!patterns[patternName]) return;
+            currentPattern = patternName;
+            showToast(`${patternName} pattern selected`, 'success');
+        }
+        
+        // Template and pattern event handlers
+        document.querySelectorAll('.template-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const templateName = btn.dataset.template;
+                applyTemplate(templateName);
+                
+                // Visual feedback
+                document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+        
+        document.querySelectorAll('.pattern-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const patternName = btn.dataset.pattern;
+                applyPattern(patternName);
+                
+                // Visual feedback
+                document.querySelectorAll('.pattern-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+        
+        // Character selection
+        document.querySelectorAll('.char-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentChar = btn.dataset.char;
+                
+                // Visual feedback
+                document.querySelectorAll('.char-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                showToast(`Character ${currentChar} selected`, 'success');
+            });
+        });
+        
+        // Enhanced freehand with pattern support
+        function drawFreehandWithPattern(pos) {
+            if (currentPattern) {
+                const pattern = patterns[currentPattern];
+                // Apply pattern in area around position
+                for (let dy = -2; dy <= 2; dy++) {
+                    for (let dx = -2; dx <= 2; dx++) {
+                        const x = pos.col + dx * pattern.spacing;
+                        const y = pos.row + dy;
+                        if (x >= 0 && x < COLS && y >= 0 && y < ROWS) {
+                            grid[y][x] = pattern.char;
+                        }
+                    }
+                }
+            } else {
+                drawFreehand(pos, currentChar);
+            }
+        }
         function setTool(tool) {
             currentTool = tool;
             document.querySelectorAll('.tool-btn').forEach(btn => {
