@@ -1060,15 +1060,15 @@
            =============================================
         
         // Tool selection
-        document.querySelectorAll('[data-tool]').forEach(btn => {
-            btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-tool]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
                 setTool(btn.dataset.tool);
             });
         });
         
         // Quick actions
-        document.querySelectorAll('[data-action]').forEach(btn => {
-            btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-action]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
                 const action = btn.dataset.action;
                 switch (action) {
                     case 'clear': clearCanvas(); break;
