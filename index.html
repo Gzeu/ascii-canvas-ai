@@ -492,13 +492,13 @@
             <div class="tool-section">
                 <h3>Tools</h3>
                 <div class="tool-grid">
-                    <button class="tool-btn active" data-tool="select">Select</button>
+                    <button class="tool-btn" data-tool="select">Select</button>
                     <button class="tool-btn" data-tool="rectangle">Rectangle</button>
                     <button class="tool-btn" data-tool="diamond">Diamond</button>
                     <button class="tool-btn" data-tool="line">Line</button>
                     <button class="tool-btn" data-tool="arrow">Arrow</button>
                     <button class="tool-btn" data-tool="text">Text</button>
-                    <button class="tool-btn" data-tool="freehand">Freehand</button>
+                    <button class="tool-btn active" data-tool="freehand">Freehand</button>
                     <button class="tool-btn" data-tool="eraser">Eraser</button>
                 </div>
             </div>
@@ -757,41 +757,104 @@
         // Tool functions
         function drawRectangle(start, end, style) {
             const chars = getBorderChars(style);
-            for (let col = start.col; col <= end.col; col++) {
-                grid[start.row][col] = chars.h;
-                grid[end.row][col] = chars.h;
+            
+            // Ensure proper coordinates
+            const minCol = Math.min(start.col, end.col);
+            const maxCol = Math.max(start.col, end.col);
+            const minRow = Math.min(start.row, end.row);
+            const maxRow = Math.max(start.row, end.row);
+            
+            // Don't draw if rectangle is too small
+            if (maxCol - minCol < 1 || maxRow - minRow < 1) return;
+            
+            // Draw horizontal lines
+            for (let col = minCol; col <= maxCol; col++) {
+                if (minRow >= 0 && minRow < ROWS && col >= 0 && col < COLS) {
+                    grid[minRow][col] = chars.h;
+                }
+                if (maxRow >= 0 && maxRow < ROWS && col >= 0 && col < COLS) {
+                    grid[maxRow][col] = chars.h;
+                }
             }
-            for (let row = start.row + 1; row < end.row; row++) {
-                grid[row][start.col] = chars.v;
-                grid[row][end.col] = chars.v;
+            
+            // Draw vertical lines
+            for (let row = minRow + 1; row < maxRow; row++) {
+                if (row >= 0 && row < ROWS && minCol >= 0 && minCol < COLS) {
+                    grid[row][minCol] = chars.v;
+                }
+                if (row >= 0 && row < ROWS && maxCol >= 0 && maxCol < COLS) {
+                    grid[row][maxCol] = chars.v;
+                }
             }
-            grid[start.row][start.col] = chars.tl;
-            grid[start.row][end.col] = chars.tr;
-            grid[end.row][start.col] = chars.bl;
-            grid[end.row][end.col] = chars.br;
+            
+            // Draw corners
+            if (minRow >= 0 && minRow < ROWS && minCol >= 0 && minCol < COLS) {
+                grid[minRow][minCol] = chars.tl;
+            }
+            if (minRow >= 0 && minRow < ROWS && maxCol >= 0 && maxCol < COLS) {
+                grid[minRow][maxCol] = chars.tr;
+            }
+            if (maxRow >= 0 && maxRow < ROWS && minCol >= 0 && minCol < COLS) {
+                grid[maxRow][minCol] = chars.bl;
+            }
+            if (maxRow >= 0 && maxRow < ROWS && maxCol >= 0 && maxCol < COLS) {
+                grid[maxRow][maxCol] = chars.br;
+            }
         }
 
         function drawDiamond(start, end, style) {
-            const midRow = Math.floor((start.row + end.row) / 2);
-            const midCol = Math.floor((start.col + end.col) / 2);
+            // Ensure proper coordinates
+            const minCol = Math.min(start.col, end.col);
+            const maxCol = Math.max(start.col, end.col);
+            const minRow = Math.min(start.row, end.row);
+            const maxRow = Math.max(start.row, end.row);
+            
+            const midRow = Math.floor((minRow + maxRow) / 2);
+            const midCol = Math.floor((minCol + maxCol) / 2);
             
             if (style === 'unicode') {
-                for (let row = start.row; row <= end.row; row++) {
-                    for (let col = start.col; col <= end.col; col++) {
-                        const relRow = row - midRow;
-                        const relCol = col - midCol;
-                        if (Math.abs(relRow) + Math.abs(relCol) <= Math.abs(end.row - start.row) / 2) {
-                            grid[row][col] = '◇';
+                // Fill diamond with unicode diamonds
+                for (let row = minRow; row <= maxRow; row++) {
+                    for (let col = minCol; col <= maxCol; col++) {
+                        const relRow = Math.abs(row - midRow);
+                        const relCol = Math.abs(col - midCol);
+                        const maxDist = Math.max(Math.abs(maxRow - midRow), Math.abs(maxCol - midCol));
+                        
+                        if (relRow + relCol <= maxDist) {
+                            if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
+                                grid[row][col] = '◇';
+                            }
                         }
                     }
                 }
             } else {
-                for (let row = start.row; row <= end.row; row++) {
-                    const progress = (row - start.row) / (end.row - start.row);
-                    const leftCol = Math.floor(start.col + (midCol - start.col) * progress);
-                    const rightCol = Math.floor(midCol + (end.col - midCol) * progress);
-                    grid[row][leftCol] = row === start.row || row === end.row ? '/' : '\\';
-                    grid[row][rightCol] = row === start.row || row === end.row ? '\\' : '/';
+                // Draw diamond outline with / and \
+                // Top half
+                for (let row = minRow; row <= midRow; row++) {
+                    const progress = (row - minRow) / (midRow - minRow);
+                    const leftCol = Math.floor(minCol + (midCol - minCol) * progress);
+                    const rightCol = Math.floor(midCol + (maxCol - midCol) * progress);
+                    
+                    if (row >= 0 && row < ROWS && leftCol >= 0 && leftCol < COLS) {
+                        grid[row][leftCol] = row === minRow ? '/' : '\\';
+                    }
+                    if (row >= 0 && row < ROWS && rightCol >= 0 && rightCol < COLS) {
+                        grid[row][rightCol] = row === minRow ? '\\' : '/';
+                    }
+                }
+                
+                // Bottom half
+                for (let row = midRow + 1; row <= maxRow; row++) {
+                    const progress = (row - midRow) / (maxRow - midRow);
+                    const leftCol = Math.floor(midCol - (midCol - minCol) * progress);
+                    const rightCol = Math.floor(midCol + (maxCol - midCol) * progress);
+                    
+                    if (row >= 0 && row < ROWS && leftCol >= 0 && leftCol < COLS) {
+                        grid[row][leftCol] = row === maxRow ? '\\' : '/';
+                    }
+                    if (row >= 0 && row < ROWS && rightCol >= 0 && rightCol < COLS) {
+                        grid[row][rightCol] = row === maxRow ? '/' : '\\';
+                    }
                 }
             }
         }
@@ -807,10 +870,16 @@
             let y = start.row;
 
             while (true) {
-                const isHorizontal = Math.abs(end.row - start.row) < Math.abs(end.col - start.col);
-                grid[y][x] = isHorizontal ? chars.h : chars.v;
+                // Draw the current point
+                if (y >= 0 && y < ROWS && x >= 0 && x < COLS) {
+                    const isHorizontal = dx > dy;
+                    grid[y][x] = isHorizontal ? chars.h : chars.v;
+                }
                 
+                // Check if we've reached the end
                 if (x === end.col && y === end.row) break;
+                
+                // Bresenham's line algorithm
                 const e2 = 2 * err;
                 if (e2 > -dy) {
                     err -= dy;
@@ -826,30 +895,47 @@
         function drawArrow(start, end, style, head) {
             drawLine(start, end, style);
             
+            // Calculate arrow head
             const dx = end.col - start.col;
             const dy = end.row - start.row;
             const len = Math.sqrt(dx * dx + dy * dy);
+            
+            if (len === 0) return; // Prevent division by zero
+            
             const ux = dx / len;
             const uy = dy / len;
             
             if (head === 'arrow') {
-                grid[end.row][end.col] = '>';
+                // Simple arrow head >
+                if (end.row >= 0 && end.row < ROWS && end.col >= 0 && end.col < COLS) {
+                    grid[end.row][end.col] = '>';
+                }
             } else {
+                // Triangle arrow head ▶
+                const headSize = 2;
                 const perpX = -uy;
                 const perpY = ux;
-                const tipRow = Math.round(end.row - uy * 2);
-                const tipCol = Math.round(end.col - ux * 2);
-                const base1Row = Math.round(tipRow + perpY);
-                const base1Col = Math.round(tipCol + perpX);
-                const base2Row = Math.round(tipRow - perpY);
-                const base2Col = Math.round(tipCol - perpX);
                 
-                if (base1Row >= 0 && base1Row < ROWS && base1Col >= 0 && base1Col < COLS) {
-                    grid[base1Row][base1Col] = '▶';
-                }
-                if (base2Row >= 0 && base2Row < ROWS && base2Col >= 0 && base2Col < COLS) {
-                    grid[base2Row][base2Col] = '▶';
-                }
+                // Calculate triangle points
+                const tipRow = Math.round(end.row - uy * headSize);
+                const tipCol = Math.round(end.col - ux * headSize);
+                const base1Row = Math.round(tipRow + perpY * headSize);
+                const base1Col = Math.round(tipCol + perpX * headSize);
+                const base2Row = Math.round(tipRow - perpY * headSize);
+                const base2Col = Math.round(tipCol - perpX * headSize);
+                
+                // Draw triangle points
+                const points = [
+                    {row: tipRow, col: tipCol},
+                    {row: base1Row, col: base1Col},
+                    {row: base2Row, col: base2Col}
+                ];
+                
+                points.forEach(point => {
+                    if (point.row >= 0 && point.row < ROWS && point.col >= 0 && point.col < COLS) {
+                        grid[point.row][point.col] = '▶';
+                    }
+                });
             }
         }
 
@@ -871,8 +957,13 @@
         }
 
         function floodSelect(start) {
+            // Get the character at the start position
+            if (start.row < 0 || start.row >= ROWS || start.col < 0 || start.col >= COLS) {
+                return null;
+            }
+            
             const char = grid[start.row][start.col];
-            if (char === ' ') return null;
+            if (char === ' ') return null; // Don't select empty spaces
             
             const visited = new Set();
             const queue = [start];
@@ -885,10 +976,15 @@
                 if (visited.has(key)) continue;
                 visited.add(key);
                 
+                // Check bounds
                 if (pos.row < 0 || pos.row >= ROWS || pos.col < 0 || pos.col >= COLS) continue;
+                
+                // Check if character matches
                 if (grid[pos.row][pos.col] !== char) continue;
                 
                 cells.push(pos);
+                
+                // Add adjacent cells
                 queue.push({row: pos.row - 1, col: pos.col});
                 queue.push({row: pos.row + 1, col: pos.col});
                 queue.push({row: pos.row, col: pos.col - 1});
@@ -897,6 +993,7 @@
             
             if (cells.length === 0) return null;
             
+            // Calculate bounding box
             const minRow = Math.min(...cells.map(c => c.row));
             const maxRow = Math.max(...cells.map(c => c.row));
             const minCol = Math.min(...cells.map(c => c.col));
@@ -907,7 +1004,8 @@
                 endRow: maxRow,
                 startCol: minCol,
                 endCol: maxCol,
-                cells: cells
+                cells: cells,
+                char: char
             };
         }
 
@@ -957,11 +1055,33 @@
                 }
             } else if (currentTool === 'text') {
                 const text = prompt('Enter text:');
-                if (text) {
+                if (text && text.trim()) {
                     saveUndo();
-                    for (let i = 0; i < text.length && pos.col + i < COLS; i++) {
-                        grid[pos.row][pos.col + i] = text[i];
+                    const cleanText = text.trim();
+                    let currentCol = pos.col;
+                    let currentRow = pos.row;
+                    
+                    // Handle multi-line text
+                    const lines = cleanText.split('\n');
+                    
+                    for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+                        const line = lines[lineIndex];
+                        
+                        // Check if we're within canvas bounds
+                        if (currentRow >= 0 && currentRow < ROWS) {
+                            // Draw each character of the line
+                            for (let i = 0; i < line.length && currentCol + i < COLS; i++) {
+                                if (currentCol + i >= 0) {
+                                    grid[currentRow][currentCol + i] = line[i];
+                                }
+                            }
+                        }
+                        
+                        // Move to next line for multi-line text
+                        currentRow++;
+                        currentCol = pos.col; // Reset column for new line
                     }
+                    
                     render();
                 }
             } else if (currentTool === 'freehand' || currentTool === 'eraser') {
@@ -1744,7 +1864,7 @@
         // Initialize
         loadConfig();
         initCanvas();
-        setTool('select');
+        setTool('freehand');
     </script>
 </body>
 </html>
