@@ -158,6 +158,56 @@
             border-color: #00d4aa;
             color: #0a0a0a;
         }
+        
+        .tool-btn.enhanced {
+            background: linear-gradient(135deg, #00d4aa, #00f5c2);
+            border-color: #00d4aa;
+            color: #0a0a0a;
+            box-shadow: 0 0 15px rgba(0, 212, 170, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tool-btn.enhanced::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+        
+        .tool-btn.enhanced.active {
+            background: linear-gradient(135deg, #00f5c2, #00d4aa);
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+        }
+        
+        .tool-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #ff6b6b;
+            color: white;
+            font-size: 8px;
+            font-weight: 600;
+            padding: 2px 4px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
 
         .tool-icon {
             font-size: 18px;
@@ -244,18 +294,36 @@
             <header class="header">
                 <a href="#" class="logo">ASCII Studio</a>
                 <div>
-                    <span style="background: #00d4aa; color: #0a0a0a; padding: 2px 6px; border-radius: 4px; font-size: 10px;">v11.0</span>
+                    <span style="background: #00d4aa; color: #0a0a0a; padding: 2px 6px; border-radius: 4px; font-size: 10px;">v12.2</span>
                 </div>
             </header>
 
-            <!-- Drawing Tools -->
+            <!-- Enhanced Freehand Status -->
+            <section class="tool-section" style="background: linear-gradient(135deg, rgba(0, 212, 170, 0.1), rgba(0, 245, 194, 0.1)); border: 1px solid rgba(0, 212, 170, 0.3);">
+                <h3 style="color: #00d4aa;">✨ Enhanced Freehand</h3>
+                <div style="padding: 8px; text-align: center;">
+                    <div style="font-size: 11px; color: #00d4aa; margin-bottom: 4px;">🎯 60fps Performance</div>
+                    <div style="font-size: 11px; color: #00f5c2; margin-bottom: 4px;">🖌️ Bresenham Algorithm</div>
+                    <div style="font-size: 11px; color: #ffffff;">📐 Pixel-Perfect Drawing</div>
+                </div>
+            </section>
+
+            <!-- Primary Drawing Tool -->
             <section class="tool-section">
-                <h3>🎨 Tools</h3>
-                <div class="tool-grid">
-                    <button class="tool-btn active" data-tool="freehand">
+                <h3>🎨 Primary Tool</h3>
+                <div class="tool-grid" style="grid-template-columns: 1fr;">
+                    <button class="tool-btn active enhanced" data-tool="freehand">
                         <span class="tool-icon">✏️</span>
-                        <span class="tool-label">Freehand</span>
+                        <span class="tool-label">Freehand Drawing</span>
+                        <span class="tool-badge">ENHANCED</span>
                     </button>
+                </div>
+            </section>
+
+            <!-- Secondary Tools -->
+            <section class="tool-section">
+                <h3>🛠️ Additional Tools</h3>
+                <div class="tool-grid">
                     <button class="tool-btn" data-tool="line">
                         <span class="tool-icon">📏</span>
                         <span class="tool-label">Line</span>
