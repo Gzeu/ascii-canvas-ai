@@ -620,7 +620,7 @@
         }
         
         function drawLine(x0, y0, x1, y1, char) {
-            saveUndo();
+            // Don't save undo here - it's handled at the start of freehand drawing
             
             var dx = Math.abs(x1 - x0);
             var dy = Math.abs(y1 - y0);
@@ -932,7 +932,7 @@
             lastPos = startPos;
 
             if (currentTool === 'freehand') {
-                saveUndo();
+                saveUndo(); // Save undo only once at start of drawing
                 drawChar(startPos.row, startPos.col, currentChar);
             } else if (currentTool === 'text') {
                 startTextInput(startPos.row, startPos.col);
@@ -977,8 +977,10 @@
             var endPos = getMousePos(e);
 
             if (currentTool === 'line') {
+                saveUndo(); // Save undo for line tool
                 drawLine(startPos.col, startPos.row, endPos.col, endPos.row);
             } else if (currentTool === 'rectangle') {
+                saveUndo(); // Save undo for rectangle tool
                 drawRectangle(startPos.col, startPos.row, endPos.col, endPos.row, currentChar, false);
             } else if (currentTool === 'select' && selection) {
                 // Normalize selection
