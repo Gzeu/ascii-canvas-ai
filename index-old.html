@@ -9,71 +9,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Color System */
-            --bg-primary: #0a0a0a;
+            --bg-primary: #0f0f0f;
             --bg-surface: #1a1a1a;
-            --bg-surface-2: #2a2a2a;
-            --bg-surface-3: #3a3a3a;
-            --border: #4a4a4a;
+            --bg-surface-2: #252525;
+            --border: #3a3a3a;
             --border-subtle: #2a2a2a;
-            
-            /* Brand Colors */
             --accent: #00d4aa;
             --accent-hover: #00f5c2;
             --accent-light: rgba(0, 212, 170, 0.1);
-            --accent-gradient: linear-gradient(135deg, #00d4aa, #00a8cc);
-            
-            /* Semantic Colors */
-            --success: #00c896;
-            --warning: #ffb347;
-            --error: #ff6b6b;
-            --info: #4dabf7;
-            
-            /* Text Colors */
             --text-primary: #ffffff;
             --text-secondary: #b0b0b0;
             --text-tertiary: #808080;
-            --text-inverse: #0a0a0a;
-            
-            /* Typography */
             --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-            --font-size-xs: 11px;
-            --font-size-sm: 12px;
-            --font-size-base: 14px;
-            --font-size-lg: 16px;
-            --font-size-xl: 18px;
-            
-            /* Spacing */
-            --space-xs: 4px;
             --space-sm: 8px;
-            --space-md: 12px;
-            --space-lg: 16px;
-            --space-xl: 20px;
-            --space-2xl: 24px;
-            
-            /* Border Radius */
+            --space-md: 16px;
+            --space-lg: 24px;
             --radius-sm: 4px;
-            --radius-md: 6px;
-            --radius-lg: 8px;
-            --radius-xl: 12px;
-            
-            /* Transitions */
+            --radius-md: 8px;
             --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
-            
-            /* Shadows */
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.25);
-            --shadow-glow: 0 0 20px rgba(0, 212, 170, 0.3);
         }
 
-        /* =============================================
-           BASE STYLES
-           ============================================= */
-        
         * {
             margin: 0;
             padding: 0;
@@ -88,16 +44,8 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            font-size: var(--font-size-base);
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* =============================================
-           LAYOUT COMPONENTS
-           ============================================= */
-        
         .app-container {
             display: flex;
             height: 100vh;
@@ -105,7 +53,7 @@
         }
 
         .left-panel {
-            width: 360px;
+            width: 320px;
             background: var(--bg-surface);
             border-right: 1px solid var(--border-subtle);
             display: flex;
@@ -124,42 +72,19 @@
         .header {
             background: var(--bg-surface);
             border-bottom: 1px solid var(--border-subtle);
-            padding: var(--space-md) var(--space-xl);
+            padding: var(--space-md) var(--space-lg);
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-shrink: 0;
-            min-height: 60px;
         }
 
         .logo {
             font-family: var(--font-mono);
-            font-size: var(--font-size-lg);
+            font-size: 16px;
             font-weight: 600;
             color: var(--accent);
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-        }
-
-        .logo-icon {
-            font-size: var(--font-size-xl);
-        }
-
-        .header-info {
-            display: flex;
-            gap: var(--space-md);
-            align-items: center;
-        }
-
-        .info-badge {
-            background: var(--accent);
-            color: var(--text-inverse);
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-md);
-            font-size: var(--font-size-xs);
-            font-weight: 500;
         }
 
         .canvas-container {
@@ -178,13 +103,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: 
-                linear-gradient(45deg, #1a1a1a 25%, transparent 25%),
-                linear-gradient(-45deg, #1a1a1a 25%, transparent 25%),
-                linear-gradient(45deg, transparent 75%, #1a1a1a 75%),
-                linear-gradient(-45deg, transparent 75%, #1a1a1a 75%);
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
         }
 
         #canvas {
@@ -194,57 +112,36 @@
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
-            will-change: transform;
-            transform-origin: 0 0;
-            transition: transform var(--transition-fast);
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-lg);
+            background: #0f0f0f;
             cursor: crosshair;
         }
 
         .status-bar {
             background: var(--bg-surface);
             border-top: 1px solid var(--border-subtle);
-            padding: var(--space-sm) var(--space-xl);
+            padding: var(--space-sm) var(--space-lg);
             display: flex;
             align-items: center;
-            gap: var(--space-lg);
+            gap: var(--space-md);
             font-family: var(--font-mono);
-            font-size: var(--font-size-xs);
+            font-size: 11px;
             color: var(--text-secondary);
-            min-height: 32px;
         }
 
-        /* =============================================
-           TOOL PANEL COMPONENTS
-           ============================================= */
-        
         .tool-section {
-            padding: var(--space-lg);
+            padding: var(--space-md);
             border-bottom: 1px solid var(--border-subtle);
-        }
-
-        .tool-section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: var(--space-md);
         }
 
         .tool-section h3 {
             font-family: var(--font-sans);
-            font-size: var(--font-size-sm);
+            font-size: 12px;
             font-weight: 600;
             color: var(--text-primary);
+            margin-bottom: var(--space-md);
             display: flex;
             align-items: center;
-            gap: var(--space-xs);
-            margin: 0;
-        }
-
-        .tool-section-icon {
-            font-size: var(--font-size-base);
+            gap: 4px;
         }
 
         .tool-grid {
@@ -253,266 +150,98 @@
             gap: var(--space-sm);
         }
 
-        .tool-grid-2x {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .tool-grid-4x {
-            grid-template-columns: repeat(4, 1fr);
-        }
-
-        .tool-grid-8x {
-            grid-template-columns: repeat(8, 1fr);
-            gap: 4px;
-        }
-
         .tool-btn {
             background: var(--bg-surface-2);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
-            padding: var(--space-md);
+            padding: var(--space-sm);
             border-radius: var(--radius-md);
             cursor: pointer;
             font-family: var(--font-sans);
-            font-size: var(--font-size-xs);
+            font-size: 11px;
             font-weight: 500;
             transition: var(--transition-fast);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: var(--space-xs);
-            min-height: 64px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tool-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--accent-gradient);
-            opacity: 0;
-            transition: opacity var(--transition-fast);
+            gap: 4px;
+            min-height: 60px;
         }
 
         .tool-btn:hover {
-            background: var(--bg-surface-3);
+            background: var(--bg-surface-2);
             border-color: var(--accent);
             color: var(--text-primary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .tool-btn:hover::before {
-            opacity: 0.1;
+            transform: translateY(-1px);
         }
 
         .tool-btn.active {
             background: var(--accent);
             border-color: var(--accent);
-            color: var(--text-inverse);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .tool-btn.active::before {
-            opacity: 1;
+            color: #0f0f0f;
         }
 
         .tool-icon {
-            font-size: var(--font-size-lg);
+            font-size: 18px;
             line-height: 1;
-            z-index: 1;
         }
 
         .tool-label {
-            font-size: var(--font-size-xs);
+            font-size: 10px;
             text-align: center;
             line-height: 1.2;
-            z-index: 1;
         }
 
-        /* =============================================
-           CHARACTER PALETTE
-           ============================================= */
-        
-        #char-palette .tool-btn {
-            min-height: 40px;
-            padding: var(--space-sm);
-            font-size: var(--font-size-sm);
+        #char-palette {
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
         }
 
-        #char-palette .tool-btn.active {
-            background: var(--accent);
-            color: var(--text-inverse);
-        }
-
-        /* =============================================
-           INPUT COMPONENTS
-           ============================================= */
-        
-        .input-group {
-            margin-bottom: var(--space-md);
-        }
-
-        .input-label {
-            display: block;
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-xs);
-        }
-
-        .input-field {
+        #apiKey {
             width: 100%;
-            padding: var(--space-sm);
+            padding: 8px;
             background: var(--bg-surface-2);
             border: 1px solid var(--border);
             color: var(--text-primary);
             border-radius: var(--radius-md);
             font-family: var(--font-mono);
-            font-size: var(--font-size-sm);
-            transition: var(--transition-fast);
+            margin-bottom: 8px;
         }
 
-        .input-field:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px var(--accent-light);
-        }
-
-        /* =============================================
-           AI STATUS
-           ============================================= */
-        
         #aiStatus {
             display: none;
         }
 
         #aiStatusContent {
-            padding: var(--space-md);
+            padding: 8px;
             background: var(--bg-surface-2);
             border-radius: var(--radius-md);
-            font-size: var(--font-size-xs);
+            font-size: 11px;
             color: var(--text-secondary);
-            border: 1px solid var(--border);
-            min-height: 60px;
         }
 
-        /* =============================================
-           HEADER BUTTONS
-           ============================================= */
-        
+        .header-info {
+            display: flex;
+            gap: var(--space-sm);
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 11px;
+        }
+
         .header-btn {
-            background: var(--bg-surface-2);
-            color: var(--text-secondary);
-            padding: var(--space-xs) var(--space-sm);
+            background: var(--accent);
+            color: #0f0f0f;
+            padding: 4px 8px;
             border-radius: var(--radius-md);
-            font-size: var(--font-size-xs);
+            font-size: 10px;
             font-weight: 500;
             cursor: pointer;
-            border: 1px solid var(--border-subtle);
+            border: none;
             font-family: var(--font-mono);
-            transition: var(--transition-fast);
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
         }
 
         .header-btn:hover {
-            background: var(--accent);
-            color: var(--text-inverse);
-            border-color: var(--accent);
-        }
-
-        .header-btn:active {
-            transform: translateY(1px);
-        }
-
-        /* =============================================
-           TOOLBAR
-           ============================================= */
-        
-        .toolbar {
-            background: var(--bg-surface);
-            border-bottom: 1px solid var(--border-subtle);
-            padding: var(--space-sm) var(--space-lg);
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-            flex-wrap: wrap;
-        }
-
-        .toolbar-group {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            padding: 0 var(--space-sm);
-            border-right: 1px solid var(--border-subtle);
-        }
-
-        .toolbar-group:last-child {
-            border-right: none;
-        }
-
-        .toolbar-btn {
-            background: var(--bg-surface-2);
-            color: var(--text-secondary);
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-sm);
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-            cursor: pointer;
-            border: 1px solid var(--border-subtle);
-            font-family: var(--font-sans);
-            transition: var(--transition-fast);
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-        }
-
-        .toolbar-btn:hover {
-            background: var(--accent);
-            color: var(--text-inverse);
-            border-color: var(--accent);
-        }
-
-        .toolbar-btn.active {
-            background: var(--accent);
-            color: var(--text-inverse);
-        }
-
-        /* =============================================
-           MOBILE RESPONSIVE
-           ============================================= */
-        
-        @media (max-width: 768px) {
-            .left-panel {
-                width: 320px;
-            }
-            
-            .tool-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .left-panel {
-                position: absolute;
-                z-index: 200;
-                transform: translateX(-100%);
-                transition: transform var(--transition-normal);
-            }
-            
-            .left-panel.mobile-open {
-                transform: translateX(0);
-            }
-            
-            .tool-grid {
-                grid-template-columns: 1fr;
-            }
+            background: var(--accent-hover);
         }
     </style>
 </head>
@@ -522,45 +251,17 @@
         <aside class="left-panel">
             <!-- Header -->
             <header class="header">
-                <a href="#" class="logo">
-                    <span class="logo-icon">🎨</span>
-                    ASCII Studio
-                </a>
+                <a href="#" class="logo">ASCII Studio</a>
                 <div class="header-info">
-                    <span class="info-badge">v10.0</span>
+                    <span style="background: var(--accent); color: #0f0f0f; padding: 2px 6px; border-radius: 4px; font-size: 10px;">v9.3</span>
                 </div>
             </header>
 
-            <!-- Toolbar -->
-            <div class="toolbar">
-                <div class="toolbar-group">
-                    <button class="toolbar-btn" id="undoBtn" title="Undo">
-                        <span>↶</span>
-                    </button>
-                    <button class="toolbar-btn" id="redoBtn" title="Redo">
-                        <span>↷</span>
-                    </button>
-                </div>
-                <div class="toolbar-group">
-                    <button class="toolbar-btn" id="saveBtn" title="Save">
-                        <span>💾</span>
-                    </button>
-                    <button class="toolbar-btn" id="loadBtn" title="Load">
-                        <span>📁</span>
-                    </button>
-                </div>
-            </div>
-
             <!-- Drawing Tools -->
             <section class="tool-section">
-                <div class="tool-section-header">
-                    <h3>
-                        <span class="tool-section-icon">🎨</span>
-                        Drawing Tools
-                    </h3>
-                </div>
+                <h3>🎨 Drawing Tools</h3>
                 <div class="tool-grid">
-                    <button class="tool-btn active" data-tool="freehand">
+                    <button class="tool-btn" data-tool="freehand">
                         <span class="tool-icon">✏️</span>
                         <span class="tool-label">Freehand</span>
                     </button>
@@ -571,18 +272,6 @@
                     <button class="tool-btn" data-tool="rectangle">
                         <span class="tool-icon">▢</span>
                         <span class="tool-label">Rectangle</span>
-                    </button>
-                    <button class="tool-btn" data-tool="filled-rectangle">
-                        <span class="tool-icon">▣</span>
-                        <span class="tool-label">Filled Rect</span>
-                    </button>
-                    <button class="tool-btn" data-tool="circle">
-                        <span class="tool-icon">○</span>
-                        <span class="tool-label">Circle</span>
-                    </button>
-                    <button class="tool-btn" data-tool="ellipse">
-                        <span class="tool-icon">⬭</span>
-                        <span class="tool-label">Ellipse</span>
                     </button>
                     <button class="tool-btn" data-tool="text">
                         <span class="tool-icon">📝</span>
@@ -599,58 +288,13 @@
                 </div>
             </section>
 
-            <!-- Brush Settings -->
-            <section class="tool-section">
-                <div class="tool-section-header">
-                    <h3>
-                        <span class="tool-section-icon">🖌️</span>
-                        Brush Settings
-                    </h3>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Brush Size</label>
-                    <select class="input-field" id="brushSize">
-                        <option value="1">1px (Fine)</option>
-                        <option value="2">2px (Small)</option>
-                        <option value="3">3px (Medium)</option>
-                        <option value="4">4px (Large)</option>
-                        <option value="5">5px (Extra Large)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Brush Style</label>
-                    <select class="input-field" id="brushStyle">
-                        <option value="solid">Solid</option>
-                        <option value="dotted">Dotted</option>
-                        <option value="dashed">Dashed</option>
-                        <option value="shaded">Shaded</option>
-                    </select>
-                </div>
-            </section>
-
-            <!-- Character Palette -->
-            <section class="tool-section">
-                <div class="tool-section-header">
-                    <h3>
-                        <span class="tool-section-icon">✦</span>
-                        Character Palette
-                    </h3>
-                </div>
-                <div id="char-palette" class="tool-grid-8x"></div>
-            </section>
-
             <!-- Quick Actions -->
             <section class="tool-section">
-                <div class="tool-section-header">
-                    <h3>
-                        <span class="tool-section-icon">⚡</span>
-                        Quick Actions
-                    </h3>
-                </div>
-                <div class="tool-grid tool-grid-2x">
+                <h3>⚡ Quick Actions</h3>
+                <div class="tool-grid">
                     <button class="tool-btn" data-action="clear">
                         <span class="tool-icon">🗑️</span>
-                        <span class="tool-label">Clear Canvas</span>
+                        <span class="tool-label">Clear</span>
                     </button>
                     <button class="tool-btn" data-action="fill-all">
                         <span class="tool-icon">🪣</span>
@@ -660,17 +304,9 @@
                         <span class="tool-icon">🔄</span>
                         <span class="tool-label">Invert</span>
                     </button>
-                    <button class="tool-btn" data-action="mirror-h">
+                    <button class="tool-btn" data-action="mirror">
                         <span class="tool-icon">🪞</span>
-                        <span class="tool-label">Mirror H</span>
-                    </button>
-                    <button class="tool-btn" data-action="mirror-v">
-                        <span class="tool-icon">↕️</span>
-                        <span class="tool-label">Mirror V</span>
-                    </button>
-                    <button class="tool-btn" data-action="rotate">
-                        <span class="tool-icon">🔄</span>
-                        <span class="tool-label">Rotate</span>
+                        <span class="tool-label">Mirror</span>
                     </button>
                     <button class="tool-btn" data-action="center">
                         <span class="tool-icon">⊕</span>
@@ -678,20 +314,21 @@
                     </button>
                     <button class="tool-btn" data-action="random">
                         <span class="tool-icon">🎲</span>
-                        <span class="tool-label">Random Art</span>
+                        <span class="tool-label">Random</span>
                     </button>
                 </div>
             </section>
 
+            <!-- Character Palette -->
+            <div class="tool-section">
+                <h3>✦ Character Palette</h3>
+                <div id="char-palette" class="tool-grid"></div>
+            </div>
+
             <!-- AI Assistant -->
-            <section class="tool-section">
-                <div class="tool-section-header">
-                    <h3>
-                        <span class="tool-section-icon">🤖</span>
-                        AI Assistant
-                    </h3>
-                </div>
-                <div class="tool-grid tool-grid-2x">
+            <div class="tool-section">
+                <h3>🤖 AI Assistant</h3>
+                <div class="tool-grid">
                     <button class="tool-btn" data-action="ai-generate">
                         <span class="tool-icon">🎨</span>
                         <span class="tool-label">Generate</span>
@@ -704,41 +341,27 @@
                         <span class="tool-icon">🔮</span>
                         <span class="tool-label">Complete</span>
                     </button>
-                    <button class="tool-btn" data-action="ai-style">
-                        <span class="tool-icon">🎭</span>
-                        <span class="tool-label">Style</span>
-                    </button>
                 </div>
-                <div class="input-group" style="margin-top: var(--space-md);">
-                    <label class="input-label">OpenAI API Key</label>
-                    <input type="password" class="input-field" id="apiKey" placeholder="Enter your API key">
-                    <button class="tool-btn" id="saveApiKey" style="width: 100%; margin-top: var(--space-sm);">
+                <div class="tool-section" style="margin-top: 8px;">
+                    <h3>🔑 API Key</h3>
+                    <input type="password" id="apiKey" placeholder="Enter OpenAI API Key">
+                    <button class="tool-btn" id="saveApiKey" style="width: 100%;">
                         <span class="tool-icon">💾</span>
-                        <span class="tool-label">Save API Key</span>
+                        <span class="tool-label">Save Key</span>
                     </button>
                 </div>
-            </section>
+            </div>
 
             <!-- AI Status -->
-            <section class="tool-section" id="aiStatus">
-                <div class="tool-section-header">
-                    <h3>
-                        <span class="tool-section-icon">🤖</span>
-                        AI Status
-                    </h3>
-                </div>
+            <div class="tool-section" id="aiStatus">
+                <h3>🤖 AI Status</h3>
                 <div id="aiStatusContent"></div>
-            </section>
+            </div>
 
             <!-- Export Options -->
             <section class="tool-section">
-                <div class="tool-section-header">
-                    <h3>
-                        <span class="tool-section-icon">💾</span>
-                        Export Options
-                    </h3>
-                </div>
-                <div class="tool-grid tool-grid-2x">
+                <h3>💾 Export</h3>
+                <div class="tool-grid">
                     <button class="tool-btn" data-export="ascii">
                         <span class="tool-icon">📄</span>
                         <span class="tool-label">ASCII</span>
@@ -746,10 +369,6 @@
                     <button class="tool-btn" data-export="png">
                         <span class="tool-icon">🖼️</span>
                         <span class="tool-label">PNG</span>
-                    </button>
-                    <button class="tool-btn" data-export="svg">
-                        <span class="tool-icon">🎨</span>
-                        <span class="tool-label">SVG</span>
                     </button>
                     <button class="tool-btn" data-export="txt">
                         <span class="tool-icon">📝</span>
@@ -767,12 +386,11 @@
                     <span>Position: <span id="cursorPos">0, 0</span></span>
                     <span>Tool: <span id="currentTool">Freehand</span></span>
                     <span>Zoom: <span id="zoomLevel">100%</span></span>
-                    <span>Size: <span id="canvasSize">200×80</span></span>
                 </div>
                 <div class="header-info">
-                    <button class="header-btn" id="zoomInBtn">🔍+</button>
-                    <button class="header-btn" id="zoomOutBtn">🔍-</button>
-                    <button class="header-btn" id="zoomResetBtn">100%</button>
+                    <button class="header-btn" id="undoBtn">↶ Undo</button>
+                    <button class="header-btn" id="redoBtn">↷ Redo</button>
+                    <button class="header-btn" id="saveBtn">💾 Save</button>
                 </div>
             </header>
 
@@ -785,19 +403,16 @@
 
             <!-- Status Bar -->
             <footer class="status-bar">
+                <span>Size: <span id="canvasSize">200×80</span></span>
                 <span>Chars: <span id="charCount">0</span></span>
                 <span>Lines: <span id="lineCount">0</span></span>
                 <span>Selection: <span id="selectionInfo">None</span></span>
-                <span>Brush: <span id="brushInfo">1px Solid</span></span>
             </footer>
         </main>
     </div>
 
     <script>
-        // =============================================
-           CANVAS SETUP
-           =============================================
-        
+        // CANVAS SETUP
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d');
         
@@ -806,7 +421,6 @@
         var ROWS = 80;
         var charWidth = 8;
         var charHeight = 12;
-        var zoomLevel = 1.0;
         
         canvas.width = COLS * charWidth;
         canvas.height = ROWS * charHeight;
@@ -830,31 +444,23 @@
         var undoStack = [];
         var redoStack = [];
         var MAX_HISTORY = 50;
-        var brushSize = 1;
-        var brushStyle = 'solid';
-        var drawingPath = [];
         
         // Character palette
         var charPalette = [
             ' ', '.', ',', ':', ';', '-', '=', '+', '*', '#', '@', '%', '$', '&', '0', 'O',
             '│', '─', '┌', '┐', '└', '┘', '├', '┤', '┬', '┴', '┼', '╭', '╮', '╰', '╯',
             '█', '▓', '▒', '░', '■', '□', '◆', '◇', '▲', '▼', '▶', '◀', '★', '☆', '→', '←',
-            '(', ')', '[', ']', '{', '}', '<', '>', '/', '\\', '|', '_', '~', '`', '"', "'",
-            '·', '•', '◦', '○', '●', '◐', '◑', '◒', '◓', '◔', '◕', '◖', '◗', '◘', '◙', '◚',
-            '±', '×', '÷', '≠', '≤', '≥', '∞', '∑', '∏', '∫', '√', '∆', '∇', '∂', '∀', '∃',
-            'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π',
-            'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ'
+            '(', ')', '[', ']', '{', '}', '<', '>', '/', '\\', '|', '_', '~', '`', '"', "'"
         ];
         
-        // =============================================
-           CHARACTER PALETTE
-           =============================================
-        
+        // CHARACTER PALETTE
         function initCharPalette() {
             var palette = document.getElementById('char-palette');
             charPalette.forEach(function(ch, i) {
                 var btn = document.createElement('button');
                 btn.className = 'tool-btn';
+                btn.style.fontSize = '16px';
+                btn.style.padding = '8px';
                 btn.textContent = ch === ' ' ? '␣' : ch;
                 btn.title = ch === ' ' ? 'Space' : ch;
                 if (i === selectedCharIndex) btn.classList.add('active');
@@ -867,26 +473,18 @@
                         b.classList.remove('active'); 
                     });
                     btn.classList.add('active');
-                    updateBrushInfo();
                 });
                 
                 palette.appendChild(btn);
             });
         }
         
-        // =============================================
-           RENDERING SYSTEM
-           =============================================
-        
+        // RENDERING SYSTEM
         function render() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Apply zoom
-            ctx.save();
-            ctx.scale(zoomLevel, zoomLevel);
-            
             // Draw background
-            ctx.fillStyle = '#0a0a0a';
+            ctx.fillStyle = '#0f0f0f';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             // Draw grid
@@ -914,14 +512,10 @@
                 );
             }
             
-            ctx.restore();
             updateInfo();
         }
         
-        // =============================================
-           INFO UPDATES
-           =============================================
-        
+        // INFO UPDATES
         function updateInfo() {
             document.getElementById('cursorPos').textContent = 
                 lastPos ? lastPos.col + ', ' + lastPos.row : '0, 0';
@@ -933,7 +527,7 @@
                 toolName += ' (space)';
             }
             document.getElementById('currentTool').textContent = toolName;
-            document.getElementById('zoomLevel').textContent = Math.round(zoomLevel * 100) + '%';
+            document.getElementById('zoomLevel').textContent = '100%';
             
             // Count characters and lines
             var charCount = 0;
@@ -966,52 +560,11 @@
             }
         }
         
-        function updateBrushInfo() {
-            var sizeText = brushSize + 'px';
-            var styleText = brushStyle.charAt(0).toUpperCase() + brushStyle.slice(1);
-            document.getElementById('brushInfo').textContent = sizeText + ' ' + styleText;
-        }
-        
-        // =============================================
-           DRAWING FUNCTIONS
-           =============================================
-        
+        // DRAWING FUNCTIONS
         function drawChar(row, col, char) {
             if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
                 grid[row][col] = char;
                 render();
-            }
-        }
-        
-        function drawBrush(row, col) {
-            if (brushSize === 1) {
-                drawChar(row, col, currentChar);
-                return;
-            }
-            
-            var radius = Math.floor(brushSize / 2);
-            for (var r = -radius; r <= radius; r++) {
-                for (var c = -radius; c <= radius; c++) {
-                    var targetRow = row + r;
-                    var targetCol = col + c;
-                    
-                    // Apply brush style
-                    var shouldDraw = false;
-                    if (brushStyle === 'solid') {
-                        shouldDraw = true;
-                    } else if (brushStyle === 'dotted') {
-                        shouldDraw = (r + c) % 2 === 0;
-                    } else if (brushStyle === 'dashed') {
-                        shouldDraw = r % 2 === 0 || c % 2 === 0;
-                    } else if (brushStyle === 'shaded') {
-                        var distance = Math.sqrt(r * r + c * c);
-                        shouldDraw = distance <= radius && (r + c) % 3 === 0;
-                    }
-                    
-                    if (shouldDraw) {
-                        drawChar(targetRow, targetCol, currentChar);
-                    }
-                }
             }
         }
         
@@ -1063,28 +616,12 @@
             render();
         }
         
-        function drawCircle(centerX, centerY, radius, char, filled) {
-            saveUndo();
-            
-            for (var y = 0; y < ROWS; y++) {
-                for (var x = 0; x < COLS; x++) {
-                    var distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
-                    var shouldDraw = filled ? distance <= radius : Math.abs(distance - radius) < 1;
-                    
-                    if (shouldDraw && y >= 0 && y < ROWS && x >= 0 && x < COLS) {
-                        grid[y][x] = char || currentChar;
-                    }
-                }
-            }
-            render();
-        }
-        
         function startTextInput(row, col) {
             var input = document.createElement('input');
             input.type = 'text';
             input.style.position = 'absolute';
-            input.style.left = canvas.offsetLeft + col * charWidth * zoomLevel + 2 + 'px';
-            input.style.top = canvas.offsetTop + row * charHeight * zoomLevel - 2 + 'px';
+            input.style.left = canvas.offsetLeft + col * charWidth + 2 + 'px';
+            input.style.top = canvas.offsetTop + row * charHeight - 2 + 'px';
             input.style.font = '12px JetBrains Mono';
             input.style.background = 'rgba(0, 212, 170, 0.25)';
             input.style.color = '#fff';
@@ -1163,15 +700,12 @@
         function getMousePos(e) {
             var rect = canvas.getBoundingClientRect();
             return {
-                col: Math.floor((e.clientX - rect.left) / (charWidth * zoomLevel)),
-                row: Math.floor((e.clientY - rect.top) / (charHeight * zoomLevel))
+                col: Math.floor((e.clientX - rect.left) / charWidth),
+                row: Math.floor((e.clientY - rect.top) / charHeight)
             };
         }
         
-        // =============================================
-           TOOL FUNCTIONS
-           =============================================
-        
+        // TOOL FUNCTIONS
         function setTool(tool) {
             currentTool = tool;
             document.querySelectorAll('.tool-btn').forEach(function(btn) {
@@ -1230,16 +764,7 @@
             }
         }
         
-        function setZoom(level) {
-            zoomLevel = Math.max(0.5, Math.min(3.0, level));
-            canvas.style.transform = 'scale(' + zoomLevel + ')';
-            render();
-        }
-        
-        // =============================================
-           AI FUNCTIONS
-           =============================================
-        
+        // AI FUNCTIONS
         function updateAIStatus(message, type) {
             type = type || 'info';
             var statusDiv = document.getElementById('aiStatus');
@@ -1308,10 +833,7 @@
             });
         }
         
-        // =============================================
-           EXPORT FUNCTIONS
-           =============================================
-        
+        // EXPORT FUNCTIONS
         function exportASCII() {
             var content = grid.map(function(row) { 
                 return row.join(''); 
@@ -1332,51 +854,12 @@
             link.click();
         }
         
-        function exportSVG() {
-            var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + canvas.width + '" height="' + canvas.height + '">';
-            svg += '<rect width="100%" height="100%" fill="#0a0a0a"/>';
-            svg += '<text x="0" y="0" font-family="JetBrains Mono" font-size="12" fill="white">';
-            
-            for (var row = 0; row < ROWS; row++) {
-                for (var col = 0; col < COLS; col++) {
-                    var char = grid[row][col];
-                    if (char !== ' ') {
-                        svg += '<tspan x="' + (col * charWidth) + '" y="' + ((row + 1) * charHeight) + '">' + char + '</tspan>';
-                    }
-                }
-            }
-            
-            svg += '</text></svg>';
-            
-            var blob = new Blob([svg], { type: 'image/svg+xml' });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = 'ascii-art-' + Date.now() + '.svg';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-        
-        // =============================================
-           EVENT LISTENERS
-           =============================================
-        
+        // EVENT LISTENERS
         // Tool selection
         document.querySelectorAll('[data-tool]').forEach(function(btn) {
             btn.addEventListener('click', function() {
                 setTool(btn.dataset.tool);
             });
-        });
-        
-        // Brush settings
-        document.getElementById('brushSize').addEventListener('change', function(e) {
-            brushSize = parseInt(e.target.value);
-            updateBrushInfo();
-        });
-        
-        document.getElementById('brushStyle').addEventListener('change', function(e) {
-            brushStyle = e.target.value;
-            updateBrushInfo();
         });
         
         // Quick actions
@@ -1398,90 +881,6 @@
                                 if (char !== ' ') {
                                     grid[r][c] = char === char.toUpperCase() ? 
                                         char.toLowerCase() : char.toUpperCase();
-                                }
-                            }
-                        }
-                        render();
-                        break;
-                    case 'mirror-h':
-                        saveUndo();
-                        for (var r = 0; r < ROWS; r++) {
-                            for (var c = 0; c < Math.floor(COLS / 2); c++) {
-                                var temp = grid[r][c];
-                                grid[r][c] = grid[r][COLS - 1 - c];
-                                grid[r][COLS - 1 - c] = temp;
-                            }
-                        }
-                        render();
-                        break;
-                    case 'mirror-v':
-                        saveUndo();
-                        for (var r = 0; r < Math.floor(ROWS / 2); r++) {
-                            var temp = grid[r];
-                            grid[r] = grid[ROWS - 1 - r];
-                            grid[ROWS - 1 - r] = temp;
-                        }
-                        render();
-                        break;
-                    case 'rotate':
-                        saveUndo();
-                        var newGrid = Array(COLS).fill(null).map(function() { 
-                            return Array(ROWS).fill(' '); 
-                        });
-                        for (var r = 0; r < ROWS; r++) {
-                            for (var c = 0; c < COLS; c++) {
-                                newGrid[c][ROWS - 1 - r] = grid[r][c];
-                            }
-                        }
-                        grid = newGrid;
-                        var temp = COLS;
-                        COLS = ROWS;
-                        ROWS = temp;
-                        canvas.width = COLS * charWidth;
-                        canvas.height = ROWS * charHeight;
-                        render();
-                        break;
-                    case 'center':
-                        saveUndo();
-                        var minX = COLS, maxX = 0, minY = ROWS, maxY = 0;
-                        for (var r = 0; r < ROWS; r++) {
-                            for (var c = 0; c < COLS; c++) {
-                                if (grid[r][c] !== ' ') {
-                                    minX = Math.min(minX, c);
-                                    maxX = Math.max(maxX, c);
-                                    minY = Math.min(minY, r);
-                                    maxY = Math.max(maxY, r);
-                                }
-                            }
-                        }
-                        if (minX <= maxX && minY <= maxY) {
-                            var width = maxX - minX + 1;
-                            var height = maxY - minY + 1;
-                            var offsetX = Math.floor((COLS - width) / 2) - minX;
-                            var offsetY = Math.floor((ROWS - height) / 2) - minY;
-                            var newGrid = Array(ROWS).fill(null).map(function() { 
-                                return Array(COLS).fill(' '); 
-                            });
-                            for (var r = 0; r < ROWS; r++) {
-                                for (var c = 0; c < COLS; c++) {
-                                    var newR = r + offsetY;
-                                    var newC = c + offsetX;
-                                    if (newR >= 0 && newR < ROWS && newC >= 0 && newC < COLS) {
-                                        newGrid[newR][newC] = grid[r][c];
-                                    }
-                                }
-                            }
-                            grid = newGrid;
-                            render();
-                        }
-                        break;
-                    case 'random':
-                        saveUndo();
-                        var chars = ['*', '#', '@', '%', '&', '+', '=', ':', '.', 'o'];
-                        for (var r = 0; r < ROWS; r++) {
-                            for (var c = 0; c < COLS; c++) {
-                                if (Math.random() < 0.1) {
-                                    grid[r][c] = chars[Math.floor(Math.random() * chars.length)];
                                 }
                             }
                         }
@@ -1514,9 +913,6 @@
                     case 'ai-complete':
                         updateAIStatus('🔮 Select an area to complete', 'info');
                         break;
-                    case 'ai-style':
-                        updateAIStatus('🎭 Select an area to apply style', 'info');
-                        break;
                 }
             });
         });
@@ -1531,9 +927,6 @@
                         break;
                     case 'png': 
                         exportPNG(); 
-                        break;
-                    case 'svg': 
-                        exportSVG(); 
                         break;
                     case 'txt': 
                         exportASCII(); 
@@ -1553,16 +946,14 @@
             }
         });
         
-        // Canvas mouse events - IMPROVED FREEHAND DRAWING
+        // Canvas mouse events
         canvas.addEventListener('mousedown', function(e) {
             isDrawing = true;
             startPos = getMousePos(e);
             lastPos = startPos;
-            drawingPath = [startPos];
 
             if (currentTool === 'freehand') {
-                saveUndo();
-                drawBrush(startPos.row, startPos.col);
+                drawChar(startPos.row, startPos.col, currentChar);
             } else if (currentTool === 'text') {
                 startTextInput(startPos.row, startPos.col);
                 isDrawing = false;
@@ -1588,11 +979,9 @@
             if (!isDrawing) return;
 
             if (currentTool === 'freehand') {
-                // Draw continuous line from last position to current position
                 if (pos.row !== lastPos.row || pos.col !== lastPos.col) {
-                    drawLine(lastPos.col, lastPos.row, pos.col, pos.row, currentChar);
+                    drawChar(pos.row, pos.col, currentChar);
                     lastPos = pos;
-                    drawingPath.push(pos);
                 }
             } else if (currentTool === 'select' && selection) {
                 selection.endRow = pos.row;
@@ -1611,31 +1000,6 @@
                 drawLine(startPos.col, startPos.row, endPos.col, endPos.row);
             } else if (currentTool === 'rectangle') {
                 drawRectangle(startPos.col, startPos.row, endPos.col, endPos.row, currentChar, false);
-            } else if (currentTool === 'filled-rectangle') {
-                drawRectangle(startPos.col, startPos.row, endPos.col, endPos.row, currentChar, true);
-            } else if (currentTool === 'circle') {
-                var radius = Math.round(Math.sqrt(
-                    Math.pow(endPos.col - startPos.col, 2) + 
-                    Math.pow(endPos.row - startPos.row, 2)
-                ));
-                drawCircle(startPos.col, startPos.row, radius, currentChar, false);
-            } else if (currentTool === 'ellipse') {
-                // Simple ellipse implementation
-                var radiusX = Math.abs(endPos.col - startPos.col);
-                var radiusY = Math.abs(endPos.row - startPos.row);
-                saveUndo();
-                for (var y = 0; y < ROWS; y++) {
-                    for (var x = 0; x < COLS; x++) {
-                        var normalizedX = (x - startPos.col) / radiusX;
-                        var normalizedY = (y - startPos.row) / radiusY;
-                        if (normalizedX * normalizedX + normalizedY * normalizedY <= 1) {
-                            if (y >= 0 && y < ROWS && x >= 0 && x < COLS) {
-                                grid[y][x] = currentChar;
-                            }
-                        }
-                    }
-                }
-                render();
             } else if (currentTool === 'select' && selection) {
                 // Normalize selection
                 var tempRow = selection.startRow;
@@ -1648,12 +1012,10 @@
             }
 
             startPos = null;
-            drawingPath = [];
         });
         
         canvas.addEventListener('mouseleave', function() {
             isDrawing = false;
-            drawingPath = [];
         });
         
         // Header buttons
@@ -1661,56 +1023,7 @@
         document.getElementById('redoBtn').addEventListener('click', redo);
         document.getElementById('saveBtn').addEventListener('click', exportASCII);
         
-        // Zoom controls
-        document.getElementById('zoomInBtn').addEventListener('click', function() {
-            setZoom(zoomLevel + 0.25);
-        });
-        
-        document.getElementById('zoomOutBtn').addEventListener('click', function() {
-            setZoom(zoomLevel - 0.25);
-        });
-        
-        document.getElementById('zoomResetBtn').addEventListener('click', function() {
-            setZoom(1.0);
-        });
-        
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey || e.metaKey) {
-                switch (e.key) {
-                    case 'z':
-                        e.preventDefault();
-                        if (e.shiftKey) {
-                            redo();
-                        } else {
-                            undo();
-                        }
-                        break;
-                    case 's':
-                        e.preventDefault();
-                        exportASCII();
-                        break;
-                    case '=':
-                    case '+':
-                        e.preventDefault();
-                        setZoom(zoomLevel + 0.25);
-                        break;
-                    case '-':
-                        e.preventDefault();
-                        setZoom(zoomLevel - 0.25);
-                        break;
-                    case '0':
-                        e.preventDefault();
-                        setZoom(1.0);
-                        break;
-                }
-            }
-        });
-        
-        // =============================================
-           INITIALIZATION
-           =============================================
-        
+        // INITIALIZATION
         // Initialize character palette
         initCharPalette();
         
@@ -1724,16 +1037,13 @@
         // Set initial tool
         setTool('freehand');
         
-        // Initialize brush info
-        updateBrushInfo();
-        
         // Initial render
         render();
         
         // Focus canvas for keyboard input
         canvas.focus();
         
-        console.log('ASCII Canvas Studio v10.0 - Improved UI/UX and Freehand Drawing!');
+        console.log('ASCII Canvas Studio v9.3 - All Buttons Functional!');
     </script>
 </body>
 </html>
