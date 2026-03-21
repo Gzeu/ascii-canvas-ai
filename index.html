@@ -385,7 +385,7 @@
                         <div class="template-desc">Pretty flower</div>
                     </button>
                     <button class="template-btn" data-template="tree">
-                        <div class="template-title">�🌳 Tree</div>
+                        <div class="template-title">� Tree</div>
                         <div class="template-desc">Big tree</div>
                     </button>
                     <button class="template-btn" data-template="computer">
@@ -555,6 +555,8 @@
         var undoStack = [];
         var redoStack = [];
         var MAX_HISTORY = 50;
+        var drawingPath = []; // Store drawing path for smoothing
+        var lastRenderTime = 0; // For performance optimization
         
         // Character palette
         var charPalette = [
@@ -972,6 +974,56 @@
                 grid[row][col] = char;
                 render();
             }
+        }
+        
+        // Improved freehand drawing function with smoothing
+        function drawFreehandLine(x0, y0, x1, y1, char) {
+            // Use Bresenham's algorithm for smooth lines
+            var dx = Math.abs(x1 - x0);
+            var dy = Math.abs(y1 - y0);
+            var sx = x0 < x1 ? 1 : -1;
+            var sy = y0 < y1 ? 1 : -1;
+            var err = dx - dy;
+            
+            while (true) {
+                if (x0 >= 0 && x0 < COLS && y0 >= 0 && y0 < ROWS) {
+                    grid[y0][x0] = char || currentChar;
+                }
+                if (x0 === x1 && y0 === y1) break;
+                
+                var e2 = 2 * err;
+                if (e2 > -dy) { 
+                    err -= dy; 
+                    x0 += sx; 
+                }
+                if (e2 < dx) { 
+                    err += dx; 
+                    y0 += sy; 
+                }
+            }
+        }
+        
+        // Enhanced freehand drawing with path smoothing
+        function drawSmoothFreehand(points, char) {
+            if (points.length < 2) return;
+            
+            // Draw lines between consecutive points
+            for (var i = 1; i < points.length; i++) {
+                var p0 = points[i - 1];
+                var p1 = points[i];
+                drawFreehandLine(p0.col, p0.row, p1.col, p1.row, char);
+            }
+        }
+        
+        // Performance optimized rendering
+        function optimizedRender() {
+            var now = Date.now();
+            // Limit rendering to 60fps for better performance
+            if (now - lastRenderTime < 16) {
+                return;
+            }
+            lastRenderTime = now;
+            render();
         }
         
         function drawLine(x0, y0, x1, y1, char) {
@@ -1392,6 +1444,7 @@
             isDrawing = true;
             startPos = getMousePos(e);
             lastPos = startPos;
+            drawingPath = [startPos]; // Start new drawing path
 
             if (currentTool === 'freehand') {
                 saveUndo(); // Save undo only once at start of drawing
@@ -1421,9 +1474,12 @@
             if (!isDrawing) return;
 
             if (currentTool === 'freehand') {
+                // Enhanced freehand drawing with path tracking
                 if (pos.row !== lastPos.row || pos.col !== lastPos.col) {
-                    drawLine(lastPos.col, lastPos.row, pos.col, pos.row, currentChar);
+                    drawingPath.push(pos); // Add to drawing path
+                    drawFreehandLine(lastPos.col, lastPos.row, pos.col, pos.row, currentChar);
                     lastPos = pos;
+                    optimizedRender(); // Use optimized rendering
                 }
             } else if (currentTool === 'select' && selection) {
                 selection.endRow = pos.row;
@@ -1438,7 +1494,11 @@
 
             var endPos = getMousePos(e);
 
-            if (currentTool === 'line') {
+            if (currentTool === 'freehand') {
+                // Final render after drawing is complete
+                render();
+                drawingPath = []; // Clear drawing path
+            } else if (currentTool === 'line') {
                 saveUndo(); // Save undo for line tool
                 drawLine(startPos.col, startPos.row, endPos.col, endPos.row);
             } else if (currentTool === 'rectangle') {
@@ -1456,10 +1516,12 @@
             }
 
             startPos = null;
+            drawingPath = [];
         });
         
         canvas.addEventListener('mouseleave', function() {
             isDrawing = false;
+            drawingPath = []; // Clear path when leaving canvas
         });
         
         // Header buttons
